@@ -8,8 +8,11 @@ import fi.jakojaannos.unstable.ecs.Component;
 public class PhysicsBody implements Component<PhysicsBody> {
     public final Body body;
 
-    public PhysicsBody(Body body) {
+    public float dragCoefficient;
+
+    public PhysicsBody(final Body body, final float dragCoefficient) {
         this.body = body;
+        this.dragCoefficient = dragCoefficient;
     }
 
     @Override
@@ -43,6 +46,6 @@ public class PhysicsBody implements Component<PhysicsBody> {
                      newBody.createFixture(fixtureDef);
                  });
 
-        return new PhysicsBody(newBody);
+        return new PhysicsBody(newBody, this.dragCoefficient);
     }
 }

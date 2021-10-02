@@ -16,14 +16,14 @@ public class PlayerInputSystem implements EcsSystem<PlayerInputSystem.Input> {
 
                  final var inputState = resources.playerInput;
 
-                 final var xAxis = as_i32(inputState.rightPressed) - as_i32(inputState.leftPressed);
-                 final var yAxis = as_i32(inputState.upPressed) - as_i32(inputState.downPressed);
+                 final var xAxis = asInt(inputState.rightPressed) - asInt(inputState.leftPressed);
+                 final var yAxis = asInt(inputState.upPressed) - asInt(inputState.downPressed);
 
                  movementInput.direction.set(xAxis, yAxis);
              });
     }
 
-    private static int as_i32(boolean b) {
+    private static int asInt(boolean b) {
         return b ? 1 : 0;
     }
 

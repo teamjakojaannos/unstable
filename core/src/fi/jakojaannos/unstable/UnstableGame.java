@@ -13,6 +13,7 @@ import fi.jakojaannos.unstable.entities.Player;
 import fi.jakojaannos.unstable.physics.PhysicsContactListener;
 import fi.jakojaannos.unstable.renderer.RenderPlayer;
 import fi.jakojaannos.unstable.resources.Resources;
+import fi.jakojaannos.unstable.systems.ApplyDragSystem;
 import fi.jakojaannos.unstable.systems.MoveCharacterSystem;
 import fi.jakojaannos.unstable.systems.PlayerInputSystem;
 
@@ -23,7 +24,8 @@ public class UnstableGame extends ApplicationAdapter {
     private final GameState gameState = new GameState();
     private final World physicsWorld;
     private final TimeState timeState;
-    private final Resources resources;
+
+    private Resources resources;
 
     private SpriteBatch batch;
     private SystemDispatcher renderer;
@@ -33,27 +35,29 @@ public class UnstableGame extends ApplicationAdapter {
 
         this.dispatcher = new SystemDispatcher.Impl(List.of(
                 new PlayerInputSystem(),
-                new MoveCharacterSystem()
+                new MoveCharacterSystem(),
+                new ApplyDragSystem()
         ));
 
-        this.physicsWorld = new World(new Vector2(0.0f, -20.0f), true);
+        this.physicsWorld = new World(new Vector2(0.0f, 0.0f), true);
         this.physicsWorld.setContactListener(new PhysicsContactListener());
 
         this.gameState.world()
-                      .spawn(Player.create(this.physicsWorld, new Vector2(5.0f, 5.0f)));
+                      .spawn(Player.create(this.physicsWorld, new Vector2(2.0f, 0.0f))
+                                   .component(new Tags.Player()));
         this.gameState.world()
-                      .spawn(Player.create(this.physicsWorld, new Vector2(15.0f, 10.0f))
+                      .spawn(Player.create(this.physicsWorld, new Vector2(4.0f, 5.0f))
                                    .component(new Tags.InAir()));
 
         this.gameState.world()
-                      .spawn(Player.create(this.physicsWorld, new Vector2(25.0f, 50.0f))
+                      .spawn(Player.create(this.physicsWorld, new Vector2(8.0f, -2.5f))
                                    .component(new Tags.FreezeInput()));
-
-        this.resources = new Resources(this.gameState.world());
     }
 
     @Override
     public void create() {
+        this.resources = new Resources(this.gameState.world());
+
         this.batch = new SpriteBatch();
 
         this.renderer = new SystemDispatcher.Impl(List.of(
@@ -62,10 +66,17 @@ public class UnstableGame extends ApplicationAdapter {
     }
 
     @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        this.resources.camera.resize(width, height);
+    }
+
+    @Override
     public void render() {
         update(Gdx.graphics.getDeltaTime());
 
         ScreenUtils.clear(1, 0, 0, 1);
+        this.batch.setProjectionMatrix(this.resources.camera.getCombinedMatrix());
         this.renderer.tick(this.gameState.world(), this.resources);
     }
 

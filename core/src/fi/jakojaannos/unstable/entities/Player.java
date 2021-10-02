@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import fi.jakojaannos.unstable.UnstableGame;
+import fi.jakojaannos.unstable.components.MovementAttributes;
 import fi.jakojaannos.unstable.components.MovementInput;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.ecs.Entity;
@@ -32,8 +33,11 @@ public class Player {
         body.createFixture(hbFixture);
         hitBox.dispose();
 
+        final var drag = 1.0f;
+        final var force = 2.0f;
         return Entity.builder()
-                     .component(new PhysicsBody(body))
+                     .component(new PhysicsBody(body, drag))
+                     .component(new MovementAttributes(force))
                      .component(new MovementInput());
     }
 }
