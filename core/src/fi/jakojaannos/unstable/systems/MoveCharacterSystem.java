@@ -29,6 +29,7 @@ public class MoveCharacterSystem implements EcsSystem<MoveCharacterSystem.Input>
                          : movementInput.direction;
 
                  final var position = physics.body.getPosition();
+                 System.out.printf(" -> position: %s\n", position.toString());
 
                  physics.body.applyLinearImpulse(
                          clampedInput,
@@ -42,6 +43,6 @@ public class MoveCharacterSystem implements EcsSystem<MoveCharacterSystem.Input>
             MovementInput input,
             PhysicsBody body,
             Optional<Tags.InAir> isInAir,
-            Without<Tags.FreezePhysics> frozenTag
+            Without<Tags.FreezeInput> frozenInputTag
     ) {}
 }

@@ -5,5 +5,5 @@ public class Tags {
 
     public static class InAir {}
 
-    public static class FreezePhysics {}
+    public static class FreezeInput {}
 }

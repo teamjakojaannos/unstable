@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public interface SystemDispatcher {
+public interface SystemDispatcher extends AutoCloseable {
     void tick(final EcsWorld world);
+
+    @Override
+    void close(); // HACK: removes the `throws Exception` from signature
 
     class Impl implements SystemDispatcher {
         @SuppressWarnings("rawtypes") private final List<SystemDispatchInfo> systems;
@@ -16,6 +19,20 @@ public interface SystemDispatcher {
         @SuppressWarnings({"rawtypes", "unchecked"})
         public Impl(List<EcsSystem> systems) {
             this.systems = systems.stream().map(this::reflectInfoFor).toList();
+        }
+
+        @Override
+        public void close() {
+            this.systems.forEach(system -> {
+                if (system.system() instanceof AutoCloseable closeable) {
+                    try {
+                        closeable.close();
+                    } catch (Exception e) {
+                        System.err.printf("Error while disposing system %s:\n", system.system().getClass().getSimpleName());
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
 
         @Override

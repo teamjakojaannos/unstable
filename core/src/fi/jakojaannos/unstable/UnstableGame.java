@@ -2,7 +2,6 @@ package fi.jakojaannos.unstable;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -11,6 +10,7 @@ import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.SystemDispatcher;
 import fi.jakojaannos.unstable.entities.Player;
 import fi.jakojaannos.unstable.physics.PhysicsContactListener;
+import fi.jakojaannos.unstable.renderer.RenderPlayer;
 import fi.jakojaannos.unstable.systems.MoveCharacterSystem;
 
 import java.util.List;
@@ -21,8 +21,8 @@ public class UnstableGame extends ApplicationAdapter {
     private final World physicsWorld;
     private final TimeState timeState;
 
-    SpriteBatch batch;
-    Texture img;
+    private SpriteBatch batch;
+    private SystemDispatcher renderer;
 
     public UnstableGame() {
         this.timeState = new TimeState();
@@ -37,18 +37,21 @@ public class UnstableGame extends ApplicationAdapter {
         this.gameState.world()
                       .spawn(Player.create(this.physicsWorld, new Vector2(5.0f, 5.0f)));
         this.gameState.world()
-                      .spawn(Player.create(this.physicsWorld, new Vector2(5.0f, 5.0f))
+                      .spawn(Player.create(this.physicsWorld, new Vector2(15.0f, 10.0f))
                                    .component(new Tags.InAir()));
 
         this.gameState.world()
-                      .spawn(Player.create(this.physicsWorld, new Vector2(5.0f, 5.0f))
-                                   .component(new Tags.FreezePhysics()));
+                      .spawn(Player.create(this.physicsWorld, new Vector2(25.0f, 50.0f))
+                                   .component(new Tags.FreezeInput()));
     }
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        img = new Texture("badlogic.jpg");
+        this.batch = new SpriteBatch();
+
+        this.renderer = new SystemDispatcher.Impl(List.of(
+                new RenderPlayer(this.batch)
+        ));
     }
 
     @Override
@@ -56,9 +59,7 @@ public class UnstableGame extends ApplicationAdapter {
         update(Gdx.graphics.getDeltaTime());
 
         ScreenUtils.clear(1, 0, 0, 1);
-        batch.begin();
-        batch.draw(img, 0, 0);
-        batch.end();
+        this.renderer.tick(this.gameState.world());
     }
 
     private void update(final float deltaSeconds) {
@@ -72,8 +73,7 @@ public class UnstableGame extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        batch.dispose();
-        img.dispose();
+        this.batch.dispose();
     }
 
     public static class Constants {
