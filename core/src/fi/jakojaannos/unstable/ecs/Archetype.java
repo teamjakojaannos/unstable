@@ -3,6 +3,7 @@ package fi.jakojaannos.unstable.ecs;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Archetype {
     private final Set<Entity> removeQueue = new HashSet<>();
@@ -57,7 +58,7 @@ public class Archetype {
     public Entity spawn(final Entity.Builder builder) {
         final var entityIndex = this.entityCount();
         final var entity = new Entity(this, entityIndex);
-        add(entity, builder.components().toArray(Component[]::new));
+        add(entity, Stream.concat(builder.components(), Stream.of(entity)).toArray(Component[]::new));
 
         return entity;
     }

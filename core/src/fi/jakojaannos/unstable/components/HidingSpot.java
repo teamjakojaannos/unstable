@@ -10,7 +10,7 @@ public class HidingSpot implements Component<HidingSpot> {
 
     public HidingSpot(Type type) {
         this.offset = switch (type) {
-            case MansionClosetLarge -> new Vector2(0.85f, 1.0f);
+            case MansionClosetLarge -> new Vector2(1.15f, 1.0f);
             case MansionClosetThin -> new Vector2(0.5f, 1.0f);
         };
         this.type = type;

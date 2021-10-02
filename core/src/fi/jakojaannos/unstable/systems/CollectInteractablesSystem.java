@@ -2,6 +2,7 @@ package fi.jakojaannos.unstable.systems;
 
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
+import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.InteractItems;
 import fi.jakojaannos.unstable.resources.Interactable;
@@ -13,12 +14,13 @@ public class CollectInteractablesSystem implements EcsSystem<CollectInteractable
     public void tick(SystemInput<Input> input, Resources resources) {
         resources.interactItems.items.clear();
 
-        input.entities().forEach(entity -> resources.interactItems.items.add(new InteractItems.InteractableItem(entity.action, entity.body)));
+        input.entities().forEach(entity -> resources.interactItems.items.add(new InteractItems.InteractableItem(entity.action, entity.body, entity.entity)));
     }
 
     public record Input(
             Interactable action,
-            PhysicsBody body
+            PhysicsBody body,
+            Entity entity
     ) {
     }
 }

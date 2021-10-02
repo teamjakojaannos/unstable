@@ -28,7 +28,7 @@ public class PlayerActionSystem implements EcsSystem<PlayerActionSystem.Input> {
                     entity.hud.currentIndicator = PlayerHudComponent.Indicator.CLOSET;
 
                     if (entity.input.actionPressed) {
-                        item.action().execute();
+                        item.action().execute(item.entity());
                     }
                     break;
                 }

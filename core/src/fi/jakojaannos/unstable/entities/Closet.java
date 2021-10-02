@@ -9,10 +9,11 @@ import fi.jakojaannos.unstable.resources.Interactable;
 
 public class Closet {
     public static Entity.Builder create(Vector2 position, Entity player, HidingSpot.Type type) {
-        final var hidingSpot = new HidingSpot(type);
+
         return Entity.builder()
-                     .component(new PhysicsBody(position.x, position.y, 2.5f, 3.0f))
-                     .component(new Interactable(() -> {
+                     .component(new PhysicsBody(position.x, position.y, 1.5f, 3.0f))
+                     .component(new Interactable((self) -> {
+                         final var hidingSpot = self.getComponent(HidingSpot.class).orElseThrow();
                          if (!player.hasComponent(Hiding.class)) {
                              final var body = player.getComponent(PhysicsBody.class).orElseThrow();
                              final var oldPos = body.getPosition();
@@ -28,6 +29,6 @@ public class Closet {
                              hidingSpot.occupied = false;
                          }
                      }))
-                     .component(hidingSpot);
+                     .component(new HidingSpot(type));
     }
 }

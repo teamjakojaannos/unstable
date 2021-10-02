@@ -39,7 +39,6 @@ public class RenderHidingSpot implements EcsSystem<RenderHidingSpot.Input>, Auto
              .forEach(entity -> {
                  final var body = entity.body();
                  final var hidingSpot = entity.hidingSpot();
-                 System.out.println(hidingSpot.occupied);
                  final var region = this.regions[hidingSpot.type.ordinal()][hidingSpot.occupied ? 1 : 0];
                  final var x = body.getPosition().x;
                  final var y = body.getPosition().y;

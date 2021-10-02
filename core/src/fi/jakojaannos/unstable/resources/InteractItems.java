@@ -1,6 +1,7 @@
 package fi.jakojaannos.unstable.resources;
 
 import fi.jakojaannos.unstable.components.PhysicsBody;
+import fi.jakojaannos.unstable.ecs.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,8 @@ public class InteractItems {
 
     public record InteractableItem(
             Interactable action,
-            PhysicsBody body
+            PhysicsBody body,
+            Entity entity
     ) {
     }
 }

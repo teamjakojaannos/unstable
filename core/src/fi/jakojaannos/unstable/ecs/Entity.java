@@ -3,7 +3,7 @@ package fi.jakojaannos.unstable.ecs;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class Entity {
+public class Entity implements Component<Entity> {
     @SuppressWarnings("rawtypes")
     private final List<Component> newComponents = new ArrayList<>();
     @SuppressWarnings("rawtypes")
@@ -82,6 +82,11 @@ public class Entity {
         return this.archetype.getComponent(clazz, this.entityIndex);
     }
 
+    @Override
+    public Entity cloneComponent() {
+        return this;
+    }
+
     public static Entity.Builder builder() {
         return new Builder();
     }
@@ -97,7 +102,7 @@ public class Entity {
         }
 
         public Class<?>[] componentClasses() {
-            return this.components.keySet().toArray(new Class[0]);
+            return Stream.concat(this.components.keySet().stream(), Stream.of(Entity.class)).toArray(Class[]::new);
         }
 
         public Stream<Component> components() {

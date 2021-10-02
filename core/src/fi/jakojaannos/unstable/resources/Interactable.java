@@ -1,6 +1,7 @@
 package fi.jakojaannos.unstable.resources;
 
 import fi.jakojaannos.unstable.ecs.Component;
+import fi.jakojaannos.unstable.ecs.Entity;
 
 public class Interactable implements Component<Interactable> {
     public final Action action;
@@ -9,8 +10,8 @@ public class Interactable implements Component<Interactable> {
         this.action = action;
     }
 
-    public void execute() {
-        this.action.execute();
+    public void execute(Entity self) {
+        this.action.execute(self);
     }
 
     @Override
@@ -19,6 +20,6 @@ public class Interactable implements Component<Interactable> {
     }
 
     public interface Action {
-        void execute();
+        void execute(Entity self);
     }
 }
