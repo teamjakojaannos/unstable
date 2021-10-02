@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
+import fi.jakojaannos.unstable.resources.Resources;
 
 public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseable {
     private final SpriteBatch spriteBatch;
@@ -17,7 +18,7 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
     }
 
     @Override
-    public void tick(SystemInput<Input> input) {
+    public void tick(SystemInput<Input> input, Resources resources) {
         input.entities()
              .forEach(entity -> {
                  final var physics = entity.body();

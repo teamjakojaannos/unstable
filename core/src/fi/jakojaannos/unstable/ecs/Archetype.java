@@ -5,15 +5,18 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Archetype {
+    private final Set<Entity> removeQueue = new HashSet<>();
+    private final Set<Entity> modificationQueue = new HashSet<>();
+    private final List<Entity> entityHandles = new ArrayList<>();
+
     @SuppressWarnings("rawtypes")
-    private Map<Class, List<Object>> storages;
-    private List<Entity> entityHandles;
+    private final Map<Class, List<Component>> storages;
+
 
     public Archetype(final Class<?>[] components) {
         this.storages = Arrays.stream(components)
                               .collect(Collectors.toUnmodifiableMap(clazz -> clazz,
                                                                     clazz -> new ArrayList<>()));
-        this.entityHandles = new ArrayList<>();
     }
 
     public boolean matches(final SystemInput.Component... components) {
@@ -50,11 +53,58 @@ public class Archetype {
     public Entity spawn(final Entity.Builder builder) {
         final var entityIndex = this.entityCount();
         final var entity = new Entity(this, entityIndex);
-        this.entityHandles.add(entity);
-
-        builder.components()
-               .forEach(component -> this.storages.get(component.getClass()).add(component));
+        add(entity, builder.components().toArray(Component[]::new));
 
         return entity;
+    }
+
+    @SuppressWarnings("rawtypes")
+    void add(final Entity entity, final Component[] components) {
+        this.entityHandles.add(entity);
+
+        for (final var component : components) {
+            this.storages.get(component.getClass())
+                         .add(component.cloneComponent());
+        }
+    }
+
+    public void reapEntities() {
+        this.removeQueue.forEach(this.entityHandles::remove);
+    }
+
+    public void markAsRemoved(final Entity entity) {
+        if (!this.entityHandles.contains(entity)) {
+            System.err.println("Warning: entity handle not present in archetype!");
+        }
+
+        this.removeQueue.add(entity);
+    }
+
+    public void markAsModified(final Entity entity) {
+        this.modificationQueue.add(entity);
+    }
+
+    public List<Entity> drainModifiedEntities() {
+        final var result = List.copyOf(this.modificationQueue);
+        this.modificationQueue.clear();
+        return result;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public List<Component> drainComponents(final int entityIndex) {
+        final var result = this.storages.values()
+                                        .stream()
+                                        .map(storage -> storage.remove(entityIndex))
+                                        .toList();
+
+        this.entityHandles.get(entityIndex).setIndex(-1);
+        this.entityHandles.stream()
+                          .filter(entity -> entity.index() >= entityIndex)
+                          .forEach(entity -> entity.setIndex(entity.index() - 1));
+        return result;
+    }
+
+    public boolean hasComponent(final Class<?> clazz) {
+        return this.storages.containsKey(clazz);
     }
 }

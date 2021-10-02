@@ -17,7 +17,17 @@ public interface EcsWorld {
 
     Entity spawn(Entity.Builder entity);
 
+    void reapEntities();
+
+    void spawnEntities();
+
+    void commitComponentModifications();
+
+    void queueSpawn(final Entity.Builder entity);
+
     class Impl implements EcsWorld {
+        public List<Entity.Builder> spawnQueue = new ArrayList<>();
+
         public List<Archetype> archetypes = new ArrayList<>();
 
         @Override
@@ -37,14 +47,52 @@ public interface EcsWorld {
 
         @Override
         public Entity spawn(final Entity.Builder entity) {
+            return findOrCreateArchetype(entity.componentClasses())
+                    .spawn(entity);
+        }
+
+        @Override
+        public void reapEntities() {
+            this.archetypes.forEach(Archetype::reapEntities);
+        }
+
+        @Override
+        public void spawnEntities() {
+            this.spawnQueue.forEach(this::spawn);
+            this.spawnQueue.clear();
+        }
+
+        @Override
+        public void commitComponentModifications() {
+            this.archetypes
+                    .stream()
+                    .flatMap(archetype -> archetype.drainModifiedEntities().stream())
+                    .forEach(entity -> {
+                        final var removedComponents = entity.drainRemovedComponents();
+                        final var components = entity.drainComponents()
+                                                     .stream()
+                                                     .filter(component -> !removedComponents.contains(component.getClass()));
+                        final var componentClasses = components
+                                .map(Object::getClass)
+                                .toArray(Class[]::new);
+                        final var newArchetype = findOrCreateArchetype(componentClasses);
+                        entity.moveToArchetype(newArchetype, components.toArray(Component[]::new));
+                    });
+        }
+
+        @Override
+        public void queueSpawn(final Entity.Builder entity) {
+            this.spawnQueue.add(entity);
+        }
+
+        private Archetype findOrCreateArchetype(Class<?>[] components) {
             return this.archetypes.stream()
-                                  .filter(archetype -> archetype.matches(Arrays.stream(entity.componentClasses())
-                                                                               .map(clazz -> new SystemInput.Component(clazz, clazz, SystemInput.Component.Type.Required))
-                                                                               .toArray(SystemInput.Component[]::new))
-                                  )
+                                  .filter(archetype -> archetype.matches(Arrays.stream(components)
+                                                                               .map(clazz -> new SystemInput.Component(clazz, clazz,
+                                                                                                                       SystemInput.Component.Type.Required))
+                                                                               .toArray(SystemInput.Component[]::new)))
                                   .findAny()
-                                  .orElseGet(() -> createArchetype(entity.componentClasses()))
-                                  .spawn(entity);
+                                  .orElseGet(() -> createArchetype(components));
         }
 
         private Archetype createArchetype(Class<?>[] components) {

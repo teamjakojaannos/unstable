@@ -7,22 +7,22 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class PhysicsContactListener implements ContactListener {
     @Override
-    public void beginContact(Contact contact) {
+    public void beginContact(final Contact contact) {
 
     }
 
     @Override
-    public void endContact(Contact contact) {
+    public void endContact(final Contact contact) {
 
     }
 
     @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
+    public void preSolve(final Contact contact, final Manifold oldManifold) {
 
     }
 
     @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
+    public void postSolve(final Contact contact, final ContactImpulse impulse) {
 
     }
 }

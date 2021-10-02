@@ -1,5 +1,7 @@
 package fi.jakojaannos.unstable.ecs;
 
+import fi.jakojaannos.unstable.resources.Resources;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
@@ -8,7 +10,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public interface SystemDispatcher extends AutoCloseable {
-    void tick(final EcsWorld world);
+    void tick(EcsWorld world, Resources resources);
 
     @Override
     void close(); // HACK: removes the `throws Exception` from signature
@@ -37,10 +39,12 @@ public interface SystemDispatcher extends AutoCloseable {
 
         @Override
         @SuppressWarnings("unchecked")
-        public void tick(EcsWorld world) {
+        public void tick(final EcsWorld world, final Resources resources) {
             for (final var system : this.systems) {
                 final var input = system.constructInput(world);
-                system.system().tick(input);
+                system.system().tick(input, resources);
+
+                world.commitComponentModifications();
             }
         }
 

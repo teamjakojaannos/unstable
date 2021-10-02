@@ -7,13 +7,14 @@ import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.ecs.Without;
+import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MoveCharacterSystem implements EcsSystem<MoveCharacterSystem.Input> {
     @Override
-    public void tick(SystemInput<Input> input) {
+    public void tick(SystemInput<Input> input, Resources resources) {
         System.out.println("Ticking!");
         var i = new AtomicInteger(0);
         input.entities()
