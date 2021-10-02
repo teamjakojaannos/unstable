@@ -37,14 +37,21 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
 
         fontGen.dispose();
 
-        lines.add(new TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari", 350.0f, 290.0f, 0.3f));
+        lines.add(new TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari",
+                0.55f,
+                0.60f,
+                0.5f
+        ));
 
         lines.add(new TextOnScreen(
                 """
                         Viime yona skotlantilainen juoppo sticky jumppasi pankin holviin ja rajaytti noin 400kg kultaa ja seitseman sentrya.
                                                 
                         Han pakeni paikalta traktorilla ja soitti sakkipillia aamunkoittoon asti.""",
-                5.0f, 300.0f, 0.45f));
+                0.05f,
+                0.6f,
+                0.45f
+        ));
 
 
     }
@@ -68,13 +75,11 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
 
         this.batch.setColor(this.orange);
         this.batch.draw(pixel,
-                        newspaperX,
-                        0.0f,
-                        newspaperWidth,
-                        newspaperHeight
+                newspaperX,
+                0.0f,
+                newspaperWidth,
+                newspaperHeight
         );
-
-        //this.batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         this.batch.draw(
                 this.newspaper,
@@ -87,12 +92,15 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
 
         this.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         for (var line : this.lines) {
+            final var xPos = line.xPos * newspaperWidth;
+            final var yPos = line.yPos * newspaperHeight;
+
             this.font.setColor(line.color);
             this.font.draw(
                     this.batch,
                     line.content,
-                    newspaperX + line.xPos,
-                    line.yPos,
+                    newspaperX + xPos,
+                    yPos,
                     newspaperWidth * line.targetWidth(),
                     Align.left,
                     true
