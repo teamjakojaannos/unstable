@@ -9,6 +9,8 @@ public class PhysicsBody implements Component<PhysicsBody> {
     private final BoundingBox bounds;
     private final Vector2 position;
 
+    public boolean facingRight;
+
     public PhysicsBody(final float x, final float y, float width, float height) {
         this(new Vector2(x, y), width, height);
     }

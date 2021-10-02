@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
 public class Camera {
-    private final float widthInUnits = 17.5f;
+    private final float widthInUnits = 16f;
     private final OrthographicCamera camera;
     public BoundingBox bounds;
     private int screenWidth, screenHeight;
@@ -42,7 +42,7 @@ public class Camera {
     }
 
     public void setPosition(final Vector3 pos) {
-        this.camera.position.set(new Vector3(pos).add(0, heightInUnits / 2.0f, 0));
+        this.camera.position.set(new Vector3(pos).add(0, heightInUnits / 3.0f, 0));
         this.camera.update();
     }
 }

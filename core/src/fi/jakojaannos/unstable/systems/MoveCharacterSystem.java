@@ -20,20 +20,21 @@ public class MoveCharacterSystem implements EcsSystem<MoveCharacterSystem.Input>
         var worldBorders = resources.worldBounds;
 
         input.entities()
-                .forEach(entity -> {
-                    final var movementInput = entity.input();
-                    final var attributes = entity.attributes();
-                    final var physics = entity.body();
+             .forEach(entity -> {
+                 final var movementInput = entity.input();
+                 final var attributes = entity.attributes();
+                 final var physics = entity.body();
 
-                    final var moveAmount = movementInput.direction.x * attributes.moveSpeed * delta;
-                    final var newX = MathUtils.clamp(
-                            physics.getPosition().x + moveAmount,
-                            worldBorders.min.x,
-                            worldBorders.max.x
-                    );
+                 final var moveAmount = movementInput.direction.x * attributes.moveSpeed * delta;
+                 final var newX = MathUtils.clamp(
+                         physics.getPosition().x + moveAmount,
+                         worldBorders.min.x,
+                         worldBorders.max.x
+                 );
 
-                    physics.setPosition(newX, 0);
-                });
+                 physics.facingRight = moveAmount == 0 ? physics.facingRight : moveAmount > 0;
+                 physics.setPosition(newX, 1.0f);
+             });
     }
 
     public record Input(

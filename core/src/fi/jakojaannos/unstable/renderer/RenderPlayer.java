@@ -2,6 +2,7 @@ package fi.jakojaannos.unstable.renderer;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
@@ -30,7 +31,13 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                  final var width = physics.getWidth();
                  final var height = physics.getHeight();
 
-                 this.spriteBatch.draw(this.texture, x, y, width, height);
+                 final var originX = 0.0f;
+                 final var originY = 0.0f;
+
+                 final var region = physics.facingRight
+                         ? new TextureRegion(this.texture, 32, 48)
+                         : new TextureRegion(this.texture, 32, 0, -32, 48);
+                 this.spriteBatch.draw(region, x, y, originX, originY, width, height, 1.0f, 1.0f, 0.0f);
                  this.spriteBatch.end();
              });
     }

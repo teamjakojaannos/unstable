@@ -21,7 +21,7 @@ import java.util.List;
 @SuppressWarnings("rawtypes")
 public class IntroAct {
     private static final int WIDTH = 8;
-    private static final int HEIGHT = 5;
+    private static final int HEIGHT = 8;
     private static final int[] TILES = new int[]{
             // @formatter:off
             80, 81, 82, 83, 84, 85, 86, 87,
@@ -29,6 +29,21 @@ public class IntroAct {
             0,  1,  0,  2,  0,  0,  2,  0,
             0,  2,  0,  0,  1,  0,  0,  0,
             0,  0,  0,  0,  0,  0,  0,  2,
+            0,  0,  2,  0,  0,  2,  0,  0,
+            0,  0,  1,  0,  0,  0,  0,  0,
+            0,  0,  0,  0,  0,  0,  0,  0,
+            // @formatter:on
+    };
+    private static final int[] TILES_FOREGROUND = new int[]{
+            // @formatter:off
+            -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, 64, 65, 66, -1, -1, -1, -1,
+            -1, 48, 49, 50, -1, -1, -1, -1,
+            -1, 32, 33, 34, -1, -1, -1, -1,
+            -1, 16, 17, 18, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1,
             // @formatter:on
     };
 
@@ -47,20 +62,30 @@ public class IntroAct {
         final var gameState = new GameState();
 
         final var tiles = new ArrayList<Tile>();
+        final var tilesForeground = new ArrayList<Tile>();
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 final var index = y * WIDTH + x;
                 final var id = TILES[index];
-                tiles.add(new Tile(id, x, y));
+                final var idForeground = TILES_FOREGROUND[index];
+                if (id >= 0) {
+                    tiles.add(new Tile(id, x, y));
+                }
+                if (idForeground >= 0) {
+                    tilesForeground.add(new Tile(idForeground, x, y));
+                }
             }
         }
 
         gameState.world()
                  .spawn(Entity.builder()
                               .component(new TileMap(tiles)));
+        gameState.world()
+                 .spawn(Entity.builder()
+                              .component(new TileMap(tilesForeground)));
 
         gameState.world()
-                 .spawn(Player.create(new Vector2(2.0f, 0.0f)));
+                 .spawn(Player.create(new Vector2(2.0f, 1.0f)));
 
         // borders
         gameState.world().spawn(Entity.builder()
