@@ -1,5 +1,7 @@
 package fi.jakojaannos.unstable.renderer;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,10 +12,14 @@ import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
 
-public class RenderMorko implements EcsSystem<RenderMorko.Input> {
+public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable {
     private final SpriteBatch spriteBatch;
     private final Texture morko;
     private final TextureRegion[] morkoFrames;
+
+    private final Sound scream;
+
+    private long screamId = -1;
 
     public RenderMorko(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
@@ -25,6 +31,8 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input> {
         for (int frameIndex = 0; frameIndex < this.morkoFrames.length; frameIndex++) {
             this.morkoFrames[frameIndex] = new TextureRegion(this.morko, frameWidth * frameIndex, 0, frameWidth, frameHeight);
         }
+
+        this.scream = Gdx.audio.newSound(Gdx.files.internal("Breathloop.ogg"));
     }
 
     @Override
@@ -32,30 +40,59 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input> {
             SystemInput<Input> input,
             Resources resources
     ) {
-        input.entities()
-             .forEach(entity -> {
-                 final var physics = entity.body;
-                 final var tick = resources.timeManager.currentTick();
+        final var minDistance = input
+                .entities()
+                .reduce(Float.MAX_VALUE, (min, entity) -> {
+                    final var physics = entity.body;
+                    final var tick = resources.timeManager.currentTick();
 
-                 final var loopDuration = 0.5;
+                    final var distanceToPlayer = resources
+                            .playerPosition()
+                            .map(pos -> pos.dst(physics.getPosition()));
 
-                 final var scaledTick = ((float) tick / (float) UnstableGame.Constants.GameLoop.TICKS_PER_SECOND) / (loopDuration / this.morkoFrames.length);
-                 final var region = this.morkoFrames[((int) scaledTick) % this.morkoFrames.length];
-                 region.flip(region.isFlipX() == physics.facingRight, false);
+                    final var loopDuration = 0.5;
 
-                 this.spriteBatch.begin();
-                 this.spriteBatch.draw(region,
-                                       physics.getPosition().x,
-                                       physics.getPosition().y - 0.21f,
-                                       0.0f,
-                                       0.0f,
-                                       2.0f,
-                                       4.0f,
-                                       1.0f,
-                                       1.0f,
-                                       0.0f);
-                 this.spriteBatch.end();
-             });
+                    final var scaledTick = ((float) tick / (float) UnstableGame.Constants.GameLoop.TICKS_PER_SECOND) / (loopDuration / this.morkoFrames.length);
+                    final var region = this.morkoFrames[((int) scaledTick) % this.morkoFrames.length];
+                    region.flip(region.isFlipX() == physics.facingRight, false);
+
+                    this.spriteBatch.begin();
+                    this.spriteBatch.draw(region,
+                                          physics.getPosition().x,
+                                          physics.getPosition().y - 0.25f,
+                                          0.0f,
+                                          0.0f,
+                                          2.0f,
+                                          6.0f,
+                                          1.0f,
+                                          1.0f,
+                                          0.0f);
+                    this.spriteBatch.end();
+
+                    return distanceToPlayer.orElse(min);
+                }, Float::min);
+
+        final var maxDistance = 14.0f;
+        if (minDistance < maxDistance) {
+            final var baseVolume = 0.75f;
+            final var volumeScale = (maxDistance - minDistance) / maxDistance;
+            final var volume = baseVolume * volumeScale;
+
+            if (this.screamId != -1) {
+                this.scream.setVolume(this.screamId, volume);
+            } else {
+                this.screamId = this.scream.loop(volume, 1.5f, 0.0f);
+            }
+        } else {
+            this.scream.stop();
+            this.screamId = -1;
+        }
+    }
+
+    @Override
+    public void close() {
+        this.scream.dispose();
+        this.morko.dispose();
     }
 
     public record Input(
