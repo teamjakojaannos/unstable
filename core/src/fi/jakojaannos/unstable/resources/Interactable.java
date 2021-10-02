@@ -10,8 +10,8 @@ public class Interactable implements Component<Interactable> {
         this.action = action;
     }
 
-    public void execute(Entity self) {
-        this.action.execute(self);
+    public void execute(Entity self, Resources resources) {
+        this.action.execute(self, resources);
     }
 
     @Override
@@ -20,6 +20,6 @@ public class Interactable implements Component<Interactable> {
     }
 
     public interface Action {
-        void execute(Entity self);
+        void execute(Entity self, Resources resources);
     }
 }

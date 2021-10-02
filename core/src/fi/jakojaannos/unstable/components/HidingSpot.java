@@ -7,11 +7,13 @@ public class HidingSpot implements Component<HidingSpot> {
     public final Vector2 offset;
     public final Type type;
     public boolean occupied;
+    private boolean oldOccupied;
 
     public HidingSpot(Type type) {
         this.offset = switch (type) {
-            case MansionClosetLarge -> new Vector2(1.15f, 1.0f);
-            case MansionClosetThin -> new Vector2(0.5f, 1.0f);
+            case MansionClosetLarge -> new Vector2(0.15f, 0.0f);
+            case MansionClosetThin -> new Vector2(0.5f, 0.0f);
+            case WallHole -> new Vector2(0.55f, 0.0f);
         };
         this.type = type;
     }
@@ -23,11 +25,29 @@ public class HidingSpot implements Component<HidingSpot> {
 
     @Override
     public HidingSpot cloneComponent() {
-        return new HidingSpot(this.offset, this.type);
+        return new HidingSpot(this.offset.cpy(), this.type);
+    }
+
+    public boolean occupiedChanged_onlyCallThisFromRendererPls() {
+        if (this.occupied != this.oldOccupied) {
+            this.oldOccupied = this.occupied;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isCloset() {
+        return switch (type) {
+            case MansionClosetLarge, MansionClosetThin -> true;
+            case WallHole -> false;
+        };
     }
 
     public enum Type {
         MansionClosetLarge,
         MansionClosetThin,
+        WallHole,
     }
 }

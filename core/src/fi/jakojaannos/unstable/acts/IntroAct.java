@@ -26,15 +26,15 @@ public class IntroAct {
     private static final int HEIGHT = 9;
     private static final String[] TILES = new String[]{
             // @formatter:off
-            "f", "f", "f", "f", "f", "f",    "f", "f", "f", "f", "f",       "f", "f",       "f", "f",       "f",
-            "w", "w", "w", "w", "w", "hole", "w", "w", "w", "w", "tapetti", "w", "tapetti", "w", "tapetti", "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "f", "f", "f", "f", "f", "f", "f", "f", "f", "f", "f",       "f", "f",       "f", "f",       "f",
+            "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "tapetti", "w", "tapetti", "w", "tapetti", "w",
+            "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
             // @formatter:on
     };
 
@@ -95,6 +95,7 @@ public class IntroAct {
                 .spawn(Player.create(new Vector2(2.0f, 1.0f)));
 
         gameState.world().spawn(Closet.create(new Vector2(1.0f, 1.0f), player, HidingSpot.Type.MansionClosetLarge));
+        gameState.world().spawn(Closet.create(new Vector2(6.0f, 1.0f), player, HidingSpot.Type.WallHole));
 
 
         gameState.world()
