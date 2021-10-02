@@ -3,6 +3,7 @@ package fi.jakojaannos.unstable.renderer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.level.TileMap;
@@ -12,6 +13,7 @@ public class RenderTiles implements EcsSystem<RenderTiles.Input>, AutoCloseable 
     private final SpriteBatch spriteBatch;
     private final Texture tileset;
     private final TextureRegion[] tileRegions;
+    private final long seed;
 
     public RenderTiles(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
@@ -26,6 +28,7 @@ public class RenderTiles implements EcsSystem<RenderTiles.Input>, AutoCloseable 
                 this.tileRegions[index] = new TextureRegion(this.tileset, x * 16, y * 16, 16, 16);
             }
         }
+        seed = MathUtils.random(Long.MAX_VALUE);
     }
 
     @Override
@@ -45,6 +48,19 @@ public class RenderTiles implements EcsSystem<RenderTiles.Input>, AutoCloseable 
                      final var height = 1.002f;
 
                      spriteBatch.draw(region, x, y, width, height);
+
+                     if (tile.isWall()) {
+                         final var hash = ((long) x) + ((long) y << 32);
+                         MathUtils.random.setSeed(hash + this.seed);
+
+                         final var variantIds = new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 2};
+                         final var id = variantIds[MathUtils.random(variantIds.length - 1)];
+
+                         if (id != -1) {
+                             final var decorRegion = this.tileRegions[id];
+                             spriteBatch.draw(decorRegion, x, y, width, height);
+                         }
+                     }
                  });
                  spriteBatch.end();
              });

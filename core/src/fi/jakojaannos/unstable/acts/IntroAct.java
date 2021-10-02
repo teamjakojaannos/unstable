@@ -17,6 +17,7 @@ import fi.jakojaannos.unstable.renderer.*;
 import fi.jakojaannos.unstable.systems.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,6 +39,8 @@ public class IntroAct {
             // @formatter:on
     };
 
+    private static final String[] WALL_IDS = new String[]{"w", "tapetti"};
+
     public Collection<EcsSystem> systems() {
         return List.of(
                 new PlayerInputSystem(),
@@ -54,7 +57,7 @@ public class IntroAct {
 
         final var tileset = new TileSet(16, 16);
         tileset.addTile("f", 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95);
-        tileset.addTile("w", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2);
+        tileset.addTile("w", 0);
 
         tileset.addProp("hole", 5, 0, 4, 4);
         tileset.addProp("tapetti", 0, 6, 2, 8);
@@ -75,10 +78,11 @@ public class IntroAct {
                 final var id = TILES[index];
 
                 final var tile = tileset.getTile(id, x, y);
+                final var isWall = Arrays.asList(WALL_IDS).contains(id);
                 if (tile.isPresent()) {
-                    tiles.add(new Tile(tile.get(), x, y));
+                    tiles.add(new Tile(tile.get(), x, y, isWall));
                 } else {
-                    final var prop = List.of(tileset.getProp(id, x, y));
+                    final var prop = List.of(tileset.getProp(id, x, y, isWall));
                     filledByProps.addAll(prop);
                     tiles.addAll(prop);
                 }

@@ -15,6 +15,7 @@ import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.Optional;
+import java.util.Random;
 
 public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseable {
     private final SpriteBatch spriteBatch;
@@ -25,6 +26,8 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
     private final TextureRegion[] hidingFrames;
     private final TextureRegion[] closetIconFrames;
     private final Texture closetIndicator;
+
+    private final Random random;
 
     private final Sound[] sounds;
 
@@ -59,6 +62,8 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                 Gdx.audio.newSound(Gdx.files.internal("Footstep_Wood3.ogg")),
                 Gdx.audio.newSound(Gdx.files.internal("Footstep_Wood4.ogg")),
         };
+
+        this.random = new Random();
     }
 
     @Override
@@ -108,8 +113,9 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                  } else if (!resources.timers.isActiveAndValid(physics.footstepTimer)) {
                      final var footstepTime = 0.5f;
                      physics.footstepTimer = resources.timers.set(footstepTime, false, () -> {
-                         final var sound = this.sounds[MathUtils.random(this.sounds.length - 1)];
-                         sound.play();
+                         final var sound = this.sounds[random.nextInt(this.sounds.length)];
+                         final var volume = 0.75f;
+                         sound.play(volume, random.nextFloat(0.85f, 1.15f), 0.0f);
                      });
                  }
              });
@@ -119,6 +125,8 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
     public void close() {
         this.texture.dispose();
         this.textureIdle.dispose();
+        this.closetIndicator.dispose();
+
         for (final var sound : this.sounds) {
             sound.dispose();
         }

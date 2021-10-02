@@ -38,7 +38,7 @@ public class TileSet {
         return Optional.of(ids[MathUtils.random(0, ids.length - 1)]);
     }
 
-    public Tile[] getProp(String name, int x, int y) {
+    public Tile[] getProp(String name, int x, int y, boolean isWall) {
         final var prop = props.get(name);
 
         final var tiles = new Tile[prop.w * prop.h];
@@ -49,7 +49,7 @@ public class TileSet {
                 final var row = prop.y + iy;
 
                 final var id = row * tilesetWidth + column % tilesetWidth;
-                tiles[index] = new Tile(id, x + ix, y + prop.h - (iy + 1));
+                tiles[index] = new Tile(id, x + ix, y + prop.h - (iy + 1), isWall);
             }
         }
 
