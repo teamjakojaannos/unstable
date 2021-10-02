@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.Align;
 import fi.jakojaannos.unstable.components.PlayerInput;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
@@ -36,19 +37,14 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
 
         fontGen.dispose();
 
-        lines.add(new TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari", 350.0f, 290.0f));
+        lines.add(new TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari", 350.0f, 290.0f, 0.3f));
 
         lines.add(new TextOnScreen(
                 """
-                        Viime yona skotlantilainen
-                        sticky jumppasi pankin holviin ja
-                        rajaytti noin 400kg kultaa ja
-                        seitseman sentrya.
+                        Viime yona skotlantilainen juoppo sticky jumppasi pankin holviin ja rajaytti noin 400kg kultaa ja seitseman sentrya.
                                                 
-                        Han pakeni paikalta traktorilla ja
-                        soitti sakkipillia aamunkoittoon asti.""",
-                5.0f, 300.0f));
-        lines.add(new TextOnScreen("juoppo", 260.0f, 300.0f, new Color(0x5B2400ff)));
+                        Han pakeni paikalta traktorilla ja soitti sakkipillia aamunkoittoon asti.""",
+                5.0f, 300.0f, 0.45f));
 
 
     }
@@ -63,27 +59,44 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
         this.batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         this.batch.begin();
 
+        final var ratio = ((float) newspaper.getWidth()) / newspaper.getHeight();
+        final var newspaperHeight = Gdx.graphics.getHeight();
+        final var newspaperWidth = newspaperHeight * ratio;
+
+        final var excessSpace = Gdx.graphics.getWidth() - newspaperWidth;
+        final var newspaperX = excessSpace / 2.0f;
 
         this.batch.setColor(this.orange);
         this.batch.draw(pixel,
-                0.0f,
-                0.0f,
-                Gdx.graphics.getWidth(), Gdx.graphics.getHeight()
+                        newspaperX,
+                        0.0f,
+                        newspaperWidth,
+                        newspaperHeight
         );
 
         //this.batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+
         this.batch.draw(
                 this.newspaper,
+                newspaperX,
                 0.0f,
-                0.0f,
-                Gdx.graphics.getWidth(), Gdx.graphics.getHeight()
+                newspaperWidth,
+                newspaperHeight
         );
 
 
         this.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         for (var line : this.lines) {
             this.font.setColor(line.color);
-            this.font.draw(this.batch, line.content, line.xPos, line.yPos);
+            this.font.draw(
+                    this.batch,
+                    line.content,
+                    newspaperX + line.xPos,
+                    line.yPos,
+                    newspaperWidth * line.targetWidth(),
+                    Align.left,
+                    true
+            );
         }
 
         this.batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -105,14 +118,16 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
             String content,
             float xPos,
             float yPos,
+            float targetWidth,
             Color color
     ) {
         public TextOnScreen(
                 String content,
                 float xPos,
-                float yPos
+                float yPos,
+                float targetWidth
         ) {
-            this(content, xPos, yPos, new Color(0xffffffff));
+            this(content, xPos, yPos, targetWidth, new Color(0xffffffff));
         }
     }
 }
