@@ -13,7 +13,7 @@ import fi.jakojaannos.unstable.entities.Player;
 import fi.jakojaannos.unstable.physics.PhysicsContactListener;
 import fi.jakojaannos.unstable.renderer.RenderPlayer;
 import fi.jakojaannos.unstable.resources.Resources;
-import fi.jakojaannos.unstable.systems.ApplyDragSystem;
+import fi.jakojaannos.unstable.resources.WorldBounds;
 import fi.jakojaannos.unstable.systems.MoveCharacterSystem;
 import fi.jakojaannos.unstable.systems.PlayerInputSystem;
 
@@ -35,8 +35,7 @@ public class UnstableGame extends ApplicationAdapter {
 
         this.dispatcher = new SystemDispatcher.Impl(List.of(
                 new PlayerInputSystem(),
-                new MoveCharacterSystem(),
-                new ApplyDragSystem()
+                new MoveCharacterSystem()
         ));
 
         this.physicsWorld = new World(new Vector2(0.0f, 0.0f), true);
@@ -56,7 +55,7 @@ public class UnstableGame extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.resources = new Resources(this.gameState.world());
+        this.resources = new Resources(this.gameState.world(), new WorldBounds(0, 100));
 
         this.batch = new SpriteBatch();
 
