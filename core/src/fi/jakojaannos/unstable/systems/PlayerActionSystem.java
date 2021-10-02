@@ -14,6 +14,12 @@ public class PlayerActionSystem implements EcsSystem<PlayerActionSystem.Input> {
     public void tick(SystemInput<Input> input, Resources resources) {
 
         input.entities().forEach(entity -> {
+
+            if(entity.input.action2Pressed){
+
+            }
+
+
             if (!entity.input.actionPressed) {
                 return;
             }

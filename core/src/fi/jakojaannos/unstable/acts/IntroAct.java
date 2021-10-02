@@ -9,6 +9,7 @@ import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Player;
 import fi.jakojaannos.unstable.level.Tile;
 import fi.jakojaannos.unstable.level.TileMap;
+import fi.jakojaannos.unstable.level.TileSet;
 import fi.jakojaannos.unstable.renderer.RenderPlayer;
 import fi.jakojaannos.unstable.renderer.RenderTiles;
 import fi.jakojaannos.unstable.resources.Interactable;
@@ -22,28 +23,16 @@ import java.util.List;
 public class IntroAct {
     private static final int WIDTH = 8;
     private static final int HEIGHT = 8;
-    private static final int[] TILES = new int[]{
+    private static final String[] TILES = new String[]{
             // @formatter:off
-            80, 81, 82, 83, 84, 85, 86, 87,
-            0,  0,  0,  0,  0,  0,  0,  1,
-            0,  1,  0,  2,  0,  0,  2,  0,
-            0,  2,  0,  0,  1,  0,  0,  0,
-            0,  0,  0,  0,  0,  0,  0,  2,
-            0,  0,  2,  0,  0,  2,  0,  0,
-            0,  0,  1,  0,  0,  0,  0,  0,
-            0,  0,  0,  0,  0,  0,  0,  0,
-            // @formatter:on
-    };
-    private static final int[] TILES_FOREGROUND = new int[]{
-            // @formatter:off
-            -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, 64, 65, 66, -1, -1, -1, -1,
-            -1, 48, 49, 50, -1, -1, -1, -1,
-            -1, 32, 33, 34, -1, -1, -1, -1,
-            -1, 16, 17, 18, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1,
+            "f", "f", "f", "f", "f", "f", "f", "f",
+            "w", "w", "w", "w", "w", "w", "w", "w",
+            "w", "w", "w", "w", "w", "w", "w", "w",
+            "w", "w", "w", "w", "w", "w", "w", "w",
+            "w", "w", "w", "w", "w", "w", "w", "w",
+            "w", "w", "w", "w", "w", "w", "w", "w",
+            "w", "w", "w", "w", "w", "w", "w", "w",
+            "w", "w", "w", "w", "w", "w", "w", "w",
             // @formatter:on
     };
 
@@ -61,21 +50,28 @@ public class IntroAct {
     public GameState state() {
         final var gameState = new GameState();
 
+        final var tileset = new TileSet(16, 16);
+        tileset.addTile("f", 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95);
+        tileset.addTile("w", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2);
+
+        tileset.addProp("closet_01", 0, 1, 3, 4);
+        tileset.addProp("closet_02", 3, 1, 2, 4);
+
         final var tiles = new ArrayList<Tile>();
-        final var tilesForeground = new ArrayList<Tile>();
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 final var index = y * WIDTH + x;
                 final var id = TILES[index];
-                final var idForeground = TILES_FOREGROUND[index];
-                if (id >= 0) {
-                    tiles.add(new Tile(id, x, y));
-                }
-                if (idForeground >= 0) {
-                    tilesForeground.add(new Tile(idForeground, x, y));
-                }
+
+                final var intId = tileset.getTile(id, x, y);
+                tiles.add(new Tile(intId, x, y));
             }
         }
+
+        final var tilesForeground = new ArrayList<Tile>();
+        tilesForeground.addAll(List.of(tileset.getProp("closet_01", 1, 1)));
+        tilesForeground.addAll(List.of(tileset.getProp("closet_02", 5, 1)));
+
 
         gameState.world()
                  .spawn(Entity.builder()

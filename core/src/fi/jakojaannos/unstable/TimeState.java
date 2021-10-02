@@ -26,6 +26,10 @@ public class TimeState {
         }
     }
 
+    public int currentTick() {
+        return this.timeManager.currentTick();
+    }
+
     public interface Tick {
         void run();
     }

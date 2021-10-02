@@ -11,8 +11,8 @@ public class Player {
     }
 
     public static Entity.Builder create(final Vector2 position) {
-        final var min = new Vector3(-1.0f, 0.0f, 0.0f);
-        final var max = new Vector3(1.0f, 3f, 0.0f);
+        final var min = new Vector3(-0.5f, 0.0f, 0.0f);
+        final var max = new Vector3(0.5f, 1.5f, 0.0f);
 
         final var bounds = new BoundingBox(min, max);
         final var force = 2.0f;

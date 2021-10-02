@@ -2,7 +2,6 @@ package fi.jakojaannos.unstable;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -67,7 +66,8 @@ public class UnstableGame extends ApplicationAdapter {
     }
 
     private void update(final float deltaSeconds) {
-        handleInput();
+        final var currentTick = this.timeState.currentTick();
+        this.resources.playerInput.updateKeyStates(currentTick);
 
         this.timeState.consumeTime(deltaSeconds, () -> {
             this.dispatcher.tick(this.gameState.world(), this.resources);
@@ -75,15 +75,6 @@ public class UnstableGame extends ApplicationAdapter {
             this.gameState.world().reapEntities();
             this.gameState.world().spawnEntities();
         });
-    }
-
-    private void handleInput() {
-        final var inputState = this.resources.playerInput;
-        inputState.upPressed = Gdx.input.isKeyPressed(Input.Keys.W);
-        inputState.downPressed = Gdx.input.isKeyPressed(Input.Keys.S);
-        inputState.leftPressed = Gdx.input.isKeyPressed(Input.Keys.A);
-        inputState.rightPressed = Gdx.input.isKeyPressed(Input.Keys.D);
-        inputState.actionPressed = Gdx.input.isKeyPressed(Input.Keys.F);
     }
 
     @Override

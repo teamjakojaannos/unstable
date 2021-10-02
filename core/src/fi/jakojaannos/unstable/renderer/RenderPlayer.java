@@ -28,8 +28,8 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                  final var position = physics.getPosition();
                  final var x = position.x;
                  final var y = position.y;
-                 final var width = physics.getWidth();
-                 final var height = physics.getHeight();
+                 final var width = physics.getWidth() * 2;
+                 final var height = physics.getHeight() * 2;
 
                  final var originX = 0.0f;
                  final var originY = 0.0f;

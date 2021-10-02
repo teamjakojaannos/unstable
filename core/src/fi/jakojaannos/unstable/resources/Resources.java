@@ -4,14 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Null;
-import fi.jakojaannos.unstable.InputState;
+import fi.jakojaannos.unstable.InputManager;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.renderer.Camera;
 
 import java.util.Optional;
 
 public class Resources {
-    public final InputState playerInput = new InputState();
+    public final InputManager playerInput = new InputManager();
     public final Entities entities;
     public final Camera camera;
     public final BoundingBox worldBounds;
