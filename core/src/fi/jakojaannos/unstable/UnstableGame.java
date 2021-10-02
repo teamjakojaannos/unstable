@@ -60,7 +60,7 @@ public class UnstableGame extends ApplicationAdapter {
     public void render() {
         update(Gdx.graphics.getDeltaTime());
 
-        ScreenUtils.clear(1, 0, 0, 1);
+        ScreenUtils.clear(0, 0, 0, 1);
         this.batch.setProjectionMatrix(this.resources.camera.getCombinedMatrix());
         this.renderer.tick(this.gameState.world(), this.resources);
     }

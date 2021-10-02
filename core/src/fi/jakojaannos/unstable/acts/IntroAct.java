@@ -21,18 +21,18 @@ import java.util.List;
 
 @SuppressWarnings("rawtypes")
 public class IntroAct {
-    private static final int WIDTH = 8;
+    private static final int WIDTH = 16;
     private static final int HEIGHT = 8;
     private static final String[] TILES = new String[]{
             // @formatter:off
-            "f", "f", "f", "f", "f", "f", "f", "f",
-            "w", "w", "w", "w", "w", "w", "w", "w",
-            "w", "w", "w", "w", "w", "w", "w", "w",
-            "w", "w", "w", "w", "w", "w", "w", "w",
-            "w", "w", "w", "w", "w", "w", "w", "w",
-            "w", "w", "w", "w", "w", "w", "w", "w",
-            "w", "w", "w", "w", "w", "w", "w", "w",
-            "w", "w", "w", "w", "w", "w", "w", "w",
+            "f", "f", "f", "f", "f", "f",    "f", "f", "f", "f", "f", "f", "f", "f", "f", "f",
+            "w", "w", "w", "w", "w", "hole", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
             // @formatter:on
     };
 
@@ -54,23 +54,36 @@ public class IntroAct {
         tileset.addTile("f", 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95);
         tileset.addTile("w", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2);
 
+        tileset.addProp("hole", 5, 0, 4, 4);
         tileset.addProp("closet_01", 0, 1, 3, 4);
         tileset.addProp("closet_02", 3, 1, 2, 4);
 
+        final var filledByProps = new ArrayList<Tile>();
         final var tiles = new ArrayList<Tile>();
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
+                int finalX = x;
+                int finalY = y;
+                if (filledByProps.stream().anyMatch(tile -> tile.x() == finalX && tile.y() == finalY)) {
+                    continue;
+                }
+
                 final var index = y * WIDTH + x;
                 final var id = TILES[index];
 
-                final var intId = tileset.getTile(id, x, y);
-                tiles.add(new Tile(intId, x, y));
+                final var tile = tileset.getTile(id, x, y);
+                if (tile.isPresent()) {
+                    tiles.add(new Tile(tile.get(), x, y));
+                } else {
+                    final var prop = List.of(tileset.getProp(id, x, y));
+                    filledByProps.addAll(prop);
+                    tiles.addAll(prop);
+                }
+
             }
         }
 
-        final var tilesForeground = new ArrayList<Tile>();
-        tilesForeground.addAll(List.of(tileset.getProp("closet_01", 1, 1)));
-        tilesForeground.addAll(List.of(tileset.getProp("closet_02", 5, 1)));
+        final var tilesForeground = List.of(tileset.getProp("closet_01", 1, 1));
 
 
         gameState.world()
@@ -103,4 +116,6 @@ public class IntroAct {
                 new RenderPlayer(batch)
         );
     }
+
+    private record TilePosition(int x, int y) {}
 }
