@@ -5,4 +5,5 @@ public class InputState {
     public boolean downPressed;
     public boolean leftPressed;
     public boolean rightPressed;
+    public boolean actionPressed;
 }

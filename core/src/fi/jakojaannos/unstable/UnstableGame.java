@@ -9,11 +9,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
-import fi.jakojaannos.unstable.components.Tags;
+import fi.jakojaannos.unstable.components.PhysicsBody;
+import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.ecs.SystemDispatcher;
 import fi.jakojaannos.unstable.entities.Player;
 import fi.jakojaannos.unstable.physics.PhysicsContactListener;
 import fi.jakojaannos.unstable.renderer.RenderPlayer;
+import fi.jakojaannos.unstable.resources.Interactable;
 import fi.jakojaannos.unstable.resources.Resources;
 import fi.jakojaannos.unstable.systems.CameraFollowsPlayerSystem;
 import fi.jakojaannos.unstable.systems.MoveCharacterSystem;
@@ -47,15 +49,19 @@ public class UnstableGame extends ApplicationAdapter {
         this.physicsWorld.setContactListener(new PhysicsContactListener());
 
         this.gameState.world()
-                .spawn(Player.create(this.physicsWorld, new Vector2(2.0f, 0.0f))
-                        .component(new Tags.Player()));
-        this.gameState.world()
-                .spawn(Player.create(this.physicsWorld, new Vector2(4.0f, 5.0f))
-                        .component(new Tags.InAir()));
+                .spawn(Player.create(this.physicsWorld, new Vector2(2.0f, 0.0f)));
 
-        this.gameState.world()
-                .spawn(Player.create(this.physicsWorld, new Vector2(8.0f, -2.5f))
-                        .component(new Tags.FreezeInput()));
+        // borders
+        this.gameState.world().spawn(Entity.builder()
+                .component(new PhysicsBody(-1.0f, 1.0f, 1.0f, 2.0f)));
+        this.gameState.world().spawn(Entity.builder()
+                .component(new PhysicsBody(101.0f, 1.0f, 1.0f, 2.0f)));
+
+        // vending machine
+        this.gameState.world().spawn(Entity.builder()
+                .component(new PhysicsBody(10.0f, 0.0f, 3.0f, 3.0f))
+                .component(new Interactable()));
+
     }
 
     @Override
@@ -119,6 +125,7 @@ public class UnstableGame extends ApplicationAdapter {
         inputState.downPressed = Gdx.input.isKeyPressed(Input.Keys.S);
         inputState.leftPressed = Gdx.input.isKeyPressed(Input.Keys.A);
         inputState.rightPressed = Gdx.input.isKeyPressed(Input.Keys.D);
+        inputState.actionPressed = Gdx.input.isKeyPressed(Input.Keys.F);
     }
 
     @Override

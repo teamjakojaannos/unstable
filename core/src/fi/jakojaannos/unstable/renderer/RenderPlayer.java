@@ -24,11 +24,11 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                  final var physics = entity.body();
 
                  this.spriteBatch.begin();
-                 final var position = physics.position;
+                 final var position = physics.getPosition();
                  final var x = position.x;
                  final var y = position.y;
-                 final var width = 1.0f;
-                 final var height = 1.0f;
+                 final var width = physics.getWidth();
+                 final var height = physics.getHeight();
 
                  this.spriteBatch.draw(this.texture, x, y, width, height);
                  this.spriteBatch.end();

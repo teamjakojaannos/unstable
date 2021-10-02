@@ -27,12 +27,12 @@ public class MoveCharacterSystem implements EcsSystem<MoveCharacterSystem.Input>
 
                     final var moveAmount = movementInput.direction.x * attributes.moveSpeed * delta;
                     final var newX = MathUtils.clamp(
-                            physics.position.x + moveAmount,
+                            physics.getPosition().x + moveAmount,
                             worldBorders.min.x,
                             worldBorders.max.x
                     );
 
-                    physics.position.set(newX, 0);
+                    physics.setPosition(newX, 0);
                 });
     }
 

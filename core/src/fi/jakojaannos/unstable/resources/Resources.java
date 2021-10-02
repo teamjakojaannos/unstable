@@ -14,7 +14,9 @@ public class Resources {
     public final InputState playerInput = new InputState();
     public final Entities entities;
     public final Camera camera;
-    public BoundingBox worldBounds;
+    public final BoundingBox worldBounds;
+
+    public final InteractItems interactItems = new InteractItems();
 
     @Null
     private Vector2 playerPosition;
