@@ -1,8 +1,11 @@
 package fi.jakojaannos.unstable.renderer;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.components.PlayerHudComponent;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
@@ -14,11 +17,19 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
     private final Texture texture;
     private final Texture closetIndicator;
 
+    private final Sound[] sounds;
 
     public RenderPlayer(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
         this.texture = new Texture("Journalist.png");
         this.closetIndicator = new Texture("badlogic.jpg");
+
+        this.sounds = new Sound[]{
+                Gdx.audio.newSound(Gdx.files.internal("Footstep_Wood1.ogg")),
+                Gdx.audio.newSound(Gdx.files.internal("Footstep_Wood2.ogg")),
+                Gdx.audio.newSound(Gdx.files.internal("Footstep_Wood3.ogg")),
+                Gdx.audio.newSound(Gdx.files.internal("Footstep_Wood4.ogg")),
+        };
     }
 
     @Override
@@ -52,12 +63,23 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                      );
                  }
                  this.spriteBatch.end();
+
+                 if (!resources.timers.isActiveAndValid(physics.footstepTimer) && physics.speed > 0.01f) {
+                     final var footstepTime = 0.5f;
+                     physics.footstepTimer = resources.timers.set(footstepTime, false, () -> {
+                         final var sound = this.sounds[MathUtils.random(this.sounds.length - 1)];
+                         sound.play();
+                     });
+                 }
              });
     }
 
     @Override
     public void close() {
         this.texture.dispose();
+        for (final var sound : this.sounds) {
+            sound.dispose();
+        }
     }
 
     public record Input(

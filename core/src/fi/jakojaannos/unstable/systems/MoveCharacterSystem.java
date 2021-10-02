@@ -25,6 +25,7 @@ public class MoveCharacterSystem implements EcsSystem<MoveCharacterSystem.Input>
                  final var attributes = entity.attributes();
                  final var physics = entity.body();
 
+                 final var oldX = physics.getPosition().x;
                  final var moveAmount = movementInput.direction.x * attributes.moveSpeed * delta;
                  final var newX = MathUtils.clamp(
                          physics.getPosition().x + moveAmount,
@@ -34,6 +35,7 @@ public class MoveCharacterSystem implements EcsSystem<MoveCharacterSystem.Input>
 
                  physics.facingRight = moveAmount == 0 ? physics.facingRight : moveAmount > 0;
                  physics.setPosition(newX, 1.0f);
+                 physics.speed = Math.abs(oldX - newX);
              });
     }
 

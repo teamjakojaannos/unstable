@@ -24,17 +24,18 @@ import java.util.List;
 @SuppressWarnings("rawtypes")
 public class IntroAct {
     private static final int WIDTH = 16;
-    private static final int HEIGHT = 8;
+    private static final int HEIGHT = 9;
     private static final String[] TILES = new String[]{
             // @formatter:off
-            "f", "f", "f", "f", "f", "f",    "f", "f", "f", "f", "f", "f", "f", "f", "f", "f",
-            "w", "w", "w", "w", "w", "hole", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
-            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",
+            "f", "f", "f", "f", "f", "f",    "f", "f", "f", "f", "f",       "f", "f",       "f", "f",       "f",
+            "w", "w", "w", "w", "w", "hole", "w", "w", "w", "w", "tapetti", "w", "tapetti", "w", "tapetti", "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
+            "w", "w", "w", "w", "w", "w",    "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
             // @formatter:on
     };
 
@@ -57,6 +58,7 @@ public class IntroAct {
         tileset.addTile("w", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2);
 
         tileset.addProp("hole", 5, 0, 4, 4);
+        tileset.addProp("tapetti", 0, 6, 2, 8);
         tileset.addProp("closet_01", 0, 1, 3, 4);
         tileset.addProp("closet_02", 3, 1, 2, 4);
 

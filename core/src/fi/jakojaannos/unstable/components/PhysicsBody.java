@@ -4,11 +4,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import fi.jakojaannos.unstable.ecs.Component;
+import fi.jakojaannos.unstable.resources.TimerHandle;
 
 public class PhysicsBody implements Component<PhysicsBody> {
     private final BoundingBox bounds;
     private final Vector2 position;
 
+    public float speed;
+    public TimerHandle footstepTimer;
     public boolean facingRight;
 
     public PhysicsBody(final float x, final float y, float width, float height) {
