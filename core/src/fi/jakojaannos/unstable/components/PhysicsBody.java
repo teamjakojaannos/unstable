@@ -50,11 +50,8 @@ public class PhysicsBody implements Component<PhysicsBody> {
     }
 
     private BoundingBox boundsPositionCorrected() {
-        final var width = this.bounds.getWidth();
-        final var height = this.bounds.getHeight();
-
-        final var min = this.bounds.min.add(this.position.x - width / 2.0f, this.position.y - height / 2.0f, 0.0f);
-        final var max = this.bounds.max.add(this.position.x + width / 2.0f, this.position.y + height / 2.0f, 0.0f);
+        final var min = this.bounds.min.cpy().add(this.position.x, this.position.y, 0.0f);
+        final var max = this.bounds.max.cpy().add(this.position.x, this.position.y, 0.0f);
 
         return new BoundingBox(min, max);
     }
