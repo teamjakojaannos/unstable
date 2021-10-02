@@ -24,7 +24,7 @@ public class Archetype {
             return false;
         }
 
-        return  Arrays
+        return Arrays
                 .stream(components)
                 .filter(component -> !component.isOptional())
                 // With the optional components filtered out, if the component is required, we must have the key
@@ -105,10 +105,18 @@ public class Archetype {
         this.entityHandles.stream()
                           .filter(entity -> entity.index() >= entityIndex)
                           .forEach(entity -> entity.setIndex(entity.index() - 1));
+        this.entityHandles.remove(entityIndex);
         return result;
     }
 
     public boolean hasComponent(final Class<?> clazz) {
         return this.storages.containsKey(clazz);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public <C extends Component> Optional<C> getComponent(Class<C> clazz, int entityIndex) {
+        return this.storages.containsKey(clazz)
+                ? Optional.of((C) this.storages.get(clazz).get(entityIndex))
+                : Optional.empty();
     }
 }

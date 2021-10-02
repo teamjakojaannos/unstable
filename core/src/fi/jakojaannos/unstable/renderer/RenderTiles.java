@@ -36,6 +36,7 @@ public class RenderTiles implements EcsSystem<RenderTiles.Input>, AutoCloseable 
         input.entities()
              .forEach(entity -> {
                  final var tileMap = entity.tileMap();
+                 spriteBatch.begin();
                  tileMap.tiles.forEach(tile -> {
                      final var region = this.tileRegions[tile.id()];
                      final var x = tile.x() - 0.001f;
@@ -43,10 +44,9 @@ public class RenderTiles implements EcsSystem<RenderTiles.Input>, AutoCloseable 
                      final var width = 1.002f;
                      final var height = 1.002f;
 
-                     spriteBatch.begin();
                      spriteBatch.draw(region, x, y, width, height);
-                     spriteBatch.end();
                  });
+                 spriteBatch.end();
              });
     }
 

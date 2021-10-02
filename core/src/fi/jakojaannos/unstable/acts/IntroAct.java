@@ -3,19 +3,17 @@ package fi.jakojaannos.unstable.acts;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.GameState;
+import fi.jakojaannos.unstable.components.HidingSpot;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.Entity;
+import fi.jakojaannos.unstable.entities.Closet;
 import fi.jakojaannos.unstable.entities.Player;
 import fi.jakojaannos.unstable.level.Tile;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
-import fi.jakojaannos.unstable.renderer.RenderMorko;
-import fi.jakojaannos.unstable.renderer.RenderPlayer;
-import fi.jakojaannos.unstable.renderer.RenderTiles;
-import fi.jakojaannos.unstable.renderer.TextRenderer;
-import fi.jakojaannos.unstable.resources.Interactable;
+import fi.jakojaannos.unstable.renderer.*;
 import fi.jakojaannos.unstable.systems.*;
 
 import java.util.ArrayList;
@@ -88,18 +86,16 @@ public class IntroAct {
             }
         }
 
-        final var tilesForeground = List.of(tileset.getProp("closet_01", 1, 1));
-
-
         gameState.world()
                  .spawn(Entity.builder()
                               .component(new TileMap(tiles)));
-        gameState.world()
-                 .spawn(Entity.builder()
-                              .component(new TileMap(tilesForeground)));
 
-        gameState.world()
-                 .spawn(Player.create(new Vector2(2.0f, 1.0f)));
+        final var player = gameState
+                .world()
+                .spawn(Player.create(new Vector2(2.0f, 1.0f)));
+
+        gameState.world().spawn(Closet.create(new Vector2(1.0f, 1.0f), player, HidingSpot.Type.MansionClosetLarge));
+
 
         gameState.world()
                  .spawn(Entity.builder()
@@ -112,17 +108,13 @@ public class IntroAct {
         gameState.world().spawn(Entity.builder()
                                       .component(new PhysicsBody(101.0f, 1.0f, 1.0f, 2.0f)));
 
-        // vending machine
-        gameState.world().spawn(Entity.builder()
-                                      .component(new PhysicsBody(10.0f, 0.0f, 3.0f, 3.0f))
-                                      .component(new Interactable(() -> System.out.println("Yeet"))));
-
         return gameState;
     }
 
     public Collection<EcsSystem> renderSystems(final SpriteBatch batch) {
         return List.of(
                 new RenderTiles(batch),
+                new RenderHidingSpot(batch),
                 new RenderPlayer(batch),
                 new RenderMorko(batch),
                 new TextRenderer(batch)

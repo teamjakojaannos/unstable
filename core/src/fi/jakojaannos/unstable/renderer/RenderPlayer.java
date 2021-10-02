@@ -7,11 +7,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import fi.jakojaannos.unstable.UnstableGame;
+import fi.jakojaannos.unstable.components.Hiding;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.components.PlayerHudComponent;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
+
+import java.util.Optional;
 
 public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseable {
     private final SpriteBatch spriteBatch;
@@ -19,6 +22,8 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
     private final Texture textureIdle;
     private final TextureRegion[] frames;
     private final TextureRegion[] idleFrames;
+    private final TextureRegion[] hidingFrames;
+    private final TextureRegion[] closetIconFrames;
     private final Texture closetIndicator;
 
     private final Sound[] sounds;
@@ -28,18 +33,25 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
         this.texture = new Texture("Journalist.png");
         this.textureIdle = new Texture("Journalist_idle.png");
         this.frames = new TextureRegion[8];
+        this.hidingFrames = new TextureRegion[8];
 
         final var frameWidth = this.texture.getWidth() / this.frames.length;
-        final var frameHeight = this.texture.getHeight();
+        final var frameHeight = this.texture.getHeight() / 2;
         for (int frameIndex = 0; frameIndex < this.frames.length; frameIndex++) {
             this.frames[frameIndex] = new TextureRegion(this.texture, frameWidth * frameIndex, 0, frameWidth, frameHeight);
+            this.hidingFrames[frameIndex] = new TextureRegion(this.texture, frameWidth * frameIndex, frameHeight, frameWidth, frameHeight);
         }
 
         this.idleFrames = new TextureRegion[]{
                 new TextureRegion(this.textureIdle)
         };
 
-        this.closetIndicator = new Texture("badlogic.jpg");
+        this.closetIndicator = new Texture("hide_icons.png");
+        this.closetIconFrames = new TextureRegion[]{
+                new TextureRegion(this.closetIndicator, 0, 0, 16, 16),
+                new TextureRegion(this.closetIndicator, 16, 0, 16, 16),
+        };
+
 
         this.sounds = new Sound[]{
                 Gdx.audio.newSound(Gdx.files.internal("Footstep_Wood1.ogg")),
@@ -68,6 +80,8 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                  final var tick = resources.timeManager.currentTick();
                  final var framesToUse = physics.speed > 0.001f
                          ? this.frames
+                         : entity.hidingTag.isPresent()
+                         ? this.hidingFrames
                          : this.idleFrames;
 
                  final var loopDuration = 1.25;
@@ -81,7 +95,7 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                  if (entity.hud.currentIndicator == PlayerHudComponent.Indicator.CLOSET) {
                      final var iconSize = 0.5f;
                      this.spriteBatch.draw(
-                             this.closetIndicator,
+                             this.closetIconFrames[entity.hidingTag.isPresent() ? 0 : 1],
                              x + width / 2.0f - iconSize / 2.0f,
                              y + height + 0.25f,
                              iconSize, iconSize
@@ -112,6 +126,7 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
 
     public record Input(
             PhysicsBody body,
-            PlayerHudComponent hud
+            PlayerHudComponent hud,
+            Optional<Hiding> hidingTag
     ) {}
 }

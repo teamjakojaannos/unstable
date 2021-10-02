@@ -74,7 +74,7 @@ public class UnstableGame extends ApplicationAdapter {
 
             this.gameState.world().reapEntities();
             this.gameState.world().spawnEntities();
-        });
+        }, this.gameState.world());
     }
 
     @Override

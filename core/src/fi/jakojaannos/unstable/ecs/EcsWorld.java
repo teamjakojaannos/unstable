@@ -64,6 +64,8 @@ public interface EcsWorld {
 
         @Override
         public void commitComponentModifications() {
+            final var movedEntities = new ArrayList<MoveToArchetypeEntity>();
+
             this.archetypes
                     .stream()
                     .flatMap(archetype -> archetype.drainModifiedEntities().stream())
@@ -71,13 +73,20 @@ public interface EcsWorld {
                         final var removedComponents = entity.drainRemovedComponents();
                         final var components = entity.drainComponents()
                                                      .stream()
-                                                     .filter(component -> !removedComponents.contains(component.getClass()));
-                        final var componentClasses = components
-                                .map(Object::getClass)
-                                .toArray(Class[]::new);
-                        final var newArchetype = findOrCreateArchetype(componentClasses);
-                        entity.moveToArchetype(newArchetype, components.toArray(Component[]::new));
+                                                     .filter(component -> !removedComponents.contains(component.getClass()))
+                                                     .toList();
+                        movedEntities.add(new MoveToArchetypeEntity(entity, components));
                     });
+
+            movedEntities.forEach(movedEntity -> {
+                final var componentClasses = movedEntity.components
+                        .stream()
+                        .map(Object::getClass)
+                        .toArray(Class[]::new);
+
+                final var newArchetype = findOrCreateArchetype(componentClasses);
+                movedEntity.entity.moveToArchetype(newArchetype, movedEntity.components.toArray(Component[]::new));
+            });
         }
 
         @Override
@@ -88,9 +97,9 @@ public interface EcsWorld {
         private Archetype findOrCreateArchetype(Class<?>[] components) {
             return this.archetypes.stream()
                                   .filter(archetype -> archetype.matches(true, Arrays.stream(components)
-                                                                               .map(clazz -> new SystemInput.Component(clazz, clazz,
-                                                                                                                       SystemInput.Component.Type.Required))
-                                                                               .toArray(SystemInput.Component[]::new)))
+                                                                                     .map(clazz -> new SystemInput.Component(clazz, clazz,
+                                                                                                                             SystemInput.Component.Type.Required))
+                                                                                     .toArray(SystemInput.Component[]::new)))
                                   .findAny()
                                   .orElseGet(() -> createArchetype(components));
         }
@@ -102,5 +111,11 @@ public interface EcsWorld {
 
             return archetype;
         }
+
+        @SuppressWarnings("rawtypes")
+        private static record MoveToArchetypeEntity(
+                Entity entity,
+                List<Component> components
+        ) {}
     }
 }

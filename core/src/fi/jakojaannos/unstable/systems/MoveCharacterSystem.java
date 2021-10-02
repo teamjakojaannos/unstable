@@ -2,10 +2,7 @@ package fi.jakojaannos.unstable.systems;
 
 import com.badlogic.gdx.math.MathUtils;
 import fi.jakojaannos.unstable.UnstableGame;
-import fi.jakojaannos.unstable.components.MovementAttributes;
-import fi.jakojaannos.unstable.components.MovementInput;
-import fi.jakojaannos.unstable.components.PhysicsBody;
-import fi.jakojaannos.unstable.components.Tags;
+import fi.jakojaannos.unstable.components.*;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.ecs.Without;
@@ -44,7 +41,8 @@ public class MoveCharacterSystem implements EcsSystem<MoveCharacterSystem.Input>
             MovementAttributes attributes,
             PhysicsBody body,
             Optional<Tags.InAir> isInAir,
-            Without<Tags.FreezeInput> frozenInputTag
+            Without<Tags.FreezeInput> frozenInputTag,
+            Without<Hiding> hidingTag
     ) {
     }
 }

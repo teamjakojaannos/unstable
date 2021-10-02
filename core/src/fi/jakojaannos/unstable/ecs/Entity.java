@@ -1,9 +1,6 @@
 package fi.jakojaannos.unstable.ecs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Entity {
@@ -18,6 +15,11 @@ public class Entity {
     public Entity(final Archetype archetype, final int entityIndex) {
         this.archetype = archetype;
         this.entityIndex = entityIndex;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Entity { entityIndex: %d, archetype: %s }", entityIndex, archetype);
     }
 
     public void destroy() {
@@ -59,8 +61,8 @@ public class Entity {
             @SuppressWarnings("rawtypes") final Component[] components
     ) {
         this.archetype = archetype;
-        this.archetype.add(this, components);
         this.entityIndex = archetype.entityCount();
+        this.archetype.add(this, components);
     }
 
     int index() {
@@ -69,6 +71,15 @@ public class Entity {
 
     void setIndex(final int index) {
         this.entityIndex = index;
+    }
+
+    public boolean hasComponent(Class<?> clazz) {
+        return this.archetype.hasComponent(clazz);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public <C extends Component> Optional<C> getComponent(Class<C> clazz) {
+        return this.archetype.getComponent(clazz, this.entityIndex);
     }
 
     public static Entity.Builder builder() {

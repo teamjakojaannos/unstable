@@ -1,5 +1,6 @@
 package fi.jakojaannos.unstable;
 
+import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.resources.TimeManager;
 import fi.jakojaannos.unstable.resources.Timers;
 
@@ -15,7 +16,7 @@ public class TimeState {
         this.timers = new Timers();
     }
 
-    public void consumeTime(final float deltaSeconds, final Tick tick) {
+    public void consumeTime(final float deltaSeconds, final Tick tick, final EcsWorld world) {
         // HACK: limit frame time to avoid lagging to death
         final var frameTime = Math.min(0.25f, deltaSeconds);
 
@@ -26,8 +27,8 @@ public class TimeState {
             tick.run();
 
             this.timeManager.tick();
-            // TODO: is this right place?
             this.timers.tick(deltaSeconds);
+            world.commitComponentModifications();
         }
     }
 
