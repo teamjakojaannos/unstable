@@ -15,16 +15,23 @@ public class Resources {
     public final Entities entities;
     public final Camera camera;
     public final BoundingBox worldBounds;
+    public final Timers timers;
 
     public final InteractItems interactItems = new InteractItems();
 
     @Null
     private Vector2 playerPosition;
 
-    public Resources(final EcsWorld world, final BoundingBox worldBounds, final BoundingBox cameraBounds) {
+    public Resources(
+            final EcsWorld world,
+            final BoundingBox worldBounds,
+            final BoundingBox cameraBounds,
+            final Timers timers
+    ) {
         entities = new Entities(world);
         camera = new Camera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cameraBounds);
         this.worldBounds = worldBounds;
+        this.timers = timers;
     }
 
     public void setPlayerPosition(final Vector2 position) {

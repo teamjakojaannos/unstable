@@ -10,6 +10,7 @@ import fi.jakojaannos.unstable.entities.Player;
 import fi.jakojaannos.unstable.level.Tile;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+import fi.jakojaannos.unstable.renderer.RenderMorko;
 import fi.jakojaannos.unstable.renderer.RenderPlayer;
 import fi.jakojaannos.unstable.renderer.RenderTiles;
 import fi.jakojaannos.unstable.resources.Interactable;
@@ -113,7 +114,8 @@ public class IntroAct {
     public Collection<EcsSystem> renderSystems(final SpriteBatch batch) {
         return List.of(
                 new RenderTiles(batch),
-                new RenderPlayer(batch)
+                new RenderPlayer(batch),
+                new RenderMorko(batch)
         );
     }
 

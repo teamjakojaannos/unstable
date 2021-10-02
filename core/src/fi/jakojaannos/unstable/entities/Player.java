@@ -21,6 +21,7 @@ public class Player {
                      .component(new MovementAttributes(force))
                      .component(new MovementInput())
                      .component(new PlayerInput())
-                     .component(new Tags.Player());
+                     .component(new Tags.Player())
+                     .component(new PlayerHudComponent(PlayerHudComponent.Indicator.NONE));
     }
 }

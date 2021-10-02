@@ -1,15 +1,18 @@
 package fi.jakojaannos.unstable;
 
 import fi.jakojaannos.unstable.resources.TimeManager;
+import fi.jakojaannos.unstable.resources.Timers;
 
 public class TimeState {
     private final float timeStep;
     private float accumulator;
     private final TimeManager timeManager;
+    public final Timers timers;
 
     public TimeState() {
         this.timeStep = UnstableGame.Constants.GameLoop.TIME_STEP;
         this.timeManager = new TimeManager();
+        this.timers = new Timers();
     }
 
     public void consumeTime(final float deltaSeconds, final Tick tick) {
@@ -23,6 +26,8 @@ public class TimeState {
             tick.run();
 
             this.timeManager.tick();
+            // TODO: is this right place?
+            this.timers.tick(deltaSeconds);
         }
     }
 

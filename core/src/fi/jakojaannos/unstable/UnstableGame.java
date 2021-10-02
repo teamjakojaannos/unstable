@@ -39,7 +39,7 @@ public class UnstableGame extends ApplicationAdapter {
                 new Vector3(worldBoundLeft + cameraPadding, 0.0f, 0.0f),
                 new Vector3(worldBoundRight - cameraPadding, 0.0f, 0.0f)
         );
-        this.resources = new Resources(this.gameState.world(), worldBounds, cameraBounds);
+        this.resources = new Resources(this.gameState.world(), worldBounds, cameraBounds, timeState.timers);
 
         this.batch = new SpriteBatch();
 

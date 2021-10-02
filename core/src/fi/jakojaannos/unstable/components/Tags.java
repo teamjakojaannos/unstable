@@ -25,4 +25,11 @@ public class Tags {
             return new Player();
         }
     }
+
+    public static class Morko implements Component<Morko> {
+        @Override
+        public Morko cloneComponent() {
+            return new Morko();
+        }
+    }
 }

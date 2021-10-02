@@ -38,6 +38,7 @@
 - Paranoia starts: "is someone following me?"
   - Glimpses of the first "monster" (?)
 - Towards the end of the act, {{ Something major happens that makes the protagonist feel unsafe }}
+(for example the player realizes that they are in fact a human, and not a storage space for valuable items; thus feeling un-safe)
 
 ### Act 3: Anxiety
 - Feelings: anxiety, fear
