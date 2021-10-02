@@ -6,6 +6,7 @@ public class PlayerInput implements Component<PlayerInput> {
 
     public boolean actionPressed;
     public boolean action2Pressed;
+    public boolean newspaperPressed;
 
     @Override
     public PlayerInput cloneComponent() {

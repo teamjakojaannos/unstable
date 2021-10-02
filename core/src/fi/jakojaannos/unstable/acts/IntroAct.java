@@ -14,6 +14,7 @@ import fi.jakojaannos.unstable.level.TileSet;
 import fi.jakojaannos.unstable.renderer.RenderMorko;
 import fi.jakojaannos.unstable.renderer.RenderPlayer;
 import fi.jakojaannos.unstable.renderer.RenderTiles;
+import fi.jakojaannos.unstable.renderer.TextRenderer;
 import fi.jakojaannos.unstable.resources.Interactable;
 import fi.jakojaannos.unstable.systems.*;
 
@@ -123,7 +124,8 @@ public class IntroAct {
         return List.of(
                 new RenderTiles(batch),
                 new RenderPlayer(batch),
-                new RenderMorko(batch)
+                new RenderMorko(batch),
+                new TextRenderer(batch)
         );
     }
 }

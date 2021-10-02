@@ -26,6 +26,8 @@ public class PlayerInputSystem implements EcsSystem<PlayerInputSystem.Input> {
                  entity.playerInput.actionPressed = (inputState.getState(ACTION) == InputManager.State.PRESSED);
 
                  entity.playerInput.action2Pressed = (inputState.getState(ACTION_2) == InputManager.State.PRESSED);
+
+                 entity.playerInput.newspaperPressed = (inputState.getState(NEWSPAPER) != InputManager.State.RELEASED);
              });
     }
 
