@@ -42,7 +42,7 @@ public class Camera {
     }
 
     public void setPosition(final Vector3 pos) {
-        this.camera.position.set(new Vector3(pos));
+        this.camera.position.set(new Vector3(pos).add(0, heightInUnits / 2.0f, 0));
         this.camera.update();
     }
 }

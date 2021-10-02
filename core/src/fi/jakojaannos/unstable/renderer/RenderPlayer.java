@@ -14,7 +14,7 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
 
     public RenderPlayer(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
-        this.texture = new Texture("badlogic.jpg");
+        this.texture = new Texture("Journalist.png");
     }
 
     @Override

@@ -5,6 +5,7 @@ import fi.jakojaannos.unstable.resources.Resources;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -19,7 +20,7 @@ public interface SystemDispatcher extends AutoCloseable {
         @SuppressWarnings("rawtypes") private final List<SystemDispatchInfo> systems;
 
         @SuppressWarnings({"rawtypes", "unchecked"})
-        public Impl(List<EcsSystem> systems) {
+        public Impl(Collection<EcsSystem> systems) {
             this.systems = systems.stream().map(this::reflectInfoFor).toList();
         }
 
