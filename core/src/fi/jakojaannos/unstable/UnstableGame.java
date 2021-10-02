@@ -1,6 +1,7 @@
 package fi.jakojaannos.unstable;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -18,11 +19,14 @@ public class UnstableGame extends ApplicationAdapter {
     private final SystemDispatcher dispatcher;
     private final GameState gameState = new GameState();
     private final World physicsWorld;
+    private final TimeState timeState;
 
     SpriteBatch batch;
     Texture img;
 
     public UnstableGame() {
+        this.timeState = new TimeState();
+
         this.dispatcher = new SystemDispatcher.Impl(List.of(
                 new MoveCharacterSystem()
         ));
@@ -31,13 +35,13 @@ public class UnstableGame extends ApplicationAdapter {
         this.physicsWorld.setContactListener(new PhysicsContactListener());
 
         this.gameState.world()
-                      .spawn(Player.create(physicsWorld, new Vector2(5.0f, 5.0f)));
+                      .spawn(Player.create(this.physicsWorld, new Vector2(5.0f, 5.0f)));
         this.gameState.world()
-                      .spawn(Player.create(physicsWorld, new Vector2(5.0f, 5.0f))
+                      .spawn(Player.create(this.physicsWorld, new Vector2(5.0f, 5.0f))
                                    .component(new Tags.InAir()));
 
         this.gameState.world()
-                      .spawn(Player.create(physicsWorld, new Vector2(5.0f, 5.0f))
+                      .spawn(Player.create(this.physicsWorld, new Vector2(5.0f, 5.0f))
                                    .component(new Tags.FreezePhysics()));
     }
 
@@ -49,7 +53,7 @@ public class UnstableGame extends ApplicationAdapter {
 
     @Override
     public void render() {
-        update();
+        update(Gdx.graphics.getDeltaTime());
 
         ScreenUtils.clear(1, 0, 0, 1);
         batch.begin();
@@ -57,8 +61,13 @@ public class UnstableGame extends ApplicationAdapter {
         batch.end();
     }
 
-    private void update() {
-        this.dispatcher.tick(this.gameState.world());
+    private void update(final float deltaSeconds) {
+        this.timeState.consumeTime(deltaSeconds, () -> {
+            this.dispatcher.tick(this.gameState.world());
+            this.physicsWorld.step(Constants.GameLoop.TIME_STEP,
+                                   Constants.PhysicsEngine.VELOCITY_ITERATIONS,
+                                   Constants.PhysicsEngine.POSITION_ITERATIONS);
+        });
     }
 
     @Override
@@ -68,6 +77,15 @@ public class UnstableGame extends ApplicationAdapter {
     }
 
     public static class Constants {
+        public static class GameLoop {
+            public static final int TICKS_PER_SECOND = 50;
+            public static final float TIME_STEP = 1.0f / TICKS_PER_SECOND;
+        }
+
+        public static class PhysicsEngine {
+            public static final int VELOCITY_ITERATIONS = 6;
+            public static final int POSITION_ITERATIONS = 2;
+        }
 
         public static class Collision {
             public static final short CATEGORY_TERRAIN = 0x0001;
