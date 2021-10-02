@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.GameState;
 import fi.jakojaannos.unstable.components.PhysicsBody;
+import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Player;
@@ -97,6 +98,11 @@ public class IntroAct {
         gameState.world()
                  .spawn(Player.create(new Vector2(2.0f, 1.0f)));
 
+        gameState.world()
+                 .spawn(Entity.builder()
+                              .component(new PhysicsBody(-1.0f, 1.0f, 2.0f, 4.0f))
+                              .component(new Tags.Morko()));
+
         // borders
         gameState.world().spawn(Entity.builder()
                                       .component(new PhysicsBody(-1.0f, 1.0f, 1.0f, 2.0f)));
@@ -118,6 +124,4 @@ public class IntroAct {
                 new RenderMorko(batch)
         );
     }
-
-    private record TilePosition(int x, int y) {}
 }

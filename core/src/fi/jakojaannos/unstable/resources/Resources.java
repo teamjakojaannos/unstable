@@ -16,6 +16,7 @@ public class Resources {
     public final Camera camera;
     public final BoundingBox worldBounds;
     public final Timers timers;
+    public final TimeManager timeManager;
 
     public final InteractItems interactItems = new InteractItems();
 
@@ -26,12 +27,14 @@ public class Resources {
             final EcsWorld world,
             final BoundingBox worldBounds,
             final BoundingBox cameraBounds,
-            final Timers timers
+            final Timers timers,
+            final TimeManager timeManager
     ) {
         entities = new Entities(world);
         camera = new Camera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cameraBounds);
         this.worldBounds = worldBounds;
         this.timers = timers;
+        this.timeManager = timeManager;
     }
 
     public void setPlayerPosition(final Vector2 position) {

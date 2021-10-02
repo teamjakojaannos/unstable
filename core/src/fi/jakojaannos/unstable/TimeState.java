@@ -6,7 +6,7 @@ import fi.jakojaannos.unstable.resources.Timers;
 public class TimeState {
     private final float timeStep;
     private float accumulator;
-    private final TimeManager timeManager;
+    public final TimeManager timeManager;
     public final Timers timers;
 
     public TimeState() {
