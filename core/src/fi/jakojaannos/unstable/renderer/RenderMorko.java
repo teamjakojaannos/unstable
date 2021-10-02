@@ -18,8 +18,10 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
     private final TextureRegion[] morkoFrames;
 
     private final Sound scream;
+    private final Sound scream2;
 
     private long screamId = -1;
+    private long screamId2;
 
     public RenderMorko(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
@@ -33,6 +35,7 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
         }
 
         this.scream = Gdx.audio.newSound(Gdx.files.internal("Breathloop.ogg"));
+        this.scream2 = Gdx.audio.newSound(Gdx.files.internal("Scream3.ogg"));
     }
 
     @Override
@@ -72,7 +75,7 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
                     return distanceToPlayer.orElse(min);
                 }, Float::min);
 
-        final var maxDistance = 14.0f;
+        final var maxDistance = 6.5f;
         if (minDistance < maxDistance) {
             final var baseVolume = 0.75f;
             final var volumeScale = (maxDistance - minDistance) / maxDistance;
@@ -80,7 +83,9 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
 
             if (this.screamId != -1) {
                 this.scream.setVolume(this.screamId, volume);
+                this.scream.setVolume(this.screamId2, volume);
             } else {
+                this.screamId2 = this.scream2.loop(volume);
                 this.screamId = this.scream.loop(volume, 1.5f, 0.0f);
             }
         } else {
@@ -92,6 +97,7 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
     @Override
     public void close() {
         this.scream.dispose();
+        this.scream2.dispose();
         this.morko.dispose();
     }
 

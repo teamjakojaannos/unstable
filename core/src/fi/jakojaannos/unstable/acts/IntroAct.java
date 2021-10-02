@@ -103,7 +103,7 @@ public class IntroAct {
 
         gameState.world()
                  .spawn(Entity.builder()
-                              .component(new PhysicsBody(-1.0f, 1.0f, 2.0f, 4.0f))
+                              .component(new PhysicsBody(16.0f, 1.0f, 2.0f, 4.0f))
                               .component(new Tags.Morko()));
 
         // borders
