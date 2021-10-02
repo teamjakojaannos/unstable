@@ -17,10 +17,7 @@ import fi.jakojaannos.unstable.physics.PhysicsContactListener;
 import fi.jakojaannos.unstable.renderer.RenderPlayer;
 import fi.jakojaannos.unstable.resources.Interactable;
 import fi.jakojaannos.unstable.resources.Resources;
-import fi.jakojaannos.unstable.systems.CameraFollowsPlayerSystem;
-import fi.jakojaannos.unstable.systems.MoveCharacterSystem;
-import fi.jakojaannos.unstable.systems.PlayerInputSystem;
-import fi.jakojaannos.unstable.systems.PlayerLocatorSystem;
+import fi.jakojaannos.unstable.systems.*;
 
 import java.util.List;
 
@@ -42,7 +39,9 @@ public class UnstableGame extends ApplicationAdapter {
                 new PlayerInputSystem(),
                 new MoveCharacterSystem(),
                 new PlayerLocatorSystem(),
-                new CameraFollowsPlayerSystem()
+                new CameraFollowsPlayerSystem(),
+                new CollectInteractablesSystem(),
+                new PlayerActionSystem()
         ));
 
         this.physicsWorld = new World(new Vector2(0.0f, 0.0f), true);

@@ -42,7 +42,7 @@ public interface EcsWorld {
         @Override
         public Stream<Archetype> getMatchingArchetypes(final SystemInput.Component... components) {
             return this.archetypes.stream()
-                                  .filter(archetype -> archetype.matches(components));
+                                  .filter(archetype -> archetype.matches(false, components));
         }
 
         @Override
@@ -87,7 +87,7 @@ public interface EcsWorld {
 
         private Archetype findOrCreateArchetype(Class<?>[] components) {
             return this.archetypes.stream()
-                                  .filter(archetype -> archetype.matches(Arrays.stream(components)
+                                  .filter(archetype -> archetype.matches(true, Arrays.stream(components)
                                                                                .map(clazz -> new SystemInput.Component(clazz, clazz,
                                                                                                                        SystemInput.Component.Type.Required))
                                                                                .toArray(SystemInput.Component[]::new)))
@@ -96,6 +96,7 @@ public interface EcsWorld {
         }
 
         private Archetype createArchetype(Class<?>[] components) {
+            System.out.printf("Creating archetype for: %s\n", Arrays.stream(components).map(Class::getSimpleName).toList());
             final var archetype = new Archetype(components);
             this.archetypes.add(archetype);
 

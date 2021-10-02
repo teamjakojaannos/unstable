@@ -1,6 +1,7 @@
 package fi.jakojaannos.unstable.systems;
 
 import fi.jakojaannos.unstable.components.MovementInput;
+import fi.jakojaannos.unstable.components.PlayerInput;
 import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
@@ -20,6 +21,8 @@ public class PlayerInputSystem implements EcsSystem<PlayerInputSystem.Input> {
                  final var yAxis = asInt(inputState.upPressed) - asInt(inputState.downPressed);
 
                  movementInput.direction.set(xAxis, yAxis);
+
+                 entity.playerInput.actionPressed = inputState.actionPressed;
              });
     }
 
@@ -29,6 +32,7 @@ public class PlayerInputSystem implements EcsSystem<PlayerInputSystem.Input> {
 
     public record Input(
             MovementInput movementInput,
+            PlayerInput playerInput,
             Tags.Player playerTag
     ) {}
 }

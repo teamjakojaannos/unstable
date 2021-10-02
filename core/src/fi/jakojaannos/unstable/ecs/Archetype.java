@@ -19,8 +19,12 @@ public class Archetype {
                                                                     clazz -> new ArrayList<>()));
     }
 
-    public boolean matches(final SystemInput.Component... components) {
-        return Arrays
+    public boolean matches(final boolean strictEquals, final SystemInput.Component... components) {
+        if (strictEquals && components.length != this.storages.size()) {
+            return false;
+        }
+
+        return  Arrays
                 .stream(components)
                 .filter(component -> !component.isOptional())
                 // With the optional components filtered out, if the component is required, we must have the key
