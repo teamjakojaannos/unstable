@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import fi.jakojaannos.unstable.components.Tags;
@@ -13,9 +15,10 @@ import fi.jakojaannos.unstable.entities.Player;
 import fi.jakojaannos.unstable.physics.PhysicsContactListener;
 import fi.jakojaannos.unstable.renderer.RenderPlayer;
 import fi.jakojaannos.unstable.resources.Resources;
-import fi.jakojaannos.unstable.resources.WorldBounds;
+import fi.jakojaannos.unstable.systems.CameraFollowsPlayerSystem;
 import fi.jakojaannos.unstable.systems.MoveCharacterSystem;
 import fi.jakojaannos.unstable.systems.PlayerInputSystem;
+import fi.jakojaannos.unstable.systems.PlayerLocatorSystem;
 
 import java.util.List;
 
@@ -35,27 +38,43 @@ public class UnstableGame extends ApplicationAdapter {
 
         this.dispatcher = new SystemDispatcher.Impl(List.of(
                 new PlayerInputSystem(),
-                new MoveCharacterSystem()
+                new MoveCharacterSystem(),
+                new PlayerLocatorSystem(),
+                new CameraFollowsPlayerSystem()
         ));
 
         this.physicsWorld = new World(new Vector2(0.0f, 0.0f), true);
         this.physicsWorld.setContactListener(new PhysicsContactListener());
 
         this.gameState.world()
-                      .spawn(Player.create(this.physicsWorld, new Vector2(2.0f, 0.0f))
-                                   .component(new Tags.Player()));
+                .spawn(Player.create(this.physicsWorld, new Vector2(2.0f, 0.0f))
+                        .component(new Tags.Player()));
         this.gameState.world()
-                      .spawn(Player.create(this.physicsWorld, new Vector2(4.0f, 5.0f))
-                                   .component(new Tags.InAir()));
+                .spawn(Player.create(this.physicsWorld, new Vector2(4.0f, 5.0f))
+                        .component(new Tags.InAir()));
 
         this.gameState.world()
-                      .spawn(Player.create(this.physicsWorld, new Vector2(8.0f, -2.5f))
-                                   .component(new Tags.FreezeInput()));
+                .spawn(Player.create(this.physicsWorld, new Vector2(8.0f, -2.5f))
+                        .component(new Tags.FreezeInput()));
     }
 
     @Override
     public void create() {
-        this.resources = new Resources(this.gameState.world(), new WorldBounds(0, 100));
+        final var worldBoundLeft = 0.0f;
+        final var worldBoundRight = 100.0f;
+
+        final var cameraPadding = 5.0f;
+
+        final var worldBounds = new BoundingBox(
+                new Vector3(worldBoundLeft, 0.0f, 0.0f),
+                new Vector3(worldBoundRight, 0.0f, 0.0f)
+        );
+
+        final var cameraBounds = new BoundingBox(
+                new Vector3(worldBoundLeft + cameraPadding, 0.0f, 0.0f),
+                new Vector3(worldBoundRight - cameraPadding, 0.0f, 0.0f)
+        );
+        this.resources = new Resources(this.gameState.world(), worldBounds, cameraBounds);
 
         this.batch = new SpriteBatch();
 
@@ -89,8 +108,8 @@ public class UnstableGame extends ApplicationAdapter {
             this.gameState.world().spawnEntities();
 
             this.physicsWorld.step(Constants.GameLoop.TIME_STEP,
-                                   Constants.PhysicsEngine.VELOCITY_ITERATIONS,
-                                   Constants.PhysicsEngine.POSITION_ITERATIONS);
+                    Constants.PhysicsEngine.VELOCITY_ITERATIONS,
+                    Constants.PhysicsEngine.POSITION_ITERATIONS);
         });
     }
 

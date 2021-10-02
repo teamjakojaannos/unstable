@@ -3,15 +3,16 @@ package fi.jakojaannos.unstable.renderer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 
 public class Camera {
     private final float widthInUnits = 17.5f;
     private final OrthographicCamera camera;
-
+    public BoundingBox bounds;
     private int screenWidth, screenHeight;
     private float heightInUnits;
 
-    public Camera(final int windowWidth, final int windowHeight) {
+    public Camera(final int windowWidth, final int windowHeight, final BoundingBox bounds) {
         final float aspectRatio = (float) windowHeight / windowWidth;
 
         this.heightInUnits = aspectRatio * this.widthInUnits;
@@ -19,6 +20,8 @@ public class Camera {
 
         this.screenWidth = windowWidth;
         this.screenHeight = windowHeight;
+
+        this.bounds = bounds;
     }
 
     public void resize(final int windowWidth, final int windowHeight) {
@@ -36,5 +39,10 @@ public class Camera {
 
     public Matrix4 getCombinedMatrix() {
         return this.camera.combined;
+    }
+
+    public void setPosition(final Vector3 pos) {
+        this.camera.position.set(new Vector3(pos));
+        this.camera.update();
     }
 }
