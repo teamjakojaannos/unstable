@@ -64,7 +64,7 @@ public class CafeIntroAct {
         gameState.world().spawn(Closet.create(new Vector2(1.0f, 1.0f), player, HidingSpot.Type.MansionClosetThin));
         gameState.world().spawn(Closet.create(new Vector2(4.0f, 1.0f), player, HidingSpot.Type.Chest));
         gameState.world().spawn(Poster.create(
-                new Vector2(12.0f, 3.5f),
+                new Vector2(12.0f, 2.5f),
                 player,
                 Poster.Type.POSTER,
                 new PopUp(List.of(new TextRenderer.TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari",

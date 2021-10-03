@@ -11,11 +11,11 @@ import java.util.Random;
 
 public class SetCafeUniforms implements EcsSystem<SetCafeUniforms.Input> {
     private static final LightningState[] LIGHTNING_SEQUENCE = new LightningState[]{
-            new LightningState(true, false, 1.0f),
-            new LightningState(false, false, 0.15f),
-            new LightningState(true, true, 0.5f),
-            new LightningState(false, true, 1.0f),
-            new LightningState(true, false, 1.0f),
+            new LightningState(true, 0.0f, 1.0f),
+            new LightningState(false, 0.0f, 0.15f),
+            new LightningState(true, 0.25f, 0.5f),
+            new LightningState(false, 0.25f, 1.0f),
+            new LightningState(true, 0.0f, 1.0f),
     };
     private final Random random = new Random();
     private final Sound lightning;
@@ -60,12 +60,13 @@ public class SetCafeUniforms implements EcsSystem<SetCafeUniforms.Input> {
     private void setLightingTimer(Resources resources, int i) {
         if (i >= LIGHTNING_SEQUENCE.length) {
             this.boom = false;
+            resources.spoopy = false;
             return;
         }
 
         final var state = LIGHTNING_SEQUENCE[i];
         this.boom = state.state;
-        resources.spoopy = state.spoopy;
+        resources.spoopy = random.nextFloat() < state.spoopiness;
         this.intensity = random.nextFloat(0.25f, 0.95f);
 
         final var duration = this.random.nextFloat(state.duration);
@@ -74,5 +75,5 @@ public class SetCafeUniforms implements EcsSystem<SetCafeUniforms.Input> {
 
     public record Input() {}
 
-    private static record LightningState(boolean state, boolean spoopy, float duration) {}
+    private static record LightningState(boolean state, float spoopiness, float duration) {}
 }

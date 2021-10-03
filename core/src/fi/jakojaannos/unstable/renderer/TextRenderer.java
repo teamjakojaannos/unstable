@@ -29,9 +29,9 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
 
         this.batch = batch;
 
-        final var fontGen = new FreeTypeFontGenerator(Gdx.files.internal("Beyond_Wonderland.ttf"));
+        final var fontGen = new FreeTypeFontGenerator(Gdx.files.internal("OldNewspaperTypes.ttf"));
         final var paramRegular = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        paramRegular.size = 24;
+        paramRegular.size = 16;
         this.font = fontGen.generateFont(paramRegular);
         fontGen.dispose();
     }

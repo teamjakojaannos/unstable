@@ -36,6 +36,7 @@ public class Poster {
 
     public enum Type {
         POSTER,
-        PAINTING
+        PAINTING,
+        WINDOW,
     }
 }
