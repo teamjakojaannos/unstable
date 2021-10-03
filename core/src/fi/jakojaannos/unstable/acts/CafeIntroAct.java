@@ -22,19 +22,26 @@ import java.util.List;
 
 @SuppressWarnings("rawtypes")
 public class CafeIntroAct {
-    private static final int WIDTH = 17;
-    private static final int HEIGHT = 9;
+    private static final int WIDTH = 29;
+    private static final int HEIGHT = 16;
     private static final String[] TILES = new String[]{
             // @formatter:off
-            "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",
-            "w_", "w_", "w_", "w_", "w_", "w_", "w_", "w_", "w_", "w_", "w_", "w_", "w_", "w_", "w_", "w_", "w_",
-            "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2",
-            "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w2",
-            "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2",
+            "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",
+            "w+", "w_", "w_", "w_", "w_", "w_", "w_", "w+", "w_", "w_", "w_", "w_", "w_", "w_", "w+", "w_", "w_", "w_", "w_", "w_", "w_", "w+", "w_", "w_", "w_", "w_", "w_", "w_", "w+",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
+            "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2",
             // @formatter:on
     };
 
@@ -61,10 +68,8 @@ public class CafeIntroAct {
                 .world()
                 .spawn(Player.create(new Vector2(2.0f, 1.0f)));
 
-        gameState.world().spawn(Closet.create(new Vector2(1.0f, 1.0f), player, HidingSpot.Type.MansionClosetThin));
-        gameState.world().spawn(Closet.create(new Vector2(4.0f, 1.0f), player, HidingSpot.Type.Chest));
         gameState.world().spawn(Poster.create(
-                new Vector2(12.0f, 2.5f),
+                new Vector2(14.0f, 2.5f),
                 player,
                 Poster.Type.POSTER,
                 new PopUp(List.of(new TextRenderer.TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari",
@@ -80,11 +85,13 @@ public class CafeIntroAct {
                                                                 0.45f))
                 )));
 
-        gameState.world().spawn(Poster.create(
-                new Vector2(8.0f, 2.5f),
-                player,
-                Poster.Type.PAINTING,
-                null));
+        for (int i = 0; i < 4; i++) {
+            gameState.world().spawn(Poster.create(
+                    new Vector2(2.0f + i * 7.0f, 2.0f),
+                    player,
+                    Poster.Type.WINDOW,
+                    null));
+        }
 
         // borders
         gameState.world().spawn(Entity.builder()
@@ -146,7 +153,13 @@ public class CafeIntroAct {
                 uniform sampler2D u_texture;
 
                 void main() {
-                  gl_FragColor = v_color * texture2D(u_texture, v_texCoords);
+                    vec4 tex_sample = texture2D(u_texture, v_texCoords);
+                    if (tex_sample.rgb == vec3(1.0, 0.0, 1.0)) {
+                        tex_sample = vec4(0.0, 0.0, 0.0, 1.0);
+                        // TODO: Sample from background image(s) + parallax ?
+                    }
+                
+                    gl_FragColor = v_color * tex_sample;
                 }
                 """;
         return List.of(

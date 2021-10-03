@@ -25,6 +25,7 @@ public class TileSet {
         CAFE.addTile("w1", false, 49);
         CAFE.addTile("w2", false, 50);
         CAFE.addTile("w_", false, 51);
+        CAFE.addTile("w+", false, 67);
     }
 
     private final Map<String, Integer[]> variantIds = new HashMap<>();

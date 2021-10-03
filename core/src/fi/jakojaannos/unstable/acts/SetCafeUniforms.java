@@ -43,7 +43,7 @@ public class SetCafeUniforms implements EcsSystem<SetCafeUniforms.Input> {
             final var lightningTime = this.random.nextFloat(lightningDelayMin, lightningDelayMax);
 
             this.lightningTimer = resources.timers.set(lightningTime, true, () -> {
-                final var volume = this.random.nextFloat(0.25f, 1.0f);
+                final var volume = this.random.nextFloat(0.25f, 0.75f);
                 final var pitch = this.random.nextFloat(0.25f, 1.0f);
                 lightning.play(volume, pitch, 0.0f);
 
