@@ -28,6 +28,7 @@ public class Resources {
     public boolean spoopy;
     public Room nextRoom;
     public Act nextAct;
+    public boolean stormy;
 
     public Resources(
             final EcsWorld world,

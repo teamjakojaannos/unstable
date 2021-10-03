@@ -1,8 +1,10 @@
 package fi.jakojaannos.unstable.acts.act3;
 
 import com.badlogic.gdx.math.Vector2;
+import fi.jakojaannos.unstable.acts.act5.Act5;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
+import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
@@ -38,7 +40,12 @@ public class MirrorRoom {
 
             @Override
             public void spawnInitialEntities(EcsWorld world, Entity player) {
-
+                world.spawn(Poster.create(
+                        new Vector2(WIDTH - 6, 1.0f),
+                        player,
+                        Poster.Type.Indoordoor,
+                        null,
+                        (s, r) -> r.nextAct = new Act5()));
             }
         };
     }

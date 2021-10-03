@@ -74,18 +74,22 @@ public class SetCafeUniforms implements EcsSystem<SetCafeUniforms.Input> {
         bgTexture3.bind(3);
         gl.glActiveTexture(GL20.GL_TEXTURE0);
 
-        if (!resources.timers.isActiveAndValid(lightningTimer)) {
-            final var lightningDelayMin = 6.0f;
-            final var lightningDelayMax = 12.0f;
+        if (resources.stormy && !resources.timers.isActiveAndValid(lightningTimer)) {
+            final var lightningDelayMin = 12.0f;
+            final var lightningDelayMax = 24.0f;
             final var lightningTime = this.random.nextFloat(lightningDelayMin, lightningDelayMax);
 
             this.lightningTimer = resources.timers.set(lightningTime, true, () -> {
-                final var volume = this.random.nextFloat(0.25f, 0.75f);
+                final var volume = this.random.nextFloat(0.125f, 0.5f);
                 final var pitch = this.random.nextFloat(0.25f, 1.0f);
                 lightning.play(volume, pitch, 0.0f);
 
                 setLightingTimer(resources, 0);
             });
+        } else {
+            if (!resources.stormy) {
+                resources.timers.clear(this.lightningTimer);
+            }
         }
 
         final var litColor = new float[]{1.0f, 1.0f, 1.0f, this.intensity}; // 🔥

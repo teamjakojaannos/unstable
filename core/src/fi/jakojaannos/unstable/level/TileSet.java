@@ -14,6 +14,8 @@ public class TileSet {
         MANSION = new TileSet(0, 16, 16);
         MANSION.addTile("f", false, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95);
         MANSION.addTile("w", true, 0);
+        MANSION.addTile("w3", false, 27);
+        MANSION.addTile("w_", false, 11, 11, 11, 11, 11, 11, 11, 11, 12);
 
         MANSION.addProp("hole", false, 5, 0, 4, 4);
         MANSION.addProp("tapetti", true, 0, 6, 2, 8);
@@ -26,6 +28,7 @@ public class TileSet {
         CAFE.addTile("w2", false, 50);
         CAFE.addTile("w_", false, 51);
         CAFE.addTile("w+", false, 67);
+
     }
 
     private final Map<String, Integer[]> variantIds = new HashMap<>();
@@ -36,15 +39,15 @@ public class TileSet {
     private final int renderId;
     private final Random random;
 
-    public int renderId() {
-        return renderId;
-    }
-
     private TileSet(int renderId, int tilesetWidth, int tilesetHeight) {
         this.renderId = renderId;
         this.tilesetWidth = tilesetWidth;
         this.tilesetHeight = tilesetHeight;
         this.random = new Random();
+    }
+
+    public int renderId() {
+        return renderId;
     }
 
     public void addTile(String name, boolean allowWallDecor, Integer... variants) {

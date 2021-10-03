@@ -13,7 +13,7 @@ import fi.jakojaannos.unstable.resources.PopUp;
 
 public class Poster {
     public static Entity.Builder create(Vector2 position, Entity player, Type type, PopUp popUp) {
-        return create(position, player, type, popUp, (x, y) -> {});
+        return create(position, player, type, popUp, null);
     }
 
     public static Entity.Builder create(
@@ -44,7 +44,7 @@ public class Poster {
                    }))
                    .component(PlayerHudComponent.Indicator.QUESTION);
         } else if (extraAction != null) {
-            builder.component(new Interactable(extraAction::execute))
+            builder.component(new Interactable(extraAction))
                    .component(PlayerHudComponent.Indicator.QUESTION);
         }
 
@@ -53,6 +53,8 @@ public class Poster {
 
     private static BoundingBox variantSize(Type type) {
         return switch (type) {
+            case Sofa -> new BoundingBox(new Vector3(0.5f, 0, 0),
+                                         new Vector3(3.5f, 1, 0));
             default -> new BoundingBox(new Vector3(0, 0, 0),
                                        new Vector3(1, 1, 0));
         };
@@ -66,5 +68,7 @@ public class Poster {
         CAFE_COUNTER,
         NEWSPAPER_ABOUT_TO_FALL,
         Indoordoor,
+        Furnace,
+        Sofa,
     }
 }

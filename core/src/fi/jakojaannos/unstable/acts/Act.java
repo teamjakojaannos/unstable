@@ -31,6 +31,10 @@ public interface Act {
         );
     }
 
+    default boolean isLightningEnabled() {
+        return false;
+    }
+
     default GameState state(Resources resources) {
         return state(defaultRoom(), resources);
     }

@@ -98,6 +98,7 @@ public class UnstableGame extends ApplicationAdapter {
             }
 
             this.resources.reset(this.gameState.world());
+            this.resources.stormy = this.currentAct.isLightningEnabled();
             this.resources.nextRoom = null;
         }
 
