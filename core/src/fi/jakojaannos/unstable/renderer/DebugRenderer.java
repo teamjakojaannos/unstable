@@ -1,10 +1,14 @@
 package fi.jakojaannos.unstable.renderer;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import fi.jakojaannos.unstable.UnstableGame;
+import fi.jakojaannos.unstable.components.MorkoAi;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
+
+import java.util.Optional;
 
 public class DebugRenderer implements EcsSystem<DebugRenderer.Input>, AutoCloseable {
 
@@ -16,6 +20,8 @@ public class DebugRenderer implements EcsSystem<DebugRenderer.Input>, AutoClosea
 
     @Override
     public void tick(SystemInput<Input> input, Resources resources) {
+        if (!UnstableGame.Constants.Debug.DEBUG_RENDERER_ENABLED) return;
+
         input.entities().forEach(entity -> {
             final var body = entity.body;
             final var bounds = body.boundsPositionCorrected();
@@ -29,6 +35,15 @@ public class DebugRenderer implements EcsSystem<DebugRenderer.Input>, AutoClosea
             renderer.setColor(1.0f, 0.0f, 0.0f, 1.0f);
             renderer.rect(min.x, min.y, width, height);
 
+
+            entity.morkoAi
+                    .flatMap(MorkoAi::getTargetPos)
+                    .ifPresent(target -> {
+                        renderer.setColor(0.0f, 0.0f, 1.0f, 1.0f);
+                        final var size = 1.0f;
+                        renderer.rect(target.x - size / 2.0f, target.y - size / 2.0f, size, size);
+                    });
+
             renderer.end();
         });
     }
@@ -39,7 +54,8 @@ public class DebugRenderer implements EcsSystem<DebugRenderer.Input>, AutoClosea
     }
 
     public record Input(
-            PhysicsBody body
+            PhysicsBody body,
+            Optional<MorkoAi> morkoAi
     ) {
     }
 }

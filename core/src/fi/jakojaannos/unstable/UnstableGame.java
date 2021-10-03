@@ -89,5 +89,9 @@ public class UnstableGame extends ApplicationAdapter {
             public static final int TICKS_PER_SECOND = 50;
             public static final float TIME_STEP = 1.0f / TICKS_PER_SECOND;
         }
+
+        public static class Debug {
+            public static final boolean DEBUG_RENDERER_ENABLED = true;
+        }
     }
 }

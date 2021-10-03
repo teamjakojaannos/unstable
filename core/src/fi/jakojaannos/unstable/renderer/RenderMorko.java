@@ -12,6 +12,7 @@ import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
+import fi.jakojaannos.unstable.resources.TimerHandle;
 
 public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable {
     private final SpriteBatch spriteBatch;
@@ -80,18 +81,22 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
 
                     final var framesToUse = switch (ai.state) {
                         case IDLING -> this.idleFrames;
-                        case WANDERING -> this.walkFrames;
-                        case CHASING -> this.attackFrames;
+                        case WANDERING, CHASING -> this.walkFrames;
                         case SEARCHING -> this.searchFrames;
+                        case ATTACKING -> this.attackFrames;
                     };
 
                     final var loopDuration = switch (ai.state) {
-                        case CHASING -> 1.0;
                         case SEARCHING -> 1.5;
+                        case ATTACKING -> ai.attackDuration;
                         default -> 0.5;
                     };
 
-                    final var scaledTick = ((float) tick / (float) UnstableGame.Constants.GameLoop.TICKS_PER_SECOND) / (loopDuration / framesToUse.length);
+
+                    final var scaledTick = switch (ai.state) {
+                        case ATTACKING -> getProgress(ai.attackHandle, resources) * attackFrames.length;
+                        default -> ((float) tick / (float) UnstableGame.Constants.GameLoop.TICKS_PER_SECOND) / (loopDuration / framesToUse.length);
+                    };
                     final var region = framesToUse[((int) scaledTick) % framesToUse.length];
                     region.flip(region.isFlipX() != physics.facingRight, false);
 
@@ -100,7 +105,7 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
 
                     this.spriteBatch.begin();
                     this.spriteBatch.draw(region,
-                            physics.getPosition().x + width * offsetX - width,
+                            physics.getPosition().x + width * offsetX - width * 0.75f,
                             physics.getPosition().y - 0.25f,
                             0.0f,
                             0.0f,
@@ -131,6 +136,18 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
             this.scream.stop();
             this.screamId = -1;
         }
+    }
+
+    private float getProgress(TimerHandle handle, Resources resources) {
+        if (handle == null) {
+            return 0.0f;
+        }
+
+        if (!resources.timers.isActiveAndValid(handle)) {
+            return 0.0f;
+        }
+
+        return (resources.timers.getTimeElapsed(handle) / handle.duration());
     }
 
     @Override

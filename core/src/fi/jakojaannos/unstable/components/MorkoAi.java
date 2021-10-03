@@ -2,22 +2,26 @@ package fi.jakojaannos.unstable.components;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Null;
-import fi.jakojaannos.unstable.UnstableGame;
 import fi.jakojaannos.unstable.ecs.Component;
+import fi.jakojaannos.unstable.resources.TimerHandle;
 
 import java.util.Optional;
 
 public class MorkoAi implements Component<MorkoAi> {
-
-
     public final float sightRadius;
-    public final float targetDistance2 = 1.0f;
-    private final float loseAggroTime;
-    private final float idleTime;
-
+    public final float targetDistance2 = 0.75f;
+    public final float attackRadius2 = 1.0f;
+    public final float loseAggroTime;
+    public final float idleTime;
+    public final float attackDuration = 0.66f;
     public State state;
-    public long idleStartTimestamp;
-    public long playerLastSightingTimestamp;
+
+    @Null
+    public TimerHandle searchHandle;
+    @Null
+    public TimerHandle idleHandle;
+    @Null
+    public TimerHandle attackHandle;
 
     @Null
     private Vector2 targetPos = null;
@@ -27,9 +31,6 @@ public class MorkoAi implements Component<MorkoAi> {
         this.loseAggroTime = loseAggroTime;
         this.idleTime = idleTime;
         this.state = state;
-
-        this.idleStartTimestamp = (long) -idleTime;
-        this.playerLastSightingTimestamp = -10000;
     }
 
     public MorkoAi(float sightRadius, float loseAggroTime, float idleTime) {
@@ -57,15 +58,7 @@ public class MorkoAi implements Component<MorkoAi> {
         return new MorkoAi(this.sightRadius, this.loseAggroTime, this.idleTime, this.state);
     }
 
-    public long loseAggroTimeInTicks() {
-        return (long) (this.loseAggroTime * UnstableGame.Constants.GameLoop.TICKS_PER_SECOND);
-    }
-
-    public long idleTimeInTicks() {
-        return (long) (this.idleTime * UnstableGame.Constants.GameLoop.TICKS_PER_SECOND);
-    }
-
     public enum State {
-        IDLING, CHASING, WANDERING, SEARCHING
+        IDLING, CHASING, WANDERING, SEARCHING, ATTACKING
     }
 }
