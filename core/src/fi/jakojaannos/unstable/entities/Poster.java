@@ -43,6 +43,9 @@ public class Poster {
                        }
                    }))
                    .component(PlayerHudComponent.Indicator.QUESTION);
+        } else if (extraAction != null) {
+            builder.component(new Interactable(extraAction::execute))
+                   .component(PlayerHudComponent.Indicator.QUESTION);
         }
 
         return builder;
@@ -62,5 +65,6 @@ public class Poster {
         WINDOW,
         CAFE_COUNTER,
         NEWSPAPER_ABOUT_TO_FALL,
+        Indoordoor,
     }
 }

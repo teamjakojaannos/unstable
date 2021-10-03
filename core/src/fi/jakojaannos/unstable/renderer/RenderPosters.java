@@ -14,6 +14,7 @@ import fi.jakojaannos.unstable.resources.Resources;
 public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoCloseable {
     private final Texture texture;
     private final Texture tilesCafe;
+    private final Texture Indoordoor;
     private final TextureRegion[][] variants;
     private final SpriteBatch spriteBatch;
 
@@ -24,6 +25,7 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
         this.spriteBatch = spriteBatch;
         this.texture = new Texture("poster.png");
         this.tilesCafe = new Texture("cafe_tiles.png");
+        this.Indoordoor = new Texture("Indoordoor.png");
         this.variants = new TextureRegion[][]{
                 {
                         new TextureRegion(this.texture, 0, 0, 16, 16),
@@ -44,6 +46,10 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                 {
                         new TextureRegion(this.texture, 16, 0, 16, 16),
                         new TextureRegion(this.texture, 16, 0, 16, 16),
+                },
+                {
+                        new TextureRegion(this.Indoordoor, 0, 0, 32, 71),
+                        new TextureRegion(this.Indoordoor, 32, 0, 32, 71),
                 },
         };
 
