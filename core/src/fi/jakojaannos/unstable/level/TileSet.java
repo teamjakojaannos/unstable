@@ -1,10 +1,10 @@
 package fi.jakojaannos.unstable.level;
 
-import com.badlogic.gdx.math.MathUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 public class TileSet {
     public static final TileSet MANSION;
@@ -33,6 +33,7 @@ public class TileSet {
     private final int tilesetWidth;
     private final int tilesetHeight;
     private final int renderId;
+    private final Random random;
 
     public int renderId() {
         return renderId;
@@ -42,6 +43,7 @@ public class TileSet {
         this.renderId = renderId;
         this.tilesetWidth = tilesetWidth;
         this.tilesetHeight = tilesetHeight;
+        this.random = new Random();
     }
 
     public void addTile(String name, boolean allowWallDecor, Integer... variants) {
@@ -61,9 +63,9 @@ public class TileSet {
 
         final var ids = this.variantIds.get(name);
         final var hash = ((long) x) + ((long) y << 32);
-        MathUtils.random.setSeed(hash);
+        this.random.setSeed(hash);
 
-        return Optional.of(ids[MathUtils.random(0, ids.length - 1)]);
+        return Optional.of(ids[this.random.nextInt(0, ids.length)]);
     }
 
     public Tile[] getProp(String name, int x, int y, boolean isWall) {
