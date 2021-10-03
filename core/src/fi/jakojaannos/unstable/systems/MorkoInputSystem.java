@@ -108,17 +108,18 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
     }
 
     private boolean canSeePlayer(Input entity, Resources resources) {
-        var playerPos = resources.playerPosition();
+        var optPlayer = resources.players.getPlayer();
+        if (optPlayer.isEmpty()) {
+            return false;
+        }
+        var player = optPlayer.get();
+
+        if (player.hasComponent(Hiding.class)) {
+            return false;
+        }
+
+        var playerPos = resources.players.getPlayerPosition();
         if (playerPos.isEmpty()) {
-            return false;
-        }
-
-        var playersList = resources.players.playerList;
-        if (playersList.size() == 0) {
-            return false;
-        }
-
-        if (playersList.get(0).hasComponent(Hiding.class)) {
             return false;
         }
 
@@ -128,12 +129,18 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
 
 
     private void doMovement(Input entity) {
+        final var targetDistance2 = 0.5f;
+
         final var ai = entity.ai;
         switch (ai.state) {
             case IDLING -> entity.input.direction.setZero();
             case CHASING, WANDERING, SEARCHING -> ai.getTargetPos().ifPresent(target -> {
                 var direction = target.cpy().sub(entity.body.getPosition());
-                entity.input.direction.set(direction).nor();
+                if (direction.len2() >= targetDistance2) {
+                    entity.input.direction.set(direction).nor();
+                } else {
+                    entity.input.direction.setZero();
+                }
             });
         }
     }

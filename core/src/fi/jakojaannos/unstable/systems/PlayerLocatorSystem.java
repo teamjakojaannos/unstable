@@ -11,9 +11,11 @@ public class PlayerLocatorSystem implements EcsSystem<PlayerLocatorSystem.Input>
 
     @Override
     public void tick(SystemInput<Input> input, Resources resources) {
-        resources.players.playerList.clear();
-
-        input.entities().forEach(entity -> resources.players.playerList.add(entity.entity));
+        input.entities()
+                .findFirst()
+                .ifPresentOrElse(player -> resources.players.setPlayer(player.entity),
+                        () -> resources.players.setPlayer(null)
+                );
     }
 
     public record Input(
