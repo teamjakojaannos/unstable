@@ -1,4 +1,4 @@
-package fi.jakojaannos.unstable.acts;
+package fi.jakojaannos.unstable.renderer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;

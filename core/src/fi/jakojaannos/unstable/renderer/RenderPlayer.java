@@ -120,7 +120,7 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                      final var footstepTime = 0.5f;
                      physics.footstepTimer = resources.timers.set(footstepTime, false, () -> {
                          final var sound = this.sounds[random.nextInt(this.sounds.length)];
-                         final var volume = 0.75f;
+                         final var volume = 0.35f;
                          sound.play(volume, random.nextFloat(0.85f, 1.15f), 0.0f);
                      });
                  }

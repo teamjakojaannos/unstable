@@ -1,13 +1,17 @@
-package fi.jakojaannos.unstable.acts;
+package fi.jakojaannos.unstable.renderer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
 import fi.jakojaannos.unstable.resources.TimerHandle;
 
 import java.util.Random;
+
+import static com.badlogic.gdx.Gdx.gl;
 
 public class SetCafeUniforms implements EcsSystem<SetCafeUniforms.Input> {
     private static final LightningState[] LIGHTNING_SEQUENCE = new LightningState[]{
@@ -19,12 +23,20 @@ public class SetCafeUniforms implements EcsSystem<SetCafeUniforms.Input> {
     };
     private final Random random = new Random();
     private final Sound lightning;
+    private final Texture bgTexture;
+    private final Texture bgTexture2;
+    private final Texture bgTexture3;
     private TimerHandle lightningTimer;
     private boolean boom;
     private float intensity;
 
     public SetCafeUniforms() {
         lightning = Gdx.audio.newSound(Gdx.files.internal("kerho_ukkonen.ogg"));
+        bgTexture = new Texture("läheiset kukkulat.png");
+        bgTexture2 = new Texture("kaukaiset kukkulat.png");
+        bgTexture3 = new Texture("taivas.png");
+        bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.MirroredRepeat);
+        bgTexture2.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.MirroredRepeat);
     }
 
     @Override
@@ -36,6 +48,29 @@ public class SetCafeUniforms implements EcsSystem<SetCafeUniforms.Input> {
         if (shader == null) {
             return;
         }
+
+        final var bgSamplerLocation = shader.getUniformLocation("u_bg_texture");
+        final var bgSamplerLocation2 = shader.getUniformLocation("u_bg_texture2");
+        final var bgSamplerLocation3 = shader.getUniformLocation("u_bg_texture3");
+        shader.setUniformi(bgSamplerLocation, 1);
+        shader.setUniformi(bgSamplerLocation2, 2);
+        shader.setUniformi(bgSamplerLocation3, 3);
+
+        final var screenWidth = resources.camera.getWidth();
+        final var screenHeight = resources.camera.getHeight();
+        shader.setUniform2fv("u_screenSize", new float[]{screenWidth, screenHeight}, 0, 2);
+        shader.setUniform2fv("u_bgSize", new float[]{bgTexture.getWidth(), bgTexture.getHeight()}, 0, 2);
+
+        final var playerX = resources.camera.getPosition().x;
+        final var playerY = resources.camera.getPosition().y;
+        shader.setUniform2fv("u_playerPos", new float[]{playerX, playerY}, 0, 2);
+
+        shader.setUniformi("u_debug_bg", 0);
+
+        bgTexture.bind(1);
+        bgTexture2.bind(2);
+        bgTexture3.bind(3);
+        gl.glActiveTexture(GL20.GL_TEXTURE0);
 
         if (!resources.timers.isActiveAndValid(lightningTimer)) {
             final var lightningDelayMin = 6.0f;

@@ -2,19 +2,12 @@ package fi.jakojaannos.unstable.acts;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.GameState;
-import fi.jakojaannos.unstable.components.HidingSpot;
-import fi.jakojaannos.unstable.components.PhysicsBody;
+import fi.jakojaannos.unstable.acts.act1.Rooms;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.Entity;
-import fi.jakojaannos.unstable.entities.Closet;
 import fi.jakojaannos.unstable.entities.Player;
-import fi.jakojaannos.unstable.entities.Poster;
-import fi.jakojaannos.unstable.level.TileMap;
-import fi.jakojaannos.unstable.level.TileSet;
 import fi.jakojaannos.unstable.renderer.*;
-import fi.jakojaannos.unstable.resources.PopUp;
 import fi.jakojaannos.unstable.systems.*;
 
 import java.util.Collection;
@@ -22,29 +15,6 @@ import java.util.List;
 
 @SuppressWarnings("rawtypes")
 public class CafeIntroAct {
-    private static final int WIDTH = 29;
-    private static final int HEIGHT = 16;
-    private static final String[] TILES = new String[]{
-            // @formatter:off
-            "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",  "f",
-            "w+", "w_", "w_", "w_", "w_", "w_", "w_", "w+", "w_", "w_", "w_", "w_", "w_", "w_", "w+", "w_", "w_", "w_", "w_", "w_", "w_", "w+", "w_", "w_", "w_", "w_", "w_", "w_", "w+",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2", "w1", "w1", "w1", "w1", "w1", "w1", "w2",
-            "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2", "w2",
-            // @formatter:on
-    };
-
     public Collection<EcsSystem> systems() {
         return List.of(
                 new PlayerInputSystem(),
@@ -58,44 +28,15 @@ public class CafeIntroAct {
 
     public GameState state() {
         final var gameState = new GameState();
+        final var room = Rooms.CAFE;
 
-        final var tileMap = TileMap.parse(TileSet.CAFE, TILES, WIDTH, HEIGHT);
-        gameState.world()
-                 .spawn(Entity.builder()
-                              .component(tileMap));
+        final var tileMap = room.createMap();
+        gameState.world().spawn(Entity.builder().component(tileMap));
 
-        final var player = gameState
-                .world()
-                .spawn(Player.create(new Vector2(2.0f, 1.0f)));
+        final var playerPosition = room.playerStartPosition();
+        final var player = gameState.world().spawn(Player.create(playerPosition));
 
-        gameState.world().spawn(Poster.create(
-                new Vector2(14.0f, 2.5f),
-                player,
-                Poster.Type.POSTER,
-                new PopUp(List.of(new TextRenderer.TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari",
-                                                                0.55f,
-                                                                0.60f,
-                                                                0.5f),
-                                  new TextRenderer.TextOnScreen("""
-                                                                        Viime yona skotlantilainen juoppo sticky jumppasi pankin holviin ja rajaytti noin 400kg kultaa ja seitseman sentrya.
-                                                                                                
-                                                                        Han pakeni paikalta traktorilla ja soitti sakkipillia aamunkoittoon asti.""",
-                                                                0.05f,
-                                                                0.6f,
-                                                                0.45f))
-                )));
-
-        for (int i = 0; i < 4; i++) {
-            gameState.world().spawn(Poster.create(
-                    new Vector2(2.0f + i * 7.0f, 2.0f),
-                    player,
-                    Poster.Type.WINDOW,
-                    null));
-        }
-
-        // borders
-        gameState.world().spawn(Entity.builder()
-                                      .component(new PhysicsBody(-1.0f, 1.0f, 1.0f, 2.0f)));
+        room.spawnInitialEntities(gameState.world(), player);
 
         return gameState;
     }
@@ -150,15 +91,63 @@ public class CafeIntroAct {
                 #endif
                 varying LOWP vec4 v_color;
                 varying vec2 v_texCoords;
+                uniform vec2 u_screenSize;
+                uniform vec2 u_bgSize;
+                uniform vec2 u_playerPos;
+                uniform int u_debug_bg;
                 uniform sampler2D u_texture;
+                uniform sampler2D u_bg_texture;
+                uniform sampler2D u_bg_texture2;
+                uniform sampler2D u_bg_texture3;
+                                
+                uniform vec4 u_overlay_color;
 
                 void main() {
                     vec4 tex_sample = texture2D(u_texture, v_texCoords);
-                    if (tex_sample.rgb == vec3(1.0, 0.0, 1.0)) {
-                        tex_sample = vec4(0.0, 0.0, 0.0, 1.0);
-                        // TODO: Sample from background image(s) + parallax ?
+                    if (tex_sample.rgb == vec3(1.0, 0.0, 1.0) || u_debug_bg == 1) {
+                        float bg_scale = 3.0;
+                        float parallax_move_scale = 4.0;
+                        float parallax_move_scale2 = 1.0;
+                        float parallax_move_scale3 = 0.0;
+
+                        vec2 scaled_player_pos = u_playerPos * parallax_move_scale;
+                        vec2 scaled_player_pos2 = u_playerPos * parallax_move_scale2;
+                        vec2 scaled_player_pos3 = u_playerPos * parallax_move_scale3;
+                        vec2 offset = vec2(scaled_player_pos.x / u_screenSize.x, 0.8);
+                        vec2 offset2 = vec2(scaled_player_pos2.x / u_screenSize.x, 0.8);
+                        vec2 offset3 = vec2(scaled_player_pos3.x / u_screenSize.x, 0.8);
+                        
+                        float bg_aspect = u_bgSize.y / u_bgSize.x;
+                        
+                        float u = gl_FragCoord.x * bg_aspect;
+                        float v = gl_FragCoord.y;
+                        
+                        vec2 projected = vec2(u, v) * bg_scale;
+                        vec2 flipped = projected / u_screenSize.xy;
+                        vec2 bg_tex_coord = vec2(flipped.x, 1.0 - flipped.y) + offset;
+                        vec2 bg_tex_coord2 = vec2(flipped.x, 1.0 - flipped.y) + offset2;
+                        vec2 bg_tex_coord3 = vec2(flipped.x, 1.0 - flipped.y) + offset3;
+                        
+                        vec2 clamped = vec2(
+                            bg_tex_coord.x,
+                            clamp(bg_tex_coord.y, -0.65, 1.1)
+                        );
+                        vec2 clamped2 = vec2(
+                            bg_tex_coord2.x,
+                            clamp(bg_tex_coord2.y, -0.65, 1.1)
+                        );
+                        vec2 clamped3 = vec2(
+                            bg_tex_coord3.x,
+                            clamp(bg_tex_coord3.y, -0.65, 1.1)
+                        );
+                    
+                        tex_sample = texture2D(u_bg_texture3, clamped3) + u_overlay_color;
+                        vec4 tex_sample2 = texture2D(u_bg_texture2, clamped2);
+                        tex_sample = mix(tex_sample, tex_sample2, tex_sample2.a);
+                        vec4 tex_sample3 = texture2D(u_bg_texture, clamped);
+                        tex_sample = mix(tex_sample, tex_sample3, tex_sample3.a);
                     }
-                
+
                     gl_FragColor = v_color * tex_sample;
                 }
                 """;

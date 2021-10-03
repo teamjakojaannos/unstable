@@ -2,8 +2,11 @@ package fi.jakojaannos.unstable.renderer;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+
+import java.awt.*;
 
 public class Camera {
     private final float widthInUnits = 24f;
@@ -44,5 +47,17 @@ public class Camera {
     public void setPosition(final Vector3 pos) {
         this.camera.position.set(new Vector3(pos).add(0, heightInUnits / 3.0f, 0));
         this.camera.update();
+    }
+
+    public float getWidth() {
+        return this.screenWidth;
+    }
+
+    public float getHeight() {
+        return this.screenHeight;
+    }
+
+    public Vector2 getPosition() {
+        return new Vector2(this.camera.position.x, this.camera.position.y);
     }
 }
