@@ -7,6 +7,8 @@ import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
 
+import java.util.Optional;
+
 public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
     @Override
     public void tick(SystemInput<Input> input, Resources resources) {
@@ -52,7 +54,7 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
         // I can't see player, and he wasn't near me recently. Either:
         // continue to the target, pick a new one or start idling
 
-        if (entity.body.getPosition().dst2(targetPos.get()) > entity.ai.targetDistance2) {
+        if (imFarFromMyTarget(entity, targetPos.get())) {
             // I'm not at my target, keep going
             return;
         }
@@ -66,6 +68,10 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
         } else {
             pickNewTarget(entity, resources);
         }
+    }
+
+    private boolean imFarFromMyTarget(Input entity, Vector2 targetPos) {
+        return entity.body.getPosition().dst2(targetPos) > entity.ai.targetDistance2;
     }
 
     private void pickNewTarget(Input entity, Resources resources) {

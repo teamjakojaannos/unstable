@@ -95,7 +95,7 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                  final var region = framesToUse[((int) scaledTick) % framesToUse.length];
                  region.flip(region.isFlipX() == physics.facingRight, false);
 
-                 this.spriteBatch.draw(region, x, y, originX, originY, width, height, 1.0f, 1.0f, 0.0f);
+                 this.spriteBatch.draw(region, x - width / 2f, y, originX, originY, width, height, 1.0f, 1.0f, 0.0f);
 
                  final var displayIcon = switch (entity.hud.currentIndicator) {
                      case CLOSET -> entity.hidingTag.isPresent() ? 0 : 1;

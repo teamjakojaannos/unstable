@@ -82,6 +82,7 @@ public class MansionIntroAct {
                 new RenderHidingSpot(batch),
                 new RenderPlayer(batch),
                 new RenderMorko(batch),
+                new DebugRenderer(),
                 new TextRenderer(batch),
                 new RenderAmbience()
         );

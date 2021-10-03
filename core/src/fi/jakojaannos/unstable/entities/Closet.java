@@ -9,8 +9,15 @@ import fi.jakojaannos.unstable.resources.Interactable;
 
 public class Closet {
     public static Entity.Builder create(Vector2 position, Entity player, HidingSpot.Type type) {
+        final var hitBoxSize = switch (type) {
+            case Chest -> new Vector2(1.75f, 2.0f);
+            case MansionClosetLarge -> new Vector2(2.0f, 3.0f);
+            case MansionClosetThin -> new Vector2(1.6f, 3.0f);
+            case WallHole -> new Vector2(2.5f, 3.0f);
+        };
+
         return Entity.builder()
-                     .component(new PhysicsBody(position.x, position.y, 1.5f, 3.0f))
+                     .component(new PhysicsBody(position.x, position.y, hitBoxSize.x, hitBoxSize.y))
                      .component(new Interactable((self, resources) -> {
                          final var timers = resources.timers;
                          final var hidingSpot = self.getComponent(HidingSpot.class).orElseThrow();

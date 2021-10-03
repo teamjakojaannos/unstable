@@ -158,6 +158,7 @@ public class CafeIntroAct {
                 new RenderPlayer(batch),
                 new RenderMorko(batch),
                 new SetShader(batch, null, null),
+                new DebugRenderer(),
                 new TextRenderer(batch)
         );
     }

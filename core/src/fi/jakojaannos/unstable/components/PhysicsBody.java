@@ -54,7 +54,7 @@ public class PhysicsBody implements Component<PhysicsBody> {
         return myBounds.intersects(anotherBounds);
     }
 
-    private BoundingBox boundsPositionCorrected() {
+    public BoundingBox boundsPositionCorrected() {
         final var min = this.bounds.min.cpy().add(this.position.x, this.position.y, 0.0f);
         final var max = this.bounds.max.cpy().add(this.position.x, this.position.y, 0.0f);
 

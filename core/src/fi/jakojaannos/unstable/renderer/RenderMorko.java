@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import fi.jakojaannos.unstable.UnstableGame;
+import fi.jakojaannos.unstable.components.MorkoAi;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
@@ -14,8 +15,11 @@ import fi.jakojaannos.unstable.resources.Resources;
 
 public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable {
     private final SpriteBatch spriteBatch;
-    private final Texture morko;
-    private final TextureRegion[] morkoFrames;
+    private final Texture morkoTexture;
+    private final TextureRegion[] walkFrames;
+    private final TextureRegion[] idleFrames;
+    private final TextureRegion[] attackFrames;
+    private final TextureRegion[] searchFrames;
 
     private final Sound scream;
     private final Sound scream2;
@@ -25,13 +29,33 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
 
     public RenderMorko(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
-        this.morko = new Texture("morkowalk.png");
-        this.morkoFrames = new TextureRegion[4];
+        this.morkoTexture = new Texture("morko.png");
+        this.walkFrames = new TextureRegion[4];
+        this.idleFrames = new TextureRegion[1];
+        this.attackFrames = new TextureRegion[8];
+        this.searchFrames = new TextureRegion[8];
 
-        final var frameWidth = this.morko.getWidth() / this.morkoFrames.length;
-        final var frameHeight = this.morko.getHeight();
-        for (int frameIndex = 0; frameIndex < this.morkoFrames.length; frameIndex++) {
-            this.morkoFrames[frameIndex] = new TextureRegion(this.morko, frameWidth * frameIndex, 0, frameWidth, frameHeight);
+        final var frameWidth = 64;
+        final var frameHeight = 92;
+
+        var row = 0;
+        for (int frameIndex = 0; frameIndex < this.walkFrames.length; frameIndex++) {
+            this.walkFrames[frameIndex] = new TextureRegion(this.morkoTexture, frameWidth * frameIndex, row * frameHeight, frameWidth, frameHeight);
+        }
+
+        row++;
+        for (int frameIndex = 0; frameIndex < this.idleFrames.length; frameIndex++) {
+            this.idleFrames[frameIndex] = new TextureRegion(this.morkoTexture, frameWidth * frameIndex, row * frameHeight, frameWidth, frameHeight);
+        }
+
+        row++;
+        for (int frameIndex = 0; frameIndex < this.attackFrames.length; frameIndex++) {
+            this.attackFrames[frameIndex] = new TextureRegion(this.morkoTexture, frameWidth * frameIndex, row * frameHeight, frameWidth, frameHeight);
+        }
+
+        row++;
+        for (int frameIndex = 0; frameIndex < this.searchFrames.length; frameIndex++) {
+            this.searchFrames[frameIndex] = new TextureRegion(this.morkoTexture, frameWidth * frameIndex, row * frameHeight, frameWidth, frameHeight);
         }
 
         this.scream = Gdx.audio.newSound(Gdx.files.internal("Breathloop.ogg"));
@@ -47,29 +71,44 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
                 .entities()
                 .reduce(Float.MAX_VALUE, (min, entity) -> {
                     final var physics = entity.body;
+                    final var ai = entity.ai;
                     final var tick = resources.timeManager.currentTick();
 
                     final var distanceToPlayer = resources
                             .playerPosition()
                             .map(pos -> pos.dst(physics.getPosition()));
 
-                    final var loopDuration = 0.5;
+                    final var framesToUse = switch (ai.state) {
+                        case IDLING -> this.idleFrames;
+                        case WANDERING -> this.walkFrames;
+                        case CHASING -> this.attackFrames;
+                        case SEARCHING -> this.searchFrames;
+                    };
 
-                    final var scaledTick = ((float) tick / (float) UnstableGame.Constants.GameLoop.TICKS_PER_SECOND) / (loopDuration / this.morkoFrames.length);
-                    final var region = this.morkoFrames[((int) scaledTick) % this.morkoFrames.length];
+                    final var loopDuration = switch (ai.state) {
+                        case CHASING -> 1.0;
+                        case SEARCHING -> 1.5;
+                        default -> 0.5;
+                    };
+
+                    final var scaledTick = ((float) tick / (float) UnstableGame.Constants.GameLoop.TICKS_PER_SECOND) / (loopDuration / framesToUse.length);
+                    final var region = framesToUse[((int) scaledTick) % framesToUse.length];
                     region.flip(region.isFlipX() != physics.facingRight, false);
+
+                    final var width = 4.0f;
+                    final var offsetX = !region.isFlipX() ? 0.25f : 0.75f;
 
                     this.spriteBatch.begin();
                     this.spriteBatch.draw(region,
-                                          physics.getPosition().x,
-                                          physics.getPosition().y - 0.25f,
-                                          0.0f,
-                                          0.0f,
-                                          2.0f,
-                                          6.0f,
-                                          1.0f,
-                                          1.0f,
-                                          0.0f);
+                            physics.getPosition().x + width * offsetX - width,
+                            physics.getPosition().y - 0.25f,
+                            0.0f,
+                            0.0f,
+                            width,
+                            6.0f,
+                            1.0f,
+                            1.0f,
+                            0.0f);
                     this.spriteBatch.end();
 
                     return distanceToPlayer.orElse(min);
@@ -98,11 +137,13 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
     public void close() {
         this.scream.dispose();
         this.scream2.dispose();
-        this.morko.dispose();
+        this.morkoTexture.dispose();
     }
 
     public record Input(
             PhysicsBody body,
+            MorkoAi ai,
             Tags.Morko tag
-    ) {}
+    ) {
+    }
 }
