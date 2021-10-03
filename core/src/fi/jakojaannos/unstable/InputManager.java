@@ -41,7 +41,7 @@ public class InputManager {
     }
 
     public enum KeyInput {
-        LEFT(A), RIGHT(D), ACTION(F), ACTION_2(G), NEWSPAPER(N);
+        LEFT(A), RIGHT(D), ACTION(F);
 
         private final int keyCode;
 

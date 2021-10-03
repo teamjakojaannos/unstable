@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Null;
 import fi.jakojaannos.unstable.InputManager;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.renderer.Camera;
+import fi.jakojaannos.unstable.renderer.TextRenderer;
 
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ public class Resources {
     public final TimeManager timeManager;
 
     public final InteractItems interactItems = new InteractItems();
+    public PopUp popup;
 
     @Null
     private Vector2 playerPosition;

@@ -1,6 +1,7 @@
 package fi.jakojaannos.unstable.resources;
 
 import fi.jakojaannos.unstable.components.PhysicsBody;
+import fi.jakojaannos.unstable.components.PlayerHudComponent;
 import fi.jakojaannos.unstable.ecs.Entity;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class InteractItems {
     public record InteractableItem(
             Interactable action,
             PhysicsBody body,
-            Entity entity
-    ) {
-    }
+            Entity entity,
+            PlayerHudComponent.Indicator icon
+    ) {}
 }

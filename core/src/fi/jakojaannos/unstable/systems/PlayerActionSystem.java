@@ -15,17 +15,12 @@ public class PlayerActionSystem implements EcsSystem<PlayerActionSystem.Input> {
     public void tick(SystemInput<Input> input, Resources resources) {
 
         input.entities().forEach(entity -> {
-
-            if (entity.input.action2Pressed) {
-                resources.timers.set(2.5f, false, () -> System.out.println("Hello from the timers"));
-            }
-
             entity.hud.currentIndicator = PlayerHudComponent.Indicator.NONE;
 
             for (final var item : resources.interactItems.items) {
                 if (entity.body.overlaps(item.body())) {
 
-                    entity.hud.currentIndicator = PlayerHudComponent.Indicator.CLOSET;
+                    entity.hud.currentIndicator = item.icon();
 
                     if (entity.input.actionPressed) {
                         item.action().execute(item.entity(), resources);

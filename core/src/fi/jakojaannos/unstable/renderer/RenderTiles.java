@@ -11,21 +11,27 @@ import fi.jakojaannos.unstable.resources.Resources;
 
 public class RenderTiles implements EcsSystem<RenderTiles.Input>, AutoCloseable {
     private final SpriteBatch spriteBatch;
-    private final Texture tileset;
-    private final TextureRegion[] tileRegions;
+    private final Texture[] tileset;
+    private final TextureRegion[][] tileRegions;
     private final long seed;
 
     public RenderTiles(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
-        this.tileset = new Texture("mansion_tiles.png");
+        this.tileset = new Texture[]{
+                new Texture("mansion_tiles.png"),
+                new Texture("cafe_tiles.png"),
+        };
 
-        final var tilesX = this.tileset.getWidth() / 16;
-        final var tilesY = this.tileset.getHeight() / 16;
-        this.tileRegions = new TextureRegion[tilesX * tilesY];
-        for (int x = 0; x < tilesX; x++) {
-            for (int y = 0; y < tilesY; y++) {
-                final var index = tilesY * y + x;
-                this.tileRegions[index] = new TextureRegion(this.tileset, x * 16, y * 16, 16, 16);
+        final var tilesX = 16;
+        final var tilesY = 16;
+        this.tileRegions = new TextureRegion[2][];
+        for (int renderId = 0; renderId < this.tileset.length; renderId++) {
+            this.tileRegions[renderId] = new TextureRegion[tilesX * tilesY];
+            for (int x = 0; x < tilesX; x++) {
+                for (int y = 0; y < tilesY; y++) {
+                    final var index = tilesY * y + x;
+                    this.tileRegions[renderId][index] = new TextureRegion(this.tileset[renderId], x * 16, y * 16, 16, 16);
+                }
             }
         }
         seed = MathUtils.random(Long.MAX_VALUE);
@@ -39,9 +45,10 @@ public class RenderTiles implements EcsSystem<RenderTiles.Input>, AutoCloseable 
         input.entities()
              .forEach(entity -> {
                  final var tileMap = entity.tileMap();
+                 final var tileSet = tileMap.tileSet();
                  spriteBatch.begin();
-                 tileMap.tiles.forEach(tile -> {
-                     final var region = this.tileRegions[tile.id()];
+                 tileMap.tiles().forEach(tile -> {
+                     final var region = this.tileRegions[tileSet.renderId()][tile.id()];
                      final var x = tile.x() - 0.001f;
                      final var y = tile.y() - 0.001f;
                      final var width = 1.002f;
@@ -57,7 +64,7 @@ public class RenderTiles implements EcsSystem<RenderTiles.Input>, AutoCloseable 
                          final var id = variantIds[MathUtils.random(variantIds.length - 1)];
 
                          if (id != -1) {
-                             final var decorRegion = this.tileRegions[id];
+                             final var decorRegion = this.tileRegions[tileSet.renderId()][id];
                              spriteBatch.draw(decorRegion, x, y, width, height);
                          }
                      }
@@ -68,7 +75,9 @@ public class RenderTiles implements EcsSystem<RenderTiles.Input>, AutoCloseable 
 
     @Override
     public void close() {
-        this.tileset.dispose();
+        for (final var tiles : this.tileset) {
+            tiles.dispose();
+        }
     }
 
     public record Input(

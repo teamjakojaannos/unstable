@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 @SuppressWarnings("rawtypes")
-public class IntroAct {
+public class MansionIntroAct {
     private static final int WIDTH = 16;
     private static final int HEIGHT = 9;
     private static final String[] TILES = new String[]{
@@ -55,44 +55,10 @@ public class IntroAct {
     public GameState state() {
         final var gameState = new GameState();
 
-        final var tileset = new TileSet(16, 16);
-        tileset.addTile("f", 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95);
-        tileset.addTile("w", 0);
-
-        tileset.addProp("hole", 5, 0, 4, 4);
-        tileset.addProp("tapetti", 0, 6, 2, 8);
-        tileset.addProp("closet_01", 0, 1, 3, 4);
-        tileset.addProp("closet_02", 3, 1, 2, 4);
-
-        final var filledByProps = new ArrayList<Tile>();
-        final var tiles = new ArrayList<Tile>();
-        for (int x = 0; x < WIDTH; x++) {
-            for (int y = 0; y < HEIGHT; y++) {
-                int finalX = x;
-                int finalY = y;
-                if (filledByProps.stream().anyMatch(tile -> tile.x() == finalX && tile.y() == finalY)) {
-                    continue;
-                }
-
-                final var index = y * WIDTH + x;
-                final var id = TILES[index];
-
-                final var tile = tileset.getTile(id, x, y);
-                final var isWall = Arrays.asList(WALL_IDS).contains(id);
-                if (tile.isPresent()) {
-                    tiles.add(new Tile(tile.get(), x, y, isWall));
-                } else {
-                    final var prop = List.of(tileset.getProp(id, x, y, isWall));
-                    filledByProps.addAll(prop);
-                    tiles.addAll(prop);
-                }
-
-            }
-        }
-
+        final var tileMap = TileMap.parse(TileSet.MANSION, TILES, WIDTH, HEIGHT);
         gameState.world()
                  .spawn(Entity.builder()
-                              .component(new TileMap(tiles)));
+                              .component(tileMap));
 
         final var player = gameState
                 .world()

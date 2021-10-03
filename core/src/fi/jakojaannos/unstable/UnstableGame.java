@@ -6,7 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.ScreenUtils;
-import fi.jakojaannos.unstable.acts.IntroAct;
+import fi.jakojaannos.unstable.acts.CafeIntroAct;
+import fi.jakojaannos.unstable.acts.MansionIntroAct;
 import fi.jakojaannos.unstable.ecs.SystemDispatcher;
 import fi.jakojaannos.unstable.resources.Resources;
 
@@ -44,7 +45,8 @@ public class UnstableGame extends ApplicationAdapter {
         this.batch = new SpriteBatch();
 
         // Initialize act
-        final var intro = new IntroAct();
+        final var intro = new CafeIntroAct();
+        //final var intro = new MansionIntroAct();
         this.dispatcher = new SystemDispatcher.Impl(intro.systems());
         this.renderer = new SystemDispatcher.Impl(intro.renderSystems(this.batch));
         this.gameState = intro.state();

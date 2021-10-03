@@ -16,8 +16,12 @@ public class PlayerHudComponent implements Component<PlayerHudComponent> {
     }
 
 
-    public enum Indicator {
-        NONE, CLOSET
-    }
+    public enum Indicator implements Component<Indicator> {
+        NONE, CLOSET, QUESTION;
 
+        @Override
+        public Indicator cloneComponent() {
+            return this;
+        }
+    }
 }

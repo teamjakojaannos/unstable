@@ -6,7 +6,6 @@ import fi.jakojaannos.unstable.components.HidingSpot;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.resources.Interactable;
-import fi.jakojaannos.unstable.resources.Timers;
 
 public class Closet {
     public static Entity.Builder create(Vector2 position, Entity player, HidingSpot.Type type) {

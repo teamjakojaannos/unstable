@@ -7,23 +7,51 @@ import java.util.Map;
 import java.util.Optional;
 
 public class TileSet {
-    private final Map<String, Integer[]> variantIds = new HashMap<>();
-    private final Map<String, Prop> props = new HashMap<>();
+    public static final TileSet MANSION;
+    public static final TileSet CAFE;
 
+    static {
+        MANSION = new TileSet(0, 16, 16);
+        MANSION.addTile("f", false, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95);
+        MANSION.addTile("w", true, 0);
+
+        MANSION.addProp("hole", false, 5, 0, 4, 4);
+        MANSION.addProp("tapetti", true, 0, 6, 2, 8);
+        MANSION.addProp("closet_01", false, 0, 1, 3, 4);
+        MANSION.addProp("closet_02", false, 3, 1, 2, 4);
+
+        CAFE = new TileSet(1, 16, 16);
+        CAFE.addTile("f", false, 48);
+        CAFE.addTile("w1", false, 49);
+        CAFE.addTile("w2", false, 50);
+        CAFE.addTile("w_", false, 51);
+    }
+
+    private final Map<String, Integer[]> variantIds = new HashMap<>();
+    private final Map<String, Boolean> wallIds = new HashMap<>();
+    private final Map<String, Prop> props = new HashMap<>();
     private final int tilesetWidth;
     private final int tilesetHeight;
+    private final int renderId;
 
-    public TileSet(int tilesetWidth, int tilesetHeight) {
+    public int renderId() {
+        return renderId;
+    }
+
+    private TileSet(int renderId, int tilesetWidth, int tilesetHeight) {
+        this.renderId = renderId;
         this.tilesetWidth = tilesetWidth;
         this.tilesetHeight = tilesetHeight;
     }
 
-    public void addTile(String name, Integer... variants) {
-        variantIds.put(name, variants);
+    public void addTile(String name, boolean allowWallDecor, Integer... variants) {
+        this.variantIds.put(name, variants);
+        this.wallIds.put(name, allowWallDecor);
     }
 
-    public void addProp(String name, int x, int y, int width, int height) {
+    public void addProp(String name, boolean allowWallDecor, int x, int y, int width, int height) {
         props.put(name, new Prop(x, y, width, height));
+        this.wallIds.put(name, allowWallDecor);
     }
 
     public Optional<Integer> getTile(String name, int x, int y) {
@@ -54,6 +82,10 @@ public class TileSet {
         }
 
         return tiles;
+    }
+
+    public boolean allowWallDecor(String id) {
+        return this.wallIds.getOrDefault(id, false);
     }
 
     private static record Prop(int x, int y, int w, int h) {}

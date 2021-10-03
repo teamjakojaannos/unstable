@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseable {
-    public final List<TextOnScreen> lines = new ArrayList<>();
     private final SpriteBatch batch;
     private final BitmapFont font;
     private final Texture newspaper;
@@ -34,34 +33,17 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
         final var paramRegular = new FreeTypeFontGenerator.FreeTypeFontParameter();
         paramRegular.size = 24;
         this.font = fontGen.generateFont(paramRegular);
-
         fontGen.dispose();
-
-        lines.add(new TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari",
-                0.55f,
-                0.60f,
-                0.5f
-        ));
-
-        lines.add(new TextOnScreen(
-                """
-                        Viime yona skotlantilainen juoppo sticky jumppasi pankin holviin ja rajaytti noin 400kg kultaa ja seitseman sentrya.
-                                                
-                        Han pakeni paikalta traktorilla ja soitti sakkipillia aamunkoittoon asti.""",
-                0.05f,
-                0.6f,
-                0.45f
-        ));
-
-
     }
 
     @Override
     public void tick(SystemInput<Input> input, Resources resources) {
         final var player = input.entities().findFirst();
-        if (player.isEmpty() || !player.get().playerInput.newspaperPressed) {
+        if (player.isEmpty() || resources.popup == null) {
             return;
         }
+
+        final var lines = resources.popup.lines();
 
         this.batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         this.batch.begin();
@@ -75,10 +57,10 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
 
         this.batch.setColor(this.orange);
         this.batch.draw(pixel,
-                newspaperX,
-                0.0f,
-                newspaperWidth,
-                newspaperHeight
+                        newspaperX,
+                        0.0f,
+                        newspaperWidth,
+                        newspaperHeight
         );
 
         this.batch.draw(
@@ -91,7 +73,7 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
 
 
         this.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        for (var line : this.lines) {
+        for (var line : lines) {
             final var xPos = line.xPos * newspaperWidth;
             final var yPos = line.yPos * newspaperHeight;
 

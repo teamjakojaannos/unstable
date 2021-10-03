@@ -5,7 +5,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import fi.jakojaannos.unstable.UnstableGame;
 import fi.jakojaannos.unstable.components.Hiding;
 import fi.jakojaannos.unstable.components.PhysicsBody;
@@ -53,6 +52,7 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
         this.closetIconFrames = new TextureRegion[]{
                 new TextureRegion(this.closetIndicator, 0, 0, 16, 16),
                 new TextureRegion(this.closetIndicator, 16, 0, 16, 16),
+                new TextureRegion(this.closetIndicator, 32, 0, 16, 16),
         };
 
 
@@ -97,10 +97,16 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
 
                  this.spriteBatch.draw(region, x, y, originX, originY, width, height, 1.0f, 1.0f, 0.0f);
 
-                 if (entity.hud.currentIndicator == PlayerHudComponent.Indicator.CLOSET) {
+                 final var displayIcon = switch (entity.hud.currentIndicator) {
+                     case CLOSET -> entity.hidingTag.isPresent() ? 0 : 1;
+                     case QUESTION -> 2;
+                     default -> -1;
+                 };
+
+                 if (displayIcon != -1) {
                      final var iconSize = 0.5f;
                      this.spriteBatch.draw(
-                             this.closetIconFrames[entity.hidingTag.isPresent() ? 0 : 1],
+                             this.closetIconFrames[displayIcon],
                              x + width / 2.0f - iconSize / 2.0f,
                              y + height + 0.25f,
                              iconSize, iconSize
