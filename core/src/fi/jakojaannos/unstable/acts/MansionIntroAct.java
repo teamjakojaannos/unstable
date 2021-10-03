@@ -10,14 +10,11 @@ import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Closet;
 import fi.jakojaannos.unstable.entities.Morko;
 import fi.jakojaannos.unstable.entities.Player;
-import fi.jakojaannos.unstable.level.Tile;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
 import fi.jakojaannos.unstable.renderer.*;
 import fi.jakojaannos.unstable.systems.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,8 +35,6 @@ public class MansionIntroAct {
             "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w",       "w", "w",       "w", "w",       "w",
             // @formatter:on
     };
-
-    private static final String[] WALL_IDS = new String[]{"w", "tapetti"};
 
     public Collection<EcsSystem> systems() {
         return List.of(
@@ -87,7 +82,8 @@ public class MansionIntroAct {
                 new RenderHidingSpot(batch),
                 new RenderPlayer(batch),
                 new RenderMorko(batch),
-                new TextRenderer(batch)
+                new TextRenderer(batch),
+                new RenderAmbience()
         );
     }
 }
