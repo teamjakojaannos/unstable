@@ -6,10 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
-import java.awt.*;
-
 public class Camera {
-    private final float widthInUnits = 24f;
+    public static final float widthInUnits = 24f;
     private final OrthographicCamera camera;
     public BoundingBox bounds;
     private int screenWidth, screenHeight;
@@ -18,8 +16,8 @@ public class Camera {
     public Camera(final int windowWidth, final int windowHeight, final BoundingBox bounds) {
         final float aspectRatio = (float) windowHeight / windowWidth;
 
-        this.heightInUnits = aspectRatio * this.widthInUnits;
-        this.camera = new OrthographicCamera(this.widthInUnits, this.heightInUnits);
+        this.heightInUnits = aspectRatio * widthInUnits;
+        this.camera = new OrthographicCamera(widthInUnits, this.heightInUnits);
 
         this.screenWidth = windowWidth;
         this.screenHeight = windowHeight;
@@ -44,11 +42,6 @@ public class Camera {
         return this.camera.combined;
     }
 
-    public void setPosition(final Vector3 pos) {
-        this.camera.position.set(new Vector3(pos).add(0, heightInUnits / 3.0f, 0));
-        this.camera.update();
-    }
-
     public float getWidth() {
         return this.screenWidth;
     }
@@ -59,5 +52,22 @@ public class Camera {
 
     public Vector2 getPosition() {
         return new Vector2(this.camera.position.x, this.camera.position.y);
+    }
+
+    public void setPosition(final Vector3 pos) {
+        this.camera.position.set(new Vector3(pos).add(0, heightInUnits / 3.0f, 0));
+        this.camera.update();
+    }
+
+    public Vector2 getBottomLeft() {
+        return getPosition().cpy().sub(widthInUnits / 2.0f, heightInUnits / 2.0f);
+    }
+
+    public float getWidthInUnits() {
+        return widthInUnits;
+    }
+
+    public float getHeightInUnits() {
+        return this.heightInUnits;
     }
 }

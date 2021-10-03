@@ -2,12 +2,12 @@ package fi.jakojaannos.unstable;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.ScreenUtils;
 import fi.jakojaannos.unstable.acts.CafeIntroAct;
-import fi.jakojaannos.unstable.acts.MansionIntroAct;
 import fi.jakojaannos.unstable.ecs.SystemDispatcher;
 import fi.jakojaannos.unstable.resources.Resources;
 
@@ -65,6 +65,18 @@ public class UnstableGame extends ApplicationAdapter {
         ScreenUtils.clear(0, 0, 0, 1);
         this.batch.setProjectionMatrix(this.resources.camera.getCombinedMatrix());
         this.renderer.tick(this.gameState.world(), this.resources);
+
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            final var x = ((float) Gdx.input.getX() / (float) Gdx.graphics.getWidth());
+            final var y = 1.0f - ((float) Gdx.input.getY() / (float) Gdx.graphics.getHeight());
+            final var xUnits = x * resources.camera.getWidthInUnits();
+            final var yUnits = y * resources.camera.getHeightInUnits();
+
+            final var cameraPos = resources.camera.getBottomLeft();
+            final var xRelativeToCam = cameraPos.x + xUnits;
+            final var yRelativeToCam = cameraPos.y + yUnits;
+            System.out.printf("x(%.2f, %.2f)\n", xRelativeToCam, yRelativeToCam);
+        }
     }
 
     private void update(final float deltaSeconds) {
