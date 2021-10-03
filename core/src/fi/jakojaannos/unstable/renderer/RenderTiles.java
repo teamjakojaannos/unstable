@@ -60,7 +60,7 @@ public class RenderTiles implements EcsSystem<RenderTiles.Input>, AutoCloseable 
                          final var hash = ((long) x) + ((long) y << 32);
                          MathUtils.random.setSeed(hash + this.seed);
 
-                         final var variantIds = new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 2};
+                         final var variantIds = new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 2, -1, -1, -1,};
                          final var id = variantIds[MathUtils.random(variantIds.length - 1)];
 
                          if (id != -1) {

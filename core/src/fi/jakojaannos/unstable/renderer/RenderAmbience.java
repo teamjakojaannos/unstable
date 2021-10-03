@@ -12,8 +12,8 @@ public class RenderAmbience implements EcsSystem<RenderAmbience.Input>, AutoClos
     public RenderAmbience() {
         this.ambience = Gdx.audio.newMusic(Gdx.files.internal("Ambience1.ogg"));
         this.ambience.setLooping(true);
-        this.ambience.setVolume(0.25f);
         this.ambience.play();
+        this.ambience.setVolume(0.1f);
     }
 
     @Override

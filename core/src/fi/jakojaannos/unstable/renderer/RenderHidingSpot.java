@@ -16,6 +16,7 @@ public class RenderHidingSpot implements EcsSystem<RenderHidingSpot.Input>, Auto
     private final Texture atlas;
     private final TextureRegion[][] regions;
     private final Sound enterClosetSound;
+    private final Sound hideInAHole;
     private final Sound exitClosetSound;
 
     public RenderHidingSpot(SpriteBatch batch) {
@@ -40,6 +41,7 @@ public class RenderHidingSpot implements EcsSystem<RenderHidingSpot.Input>, Auto
                 },
         };
         this.enterClosetSound = Gdx.audio.newSound(Gdx.files.internal("Door_Unlock.ogg"));
+        this.hideInAHole = Gdx.audio.newSound(Gdx.files.internal("Hide.ogg"));
         this.exitClosetSound = Gdx.audio.newSound(Gdx.files.internal("Footstep_Wood2.ogg"));
     }
 
@@ -58,7 +60,7 @@ public class RenderHidingSpot implements EcsSystem<RenderHidingSpot.Input>, Auto
                          if (hidingSpot.isCloset()) {
                              this.enterClosetSound.play(0.5f, 1.5f, 0.0f);
                          } else {
-                             this.exitClosetSound.play(0.25f, 0.75f, 0.0f);
+                             this.hideInAHole.play(1.00f, 0.75f, 0.0f);
                          }
                      } else {
                          this.exitClosetSound.play(0.35f, 0.95f, 0.0f);
@@ -80,6 +82,7 @@ public class RenderHidingSpot implements EcsSystem<RenderHidingSpot.Input>, Auto
     public void close() {
         this.atlas.dispose();
         this.enterClosetSound.dispose();
+        this.hideInAHole.dispose();
         this.exitClosetSound.dispose();
     }
 
