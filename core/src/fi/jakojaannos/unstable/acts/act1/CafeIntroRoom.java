@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.acts.act2.Act2;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
+import fi.jakojaannos.unstable.entities.Nurse;
 import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
@@ -102,6 +103,8 @@ public class CafeIntroRoom {
                             Poster.Type.WINDOW,
                             null));
                 }
+
+                world.spawn(Nurse.create(new Vector2(10.0f, 1.0f)));
             }
         };
     }

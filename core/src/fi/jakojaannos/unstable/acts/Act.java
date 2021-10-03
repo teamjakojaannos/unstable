@@ -28,6 +28,7 @@ public interface Act {
         return List.of(
                 new PlayerInputSystem(),
                 new MorkoInputSystem(),
+                new NurseInputSystem(),
                 new MoveCharacterSystem(),
                 new PlayerLocatorSystem(),
                 new CameraFollowsPlayerSystem(),
@@ -96,6 +97,7 @@ public interface Act {
                 new RenderPosters(batch),
                 new RenderPlayer(batch),
                 new RenderMorko(batch),
+                new RenderNurse(batch),
                 new SetShader(batch, null, null),
                 new DebugRenderer(),
                 new TextRenderer(batch),
