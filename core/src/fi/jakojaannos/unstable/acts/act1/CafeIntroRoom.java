@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.acts.act2.Act2;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
+import fi.jakojaannos.unstable.entities.Morko;
 import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
@@ -76,7 +77,7 @@ public class CafeIntroRoom {
                                                                         0.6f,
                                                                         0.45f))
                         ),
-                        (s, r) -> r.nextRoom = Act2.MANOR_ENTRY));
+                        (s, r) -> r.nextAct = new Act2()));
 
                 world.spawn(Poster.create(
                         new Vector2(WIDTH - 8 + 0.75f, 2.05f),

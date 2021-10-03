@@ -14,14 +14,15 @@ import java.util.Optional;
 
 public class Resources {
     public final InputManager playerInput = new InputManager();
-    public final Entities entities;
     public final Camera camera;
     public final BoundingBox worldBounds;
-    public final Timers timers;
     public final TimeManager timeManager;
-    public final Players players = new Players();
 
-    public final InteractItems interactItems = new InteractItems();
+    public Timers timers;
+    public Entities entities;
+    public Players players = new Players();
+    public InteractItems interactItems = new InteractItems();
+
     public PopUp popup;
     public ShaderProgram activeShader;
     public boolean spoopy;
@@ -42,6 +43,15 @@ public class Resources {
         this.timeManager = timeManager;
     }
 
+    public void reset(EcsWorld world) {
+        this.popup = null;
+        this.activeShader = null;
+        this.spoopy = false;
+
+        this.players = new Players();
+        this.entities = new Entities(world);
+        this.interactItems = new InteractItems();
+    }
 
     public Optional<Vector2> playerPosition() {
         return this.players.getPlayerPosition();

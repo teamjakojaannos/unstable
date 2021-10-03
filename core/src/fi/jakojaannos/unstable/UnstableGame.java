@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import fi.jakojaannos.unstable.acts.Act;
 import fi.jakojaannos.unstable.acts.act1.Act1;
 import fi.jakojaannos.unstable.ecs.SystemDispatcher;
-import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.resources.Resources;
 
 public class UnstableGame extends ApplicationAdapter {
@@ -22,7 +21,6 @@ public class UnstableGame extends ApplicationAdapter {
     private SystemDispatcher dispatcher;
     private SystemDispatcher renderer;
     private Act currentAct;
-    private Room currentRoom;
 
     public UnstableGame() {
         this.timeState = new TimeState();
@@ -94,11 +92,12 @@ public class UnstableGame extends ApplicationAdapter {
 
         if (this.resources.nextRoom != null || this.gameState == null) {
             if (this.resources.nextRoom != null) {
-                this.gameState = this.currentAct.state(this.resources.nextRoom);
+                this.gameState = this.currentAct.state(this.resources.nextRoom, resources);
             } else {
-                this.gameState = this.currentAct.state();
+                this.gameState = this.currentAct.state(resources);
             }
 
+            this.resources.reset(this.gameState.world());
             this.resources.nextRoom = null;
         }
 

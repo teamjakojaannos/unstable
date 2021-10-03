@@ -6,6 +6,7 @@ import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Player;
 import fi.jakojaannos.unstable.level.Room;
+import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.Collection;
 
@@ -14,11 +15,11 @@ public interface Act {
 
     Room defaultRoom();
 
-    default GameState state() {
-        return state(defaultRoom());
+    default GameState state(Resources resources) {
+        return state(defaultRoom(), resources);
     }
 
-    default GameState state(Room room) {
+    default GameState state(Room room, Resources resources) {
         final var gameState = new GameState();
 
         final var tileMap = room.createMap();
