@@ -5,10 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.GameState;
 import fi.jakojaannos.unstable.components.HidingSpot;
 import fi.jakojaannos.unstable.components.PhysicsBody;
-import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Closet;
+import fi.jakojaannos.unstable.entities.Morko;
 import fi.jakojaannos.unstable.entities.Player;
 import fi.jakojaannos.unstable.level.Tile;
 import fi.jakojaannos.unstable.level.TileMap;
@@ -44,6 +44,7 @@ public class MansionIntroAct {
     public Collection<EcsSystem> systems() {
         return List.of(
                 new PlayerInputSystem(),
+                new MorkoInputSystem(),
                 new MoveCharacterSystem(),
                 new PlayerLocatorSystem(),
                 new CameraFollowsPlayerSystem(),
@@ -69,9 +70,7 @@ public class MansionIntroAct {
 
 
         gameState.world()
-                 .spawn(Entity.builder()
-                              .component(new PhysicsBody(16.0f, 1.0f, 2.0f, 4.0f))
-                              .component(new Tags.Morko()));
+                .spawn(Morko.create(new Vector2(16.0f, 1.0f)));
 
         // borders
         gameState.world().spawn(Entity.builder()
