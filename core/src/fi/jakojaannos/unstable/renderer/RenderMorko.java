@@ -77,7 +77,7 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
 
         final var maxDistance = 6.5f;
         if (minDistance < maxDistance) {
-            final var baseVolume = 0.75f;
+            final var baseVolume = 0.25f;
             final var volumeScale = (maxDistance - minDistance) / maxDistance;
             final var volume = baseVolume * volumeScale;
 
