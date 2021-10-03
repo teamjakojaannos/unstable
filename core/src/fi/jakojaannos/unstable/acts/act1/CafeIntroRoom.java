@@ -1,6 +1,7 @@
 package fi.jakojaannos.unstable.acts.act1;
 
 import com.badlogic.gdx.math.Vector2;
+import fi.jakojaannos.unstable.acts.act2.Act2;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Poster;
@@ -51,20 +52,39 @@ public class CafeIntroRoom {
             @Override
             public void spawnInitialEntities(EcsWorld world, Entity player) {
                 world.spawn(Poster.create(new Vector2(14.0f, 2.5f), player, Poster.Type.POSTER,
-                                                      new PopUp(List.of(new TextRenderer.TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari",
-                                                                                                      0.55f,
-                                                                                                      0.60f,
-                                                                                                      0.5f),
-                                                                        new TextRenderer.TextOnScreen("""
-                                                                                                      Viime yona skotlantilainen juoppo sticky jumppasi pankin holviin ja rajaytti noin 400kg kultaa ja seitseman sentrya.
-                                                                                                                              
-                                                                                                      Han pakeni paikalta traktorilla ja soitti sakkipillia aamunkoittoon asti.""",
-                                                                                                      0.05f,
-                                                                                                      0.6f,
-                                                                                                      0.45f))
-                                                      )));
+                                          new PopUp(List.of(new TextRenderer.TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari",
+                                                                                          0.55f,
+                                                                                          0.60f,
+                                                                                          0.5f),
+                                                            new TextRenderer.TextOnScreen("""
+                                                                                                  Viime yona skotlantilainen juoppo sticky jumppasi pankin holviin ja rajaytti noin 400kg kultaa ja seitseman sentrya.
+                                                                                                                          
+                                                                                                  Han pakeni paikalta traktorilla ja soitti sakkipillia aamunkoittoon asti.""",
+                                                                                          0.05f,
+                                                                                          0.6f,
+                                                                                          0.45f))
+                                          )));
 
-                for (int i = 0; i < 4; i++) {
+                world.spawn(Poster.create(
+                        new Vector2(WIDTH - 8, 1.0f),
+                        player,
+                        Poster.Type.CAFE_COUNTER,
+                        new PopUp(List.of(new TextRenderer.TextOnScreen("""
+                                                                                Group of youngsters disappeared near {{ family name }} manor.
+                                                                                """,
+                                                                        0.05f,
+                                                                        0.6f,
+                                                                        0.45f))
+                        ),
+                        (s, r) -> r.nextRoom = Act2.MANOR_ENTRY));
+
+                world.spawn(Poster.create(
+                        new Vector2(WIDTH - 8 + 0.75f, 2.05f),
+                        player,
+                        Poster.Type.NEWSPAPER_ABOUT_TO_FALL,
+                        null));
+
+                for (int i = 0; i < 3; i++) {
                     world.spawn(Poster.create(
                             new Vector2(2.0f + i * 7.0f, 2.0f),
                             player,

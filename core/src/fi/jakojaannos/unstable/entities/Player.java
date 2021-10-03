@@ -15,7 +15,7 @@ public class Player {
         final var max = new Vector3(0.5f, 1.5f, 0.0f);
 
         final var bounds = new BoundingBox(min, max);
-        final var force = 2.0f;
+        final var force = 20.0f;
         return Entity.builder()
                      .component(new PhysicsBody(position, bounds))
                      .component(new MovementAttributes(force))

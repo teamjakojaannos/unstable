@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.ScreenUtils;
-import fi.jakojaannos.unstable.acts.CafeIntroAct;
+import fi.jakojaannos.unstable.acts.Act;
+import fi.jakojaannos.unstable.acts.act1.Act1;
 import fi.jakojaannos.unstable.ecs.SystemDispatcher;
+import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.resources.Resources;
 
 public class UnstableGame extends ApplicationAdapter {
@@ -19,6 +21,8 @@ public class UnstableGame extends ApplicationAdapter {
     private SpriteBatch batch;
     private SystemDispatcher dispatcher;
     private SystemDispatcher renderer;
+    private Act currentAct;
+    private Room currentRoom;
 
     public UnstableGame() {
         this.timeState = new TimeState();
@@ -45,11 +49,7 @@ public class UnstableGame extends ApplicationAdapter {
         this.batch = new SpriteBatch();
 
         // Initialize act
-        final var intro = new CafeIntroAct();
-        //final var intro = new MansionIntroAct();
-        this.dispatcher = new SystemDispatcher.Impl(intro.systems());
-        this.renderer = new SystemDispatcher.Impl(intro.renderSystems(this.batch));
-        this.gameState = intro.state();
+        resources.nextAct = new Act1();
     }
 
     @Override
@@ -62,6 +62,9 @@ public class UnstableGame extends ApplicationAdapter {
     public void render() {
         update(Gdx.graphics.getDeltaTime());
 
+        if (this.renderer == null) {
+            return;
+        }
         ScreenUtils.clear(0, 0, 0, 1);
         this.batch.setProjectionMatrix(this.resources.camera.getCombinedMatrix());
         this.renderer.tick(this.gameState.world(), this.resources);
@@ -80,6 +83,25 @@ public class UnstableGame extends ApplicationAdapter {
     }
 
     private void update(final float deltaSeconds) {
+        if (this.resources.nextAct != null) {
+            this.currentAct = this.resources.nextAct;
+            this.dispatcher = new SystemDispatcher.Impl(this.currentAct.systems());
+            this.renderer = new SystemDispatcher.Impl(this.currentAct.renderSystems(this.batch));
+            this.gameState = null;
+
+            this.resources.nextAct = null;
+        }
+
+        if (this.resources.nextRoom != null || this.gameState == null) {
+            if (this.resources.nextRoom != null) {
+                this.gameState = this.currentAct.state(this.resources.nextRoom);
+            } else {
+                this.gameState = this.currentAct.state();
+            }
+
+            this.resources.nextRoom = null;
+        }
+
         final var currentTick = this.timeState.currentTick();
         this.resources.playerInput.updateKeyStates(currentTick);
 

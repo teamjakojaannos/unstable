@@ -1,49 +1,10 @@
-package fi.jakojaannos.unstable.acts;
+package fi.jakojaannos.unstable;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import fi.jakojaannos.unstable.GameState;
-import fi.jakojaannos.unstable.acts.act1.Rooms;
-import fi.jakojaannos.unstable.ecs.EcsSystem;
-import fi.jakojaannos.unstable.ecs.Entity;
-import fi.jakojaannos.unstable.entities.Player;
-import fi.jakojaannos.unstable.renderer.*;
-import fi.jakojaannos.unstable.systems.*;
 
-import java.util.Collection;
-import java.util.List;
-
-@SuppressWarnings("rawtypes")
-public class CafeIntroAct {
-    public Collection<EcsSystem> systems() {
-        return List.of(
-                new PlayerInputSystem(),
-                new MoveCharacterSystem(),
-                new PlayerLocatorSystem(),
-                new CameraFollowsPlayerSystem(),
-                new CollectInteractablesSystem(),
-                new PlayerActionSystem()
-        );
-    }
-
-    public GameState state() {
-        final var gameState = new GameState();
-        final var room = Rooms.CAFE;
-
-        final var tileMap = room.createMap();
-        gameState.world().spawn(Entity.builder().component(tileMap));
-
-        final var playerPosition = room.playerStartPosition();
-        final var player = gameState.world().spawn(Player.create(playerPosition));
-
-        room.spawnInitialEntities(gameState.world(), player);
-
-        return gameState;
-    }
-
-    public Collection<EcsSystem> renderSystems(final SpriteBatch batch) {
-        final var gradientVertexShader = String.format(
-                """
+public class Shaders {
+    public static final String gradientVertexShader = String.format(
+            """
                         attribute vec4 %1$s;
                         attribute vec4 %2$s;
                         attribute vec2 %3$s;
@@ -78,11 +39,11 @@ public class CafeIntroAct {
                             gl_Position = u_projTrans * %1$s;
                         }
                         """,
-                ShaderProgram.POSITION_ATTRIBUTE,
-                ShaderProgram.COLOR_ATTRIBUTE,
-                ShaderProgram.TEXCOORD_ATTRIBUTE + "0");
+            ShaderProgram.POSITION_ATTRIBUTE,
+            ShaderProgram.COLOR_ATTRIBUTE,
+            ShaderProgram.TEXCOORD_ATTRIBUTE + "0");
 
-        final var gradientFragmentShader = """
+    public static final String gradientFragmentShader = """
                 #ifdef GL_ES
                 #define LOWP lowp
                 precision mediump float;
@@ -151,17 +112,4 @@ public class CafeIntroAct {
                     gl_FragColor = v_color * tex_sample;
                 }
                 """;
-        return List.of(
-                new SetShader(batch, gradientVertexShader, gradientFragmentShader),
-                new SetCafeUniforms(),
-                new RenderTiles(batch),
-                new RenderHidingSpot(batch),
-                new RenderPosters(batch),
-                new RenderPlayer(batch),
-                new RenderMorko(batch),
-                new SetShader(batch, null, null),
-                new DebugRenderer(),
-                new TextRenderer(batch)
-        );
-    }
 }

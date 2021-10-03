@@ -5,9 +5,10 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import fi.jakojaannos.unstable.InputManager;
+import fi.jakojaannos.unstable.acts.Act;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
+import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.renderer.Camera;
-import fi.jakojaannos.unstable.renderer.TextRenderer;
 
 import java.util.Optional;
 
@@ -24,6 +25,8 @@ public class Resources {
     public PopUp popup;
     public ShaderProgram activeShader;
     public boolean spoopy;
+    public Room nextRoom;
+    public Act nextAct;
 
     public Resources(
             final EcsWorld world,

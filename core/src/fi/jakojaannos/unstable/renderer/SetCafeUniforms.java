@@ -48,6 +48,7 @@ public class SetCafeUniforms implements EcsSystem<SetCafeUniforms.Input> {
         if (shader == null) {
             return;
         }
+        shader.bind();
 
         final var bgSamplerLocation = shader.getUniformLocation("u_bg_texture");
         final var bgSamplerLocation2 = shader.getUniformLocation("u_bg_texture2");
@@ -67,6 +68,7 @@ public class SetCafeUniforms implements EcsSystem<SetCafeUniforms.Input> {
 
         shader.setUniformi("u_debug_bg", 0);
 
+        gl.glActiveTexture(GL20.GL_TEXTURE0);
         bgTexture.bind(1);
         bgTexture2.bind(2);
         bgTexture3.bind(3);
