@@ -57,7 +57,7 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
 
                     final var scaledTick = ((float) tick / (float) UnstableGame.Constants.GameLoop.TICKS_PER_SECOND) / (loopDuration / this.morkoFrames.length);
                     final var region = this.morkoFrames[((int) scaledTick) % this.morkoFrames.length];
-                    region.flip(region.isFlipX() == physics.facingRight, false);
+                    region.flip(region.isFlipX() != physics.facingRight, false);
 
                     this.spriteBatch.begin();
                     this.spriteBatch.draw(region,
