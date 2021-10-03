@@ -24,6 +24,7 @@ public class SetShader implements EcsSystem<SetShader.Input>, AutoCloseable {
             Resources resources
     ) {
         spriteBatch.setShader(this.shader);
+        resources.activeShader = this.shader;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package fi.jakojaannos.unstable.resources;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import fi.jakojaannos.unstable.InputManager;
@@ -21,6 +22,8 @@ public class Resources {
 
     public final InteractItems interactItems = new InteractItems();
     public PopUp popup;
+    public ShaderProgram activeShader;
+    public boolean spoopy;
 
     public Resources(
             final EcsWorld world,

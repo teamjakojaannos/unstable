@@ -13,7 +13,8 @@ import fi.jakojaannos.unstable.resources.Resources;
 
 public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoCloseable {
     private final Texture texture;
-    private final TextureRegion[] variants;
+    private final Texture tilesCafe;
+    private final TextureRegion[][] variants;
     private final SpriteBatch spriteBatch;
 
     private final Sound interact;
@@ -22,8 +23,16 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
     public RenderPosters(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
         this.texture = new Texture("poster.png");
-        this.variants = new TextureRegion[]{
-                new TextureRegion(this.texture, 0, 0, 16, 16)
+        this.tilesCafe = new Texture("cafe_tiles.png");
+        this.variants = new TextureRegion[][]{
+                {
+                        new TextureRegion(this.texture, 0, 0, 16, 16),
+                        new TextureRegion(this.texture, 0, 0, 16, 16),
+                },
+                {
+                        new TextureRegion(this.tilesCafe, 196, 0, 64, 48),
+                        new TextureRegion(this.tilesCafe, 196, 48, 64, 48),
+                }
         };
 
         this.interact = Gdx.audio.newSound(Gdx.files.internal("PaperTurnPage.ogg"));
@@ -53,11 +62,11 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                      }
                  }
 
-                 final var region = this.variants[poster.type.ordinal()];
+                 final var region = this.variants[poster.type.ordinal()][resources.spoopy ? 1 : 0];
                  final var y = body.getPosition().y - 0.001f;
                  final var width = region.getRegionWidth() / 16.0f + 0.001f;
                  final var height = region.getRegionHeight() / 16.0f + 0.001f;
-                 final var x = body.getPosition().x - 0.001f + width;
+                 final var x = body.getPosition().x - 0.001f;
 
                  spriteBatch.draw(region, x, y, width, height);
              });
@@ -67,6 +76,7 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
     @Override
     public void close() {
         this.texture.dispose();
+        this.tilesCafe.dispose();
         this.interact.dispose();
         this.interact2.dispose();
     }

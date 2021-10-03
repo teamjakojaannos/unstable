@@ -64,8 +64,9 @@ public class CafeIntroAct {
         gameState.world().spawn(Closet.create(new Vector2(1.0f, 1.0f), player, HidingSpot.Type.MansionClosetThin));
         gameState.world().spawn(Closet.create(new Vector2(4.0f, 1.0f), player, HidingSpot.Type.Chest));
         gameState.world().spawn(Poster.create(
-                new Vector2(8.0f, 2.5f),
+                new Vector2(12.0f, 3.5f),
                 player,
+                Poster.Type.POSTER,
                 new PopUp(List.of(new TextRenderer.TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari",
                                                                 0.55f,
                                                                 0.60f,
@@ -78,6 +79,12 @@ public class CafeIntroAct {
                                                                 0.6f,
                                                                 0.45f))
                 )));
+
+        gameState.world().spawn(Poster.create(
+                new Vector2(8.0f, 2.5f),
+                player,
+                Poster.Type.PAINTING,
+                null));
 
         // borders
         gameState.world().spawn(Entity.builder()
@@ -94,7 +101,7 @@ public class CafeIntroAct {
                         attribute vec2 %3$s;
 
                         uniform mat4 u_projTrans;
-                        uniform vec2 v_player_pos;
+                        uniform vec4 u_overlay_color;
                         varying vec4 v_color;
                         varying vec2 v_texCoords;
                                                         
@@ -115,6 +122,10 @@ public class CafeIntroAct {
                             v_color = %2$s;
                             v_color.a = v_color.a * (255.0/254.0);
                             v_color = mix(v_color, gradient_value, t * gradient_factor);
+                            
+                            vec4 overlay = mix(vec4(0, 0, 0, 1), vec4(u_overlay_color.rgb, 1.0), u_overlay_color.a);
+                            v_color.rgb += overlay.rgb;
+                            
                             v_texCoords = %3$s;
                             gl_Position = u_projTrans * %1$s;
                         }
@@ -140,6 +151,7 @@ public class CafeIntroAct {
                 """;
         return List.of(
                 new SetShader(batch, gradientVertexShader, gradientFragmentShader),
+                new SetCafeUniforms(),
                 new RenderTiles(batch),
                 new RenderHidingSpot(batch),
                 new RenderPosters(batch),
