@@ -1,6 +1,7 @@
 package fi.jakojaannos.unstable.acts;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.GameState;
 import fi.jakojaannos.unstable.components.HidingSpot;
@@ -61,6 +62,7 @@ public class CafeIntroAct {
                 .spawn(Player.create(new Vector2(2.0f, 1.0f)));
 
         gameState.world().spawn(Closet.create(new Vector2(1.0f, 1.0f), player, HidingSpot.Type.MansionClosetThin));
+        gameState.world().spawn(Closet.create(new Vector2(4.0f, 1.0f), player, HidingSpot.Type.Chest));
         gameState.world().spawn(Poster.create(
                 new Vector2(8.0f, 2.5f),
                 player,
@@ -85,12 +87,65 @@ public class CafeIntroAct {
     }
 
     public Collection<EcsSystem> renderSystems(final SpriteBatch batch) {
+        final var gradientVertexShader = String.format(
+                """
+                        attribute vec4 %1$s;
+                        attribute vec4 %2$s;
+                        attribute vec2 %3$s;
+
+                        uniform mat4 u_projTrans;
+                        uniform vec2 v_player_pos;
+                        varying vec4 v_color;
+                        varying vec2 v_texCoords;
+                                                        
+                        void main() {
+                            float y = %1$s.y;
+                            float max_y = 1.1;
+                            float min_y = 1.0;
+                            
+                            float remapped = max_y - (y + (-min_y));
+                            float t = clamp(remapped / max_y, 0.0, 1.0);
+                            
+                            vec4 gradient_from = vec4(0, 0, 0, 1.0);
+                            vec4 gradient_to = vec4(0, 0, 0, 1.0);
+                            vec4 gradient_value = mix(gradient_from, gradient_to, t);
+                                                
+                            float gradient_factor = y > 1 ? 0.25 : 0.75;
+
+                            v_color = %2$s;
+                            v_color.a = v_color.a * (255.0/254.0);
+                            v_color = mix(v_color, gradient_value, t * gradient_factor);
+                            v_texCoords = %3$s;
+                            gl_Position = u_projTrans * %1$s;
+                        }
+                        """,
+                ShaderProgram.POSITION_ATTRIBUTE,
+                ShaderProgram.COLOR_ATTRIBUTE,
+                ShaderProgram.TEXCOORD_ATTRIBUTE + "0");
+
+        final var gradientFragmentShader = """
+                #ifdef GL_ES
+                #define LOWP lowp
+                precision mediump float;
+                #else
+                #define LOWP 
+                #endif
+                varying LOWP vec4 v_color;
+                varying vec2 v_texCoords;
+                uniform sampler2D u_texture;
+
+                void main() {
+                  gl_FragColor = v_color * texture2D(u_texture, v_texCoords);
+                }
+                """;
         return List.of(
+                new SetShader(batch, gradientVertexShader, gradientFragmentShader),
                 new RenderTiles(batch),
                 new RenderHidingSpot(batch),
                 new RenderPosters(batch),
                 new RenderPlayer(batch),
                 new RenderMorko(batch),
+                new SetShader(batch, null, null),
                 new TextRenderer(batch)
         );
     }

@@ -34,6 +34,10 @@ public class RenderHidingSpot implements EcsSystem<RenderHidingSpot.Input>, Auto
                         new TextureRegion(this.atlas, 80, 0, 57, 64),
                         new TextureRegion(this.atlas, 80, 0, 57, 64),
                 },
+                {
+                        new TextureRegion(this.atlas, 136, 56, 32, 24),
+                        new TextureRegion(this.atlas, 168, 56, 32, 24),
+                },
         };
         this.enterClosetSound = Gdx.audio.newSound(Gdx.files.internal("Door_Unlock.ogg"));
         this.exitClosetSound = Gdx.audio.newSound(Gdx.files.internal("Footstep_Wood2.ogg"));
