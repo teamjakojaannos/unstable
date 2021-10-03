@@ -39,7 +39,9 @@ public class Poster {
                            self.getComponent(PosterState.class).ifPresent(state -> state.active = false);
                            player.removeComponent(Tags.FreezeInput.class);
 
-                           extraAction.execute(self, resources);
+                           if (extraAction != null) {
+                               extraAction.execute(self, resources);
+                           }
                        }
                    }))
                    .component(PlayerHudComponent.Indicator.QUESTION);
