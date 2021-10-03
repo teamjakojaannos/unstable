@@ -45,8 +45,8 @@ public class UnstableGame extends ApplicationAdapter {
         this.batch = new SpriteBatch();
 
         // Initialize act
-        //final var intro = new CafeIntroAct();
-        final var intro = new MansionIntroAct();
+        final var intro = new CafeIntroAct();
+        //final var intro = new MansionIntroAct();
         this.dispatcher = new SystemDispatcher.Impl(intro.systems());
         this.renderer = new SystemDispatcher.Impl(intro.renderSystems(this.batch));
         this.gameState = intro.state();

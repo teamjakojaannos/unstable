@@ -1,12 +1,14 @@
 package fi.jakojaannos.unstable.acts;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import fi.jakojaannos.unstable.components.PhysicsBody;
+import fi.jakojaannos.unstable.components.PosterState;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
-import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.resources.Resources;
 
 public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoCloseable {
@@ -14,12 +16,18 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
     private final TextureRegion[] variants;
     private final SpriteBatch spriteBatch;
 
+    private final Sound interact;
+    private final Sound interact2;
+
     public RenderPosters(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
         this.texture = new Texture("poster.png");
         this.variants = new TextureRegion[]{
                 new TextureRegion(this.texture, 0, 0, 16, 16)
         };
+
+        this.interact = Gdx.audio.newSound(Gdx.files.internal("PaperTurnPage.ogg"));
+        this.interact2 = Gdx.audio.newSound(Gdx.files.internal("PaperOpen.ogg"));
     }
 
     @Override
@@ -29,11 +37,23 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
     ) {
         spriteBatch.begin();
         input.entities()
-             .forEach(poster -> {
-                 final var body = poster.body;
-                 final var type = poster.type;
+             .forEach(entity -> {
+                 final var body = entity.body;
+                 final var poster = entity.poster;
 
-                 final var region = this.variants[type.ordinal()];
+                 if (poster.activeChanged_onlyCallThisFromRendererPls()) {
+                     if (poster.active) {
+                         this.interact.play(1.0f,
+                                            1.0f,
+                                            0.0f);
+                     } else {
+                         this.interact2.play(0.25f,
+                                             1.0f,
+                                             0.0f);
+                     }
+                 }
+
+                 final var region = this.variants[poster.type.ordinal()];
                  final var y = body.getPosition().y - 0.001f;
                  final var width = region.getRegionWidth() / 16.0f + 0.001f;
                  final var height = region.getRegionHeight() / 16.0f + 0.001f;
@@ -47,10 +67,12 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
     @Override
     public void close() {
         this.texture.dispose();
+        this.interact.dispose();
+        this.interact2.dispose();
     }
 
     public record Input(
             PhysicsBody body,
-            Poster.Type type
+            PosterState poster
     ) {}
 }
