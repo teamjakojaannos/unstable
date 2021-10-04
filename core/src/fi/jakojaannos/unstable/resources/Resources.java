@@ -53,6 +53,7 @@ public class Resources {
     public boolean endFadeToBlackStarted2;
     public boolean creditsAvailable;
     public boolean credits;
+    public boolean numlock;
 
     private List<Collection<TextRenderer.TextOnScreen>> dialogueText;
 

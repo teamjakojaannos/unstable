@@ -215,6 +215,7 @@ public class Poster {
         NpcNAINE2,
         JalkaKynttila,
         SeinaKynttila,
-        Pouta
+        Pouta,
+        Invisible,
     }
 }

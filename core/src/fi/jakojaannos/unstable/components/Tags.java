@@ -53,4 +53,11 @@ public class Tags {
             return new Spoopy();
         }
     }
+
+    public static class Numlock implements Component<Numlock> {
+        @Override
+        public Numlock cloneComponent() {
+            return new Numlock();
+        }
+    }
 }

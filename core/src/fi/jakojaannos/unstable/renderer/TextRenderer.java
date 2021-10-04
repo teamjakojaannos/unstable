@@ -16,6 +16,7 @@ import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseable {
     private final SpriteBatch batch;
@@ -59,15 +60,18 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
     @Override
     public void tick(SystemInput<Input> input, Resources resources) {
         final var player = input.entities().findFirst();
+        if (player.flatMap(p -> p.numlockTag).isPresent()) {
+            if (resources.numlock) {
+                tickNumberLock(resources);
+            }
+            return;
+        }
+
         if (player.isEmpty() || resources.popup == null) {
             return;
         }
 
         final var lines = resources.popup.lines();
-        if (lines.size() == 1 && lines.get(0).content == null) {
-            tickNumberLock(resources);
-            return;
-        }
 
         final var bgType = resources.popup.photo();
         final var bg = this.backgrounds[bgType.ordinal()];
@@ -169,12 +173,15 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
         if (resources.enteringNumber == -1) {
             resources.setDialogueText(List.of(List.of(new TextOnScreen("I need a three digit combination..."),
                                                       new TextOnScreen("(use number keys 0-9)"))));
+        } else if (resources.enteringNumber == 0) {
+            resources.setDialogueText(List.of(List.of(new TextOnScreen("Alright, next one is..."),
+                                                      new TextOnScreen("(use number keys 0-9)"))));
+        } else if (resources.enteringNumber == 1) {
+            resources.setDialogueText(List.of(List.of(new TextOnScreen("And the last one..."),
+                                                      new TextOnScreen("(use number keys 0-9)"))));
         }
 
         if (anyPressed) {
-            resources.setDialogueText(List.of(List.of(new TextOnScreen("Alright, next one is..."),
-                                                      new TextOnScreen("(use number keys 0-9)"))));
-
             resources.enteringNumber++;
             resources.numbers[resources.enteringNumber] = justPressed0
                     ? 0
@@ -222,7 +229,8 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
     }
 
     public record Input(
-            PlayerInput playerInput
+            PlayerInput playerInput,
+            Optional<Tags.Numlock> numlockTag
     ) {
     }
 

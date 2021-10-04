@@ -190,6 +190,10 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                         new TextureRegion(this.poyta),
                         new TextureRegion(this.poyta),
                 },
+                {
+                        new TextureRegion(this.tilesCafe, 0, 0, 1, 1),
+                        new TextureRegion(this.tilesCafe, 0, 0, 1, 1),
+                },
         };
 
         this.interact = Gdx.audio.newSound(Gdx.files.internal("PaperTurnPage.ogg"));
