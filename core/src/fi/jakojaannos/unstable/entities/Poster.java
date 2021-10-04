@@ -108,6 +108,17 @@ public class Poster {
             Vector2 spawnPos,
             BiFunction<Entity, Resources, Boolean> condition
     ) {
+        return createDoor(position, nextRoom, nextAct, spawnPos, condition, null);
+    }
+
+    public static Entity.Builder createDoor(
+            Vector2 position,
+            Room nextRoom,
+            Act nextAct,
+            Vector2 spawnPos,
+            BiFunction<Entity, Resources, Boolean> condition,
+            Interactable.Action extraAction
+    ) {
         return Poster.create(position,
                              Type.Indoordoor,
                              null,
@@ -132,6 +143,9 @@ public class Poster {
                                      }
                                      if (spawnPos != null) {
                                          r.spawnPos = spawnPos;
+                                     }
+                                     if (extraAction != null) {
+                                         extraAction.execute(s, r);
                                      }
                                      return true;
                                  }

@@ -47,9 +47,12 @@ public class ManorNurseHallwayRoom {
 
             @Override
             public void spawnInitialEntities(EcsWorld world, Entity player) {
-                world.spawn(Poster.createDoor(new Vector2(19.0f, 1.0f), Act2.HAMMER_ROOM, null));
-
                 final var nurse = world.spawn(Nurse.create2(new Vector2(28.0f, 1.0f)));
+                world.spawn(Poster.createDoor(new Vector2(19.0f, 1.0f), Act2.HAMMER_ROOM, null, null, null, (s, r) -> {
+                    nurse.destroy();
+                    return true;
+                }));
+
 
                 world.spawn(Entity.builder()
                                   .component(new PhysicsBody(new Vector2(13.0f, 1.0f), 1.0f, 1.0f))
