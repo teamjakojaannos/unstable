@@ -38,6 +38,7 @@ public class Resources {
     public boolean stormy;
     public Vector2 spawnPos;
     public Entity player;
+    public Attacks attacks = new Attacks();
 
     public Inventory playerInventory = new Inventory();
     public TimerHandle interactCooldown;

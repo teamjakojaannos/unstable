@@ -1,6 +1,7 @@
 package fi.jakojaannos.unstable.entities;
 
 import com.badlogic.gdx.math.Vector2;
+import fi.jakojaannos.unstable.components.AttackTargetComponent;
 import fi.jakojaannos.unstable.components.Hiding;
 import fi.jakojaannos.unstable.components.HidingSpot;
 import fi.jakojaannos.unstable.components.PhysicsBody;
@@ -48,6 +49,18 @@ public class Closet {
 
                          return true;
                      }))
-                     .component(new HidingSpot(type));
+                     .component(new HidingSpot(type))
+                     .component(new AttackTargetComponent((self) -> {
+                         if (!self.getComponent(HidingSpot.class).orElseThrow().occupied) {
+                             return;
+                         }
+
+                         player.getComponent(PhysicsBody.class)
+                                 .orElseThrow()
+                                 .setPosition(player.getComponent(Hiding.class)
+                                         .orElseThrow().previousPosition);
+                         player.removeComponent(Hiding.class);
+                         self.getComponent(HidingSpot.class).orElseThrow().occupied = false;
+                     }));
     }
 }

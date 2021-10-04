@@ -27,6 +27,7 @@ public interface Act {
     default Collection<EcsSystem> systems() {
         return List.of(
                 new CollectBlockersSystem(),
+                new AttackTargetCollectorSystem(),
                 new PlayerInputSystem(),
                 new MorkoInputSystem(),
                 new NurseInputSystem(),
@@ -35,7 +36,8 @@ public interface Act {
                 new CameraFollowsPlayerSystem(),
                 new CollectInteractablesSystem(),
                 new TriggerObserverSystem(),
-                new PlayerActionSystem()
+                new PlayerActionSystem(),
+                new AttackHandlerSystem()
         );
     }
 

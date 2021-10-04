@@ -6,10 +6,13 @@ import fi.jakojaannos.unstable.components.*;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.ecs.SystemInput;
+import fi.jakojaannos.unstable.resources.Attacks;
 import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
     @Override
@@ -190,7 +193,7 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
 
         final var radius = entity.ai.sightRadius / 4.0f;
         entity.ai.getTargetPos()
-                .flatMap(target -> getNearestAttackTarget(target, resources, radius))
+                .flatMap(target -> getNearestAttackTargetPosition(target, resources, radius))
                 .ifPresentOrElse(
                         entity.ai::setAttackTarget,
                         entity.ai::clearAttackTarget
@@ -202,7 +205,7 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
      *
      * @param pos get hiding spots near this position
      */
-    private Optional<Vector2> getNearestAttackTarget(
+    private Optional<Vector2> getNearestAttackTargetPosition(
             Vector2 pos,
             Resources resources,
             float searchRadius
@@ -218,13 +221,34 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
                 .map(item -> item.body().getPosition());
     }
 
+    private List<Attacks.AttackTarget> getAttackTargetsInRange(
+            Vector2 myPos,
+            Resources resources,
+            float searchRadius
+    ) {
+        return new ArrayList<>(resources.attacks.availableTargets)
+                .stream()
+                .filter(target -> target.origin().dst2(myPos) <= searchRadius * searchRadius)
+                .collect(Collectors.toList());
+    }
+
     private void attack(Input entity, Resources resources) {
         entity.ai.state = MorkoAi.State.ATTACKING;
 
-        if (!resources.timers.isActiveAndValid(entity.ai.attackHandle)) {
-            entity.ai.attackHandle = resources.timers.set(entity.ai.attackDuration, false, () -> {
-            });
+        if (resources.timers.isActiveAndValid(entity.ai.attackHandle)) {
+            return;
         }
+
+        entity.ai.attackHandle = resources.timers.set(entity.ai.attackDuration, false, () -> {
+        });
+
+
+        resources.timers.set(entity.ai.attackDuration * 0.25f, false, () -> {
+            final var myPos = entity.body.getPosition();
+            resources.attacks
+                    .attackedTargets
+                    .addAll(getAttackTargetsInRange(myPos, resources, entity.ai.attackRadius2));
+        });
     }
 
     private void scriptedAction(Input entity) {

@@ -22,6 +22,11 @@ public class Player {
                      .component(new MovementInput())
                      .component(new PlayerInput())
                      .component(new Tags.Player())
+                     .component(new AttackTargetComponent((self) -> {
+                         if (!self.hasComponent(Hiding.class)) {
+                             // TODO:
+                         }
+                     }))
                      .component(new PlayerHudComponent(PlayerHudComponent.Indicator.NONE));
     }
 }
