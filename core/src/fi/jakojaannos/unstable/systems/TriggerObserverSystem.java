@@ -17,12 +17,30 @@ public class TriggerObserverSystem implements EcsSystem<TriggerObserverSystem.In
         final var playerBody = optBody.get();
 
         input.entities().forEach(entity -> {
-            if (!entity.body.overlaps(playerBody)){
+            if (!entity.body.overlaps(playerBody)) {
                 return;
             }
 
-            System.out.println("Overlap!");
+            if (canExecute(entity, resources)) {
+                entity.trigger.action.execute(resources);
+                entity.trigger.triggered = true;
+                entity.trigger.cooldown = resources
+                        .timers
+                        .set(entity.trigger.triggerCooldown, false, () -> {
+                        });
+            }
         });
+    }
+
+    private boolean canExecute(Input entity, Resources resources) {
+        var trigger = entity.trigger;
+
+        if (trigger.triggered && !trigger.canRepeat) {
+            return false;
+        }
+
+        var onCooldown = resources.timers.isActiveAndValid(trigger.cooldown);
+        return !onCooldown;
     }
 
     public record Input(

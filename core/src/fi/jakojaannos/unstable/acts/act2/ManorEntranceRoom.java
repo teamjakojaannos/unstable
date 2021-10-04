@@ -9,6 +9,7 @@ import fi.jakojaannos.unstable.components.Trigger;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Closet;
+import fi.jakojaannos.unstable.entities.Morko;
 import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
@@ -56,8 +57,11 @@ public class ManorEntranceRoom {
                 world.spawn(Poster.createDoor(new Vector2(WIDTH - 12, 1.0f), Act2.SMALL_BEDROOM, null));
 
                 world.spawn(Entity.builder()
-                        .component(new PhysicsBody(13.5f, 1.0f, 1.0f, 1.0f))
-                        .component(new Trigger())
+                        .component(new PhysicsBody(16.0f, 1.0f, 1.0f, 1.0f))
+                        .component(new Trigger(1.0f, false,
+                                res -> res.entities.spawn(
+                                        Morko.create(new Vector2(28.0f, 1.0f))
+                                )))
                 );
             }
         };
