@@ -3,6 +3,9 @@ package fi.jakojaannos.unstable.acts.act2;
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.components.HidingSpot;
 import fi.jakojaannos.unstable.components.PhysicsBody;
+import fi.jakojaannos.unstable.components.SoundTags;
+import fi.jakojaannos.unstable.components.Tags;
+import fi.jakojaannos.unstable.components.Trigger;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Closet;
@@ -52,11 +55,10 @@ public class ManorEntranceRoom {
                                               (s, r) -> r.playerInventory.photo));
                 world.spawn(Poster.createDoor(new Vector2(WIDTH - 12, 1.0f), Act2.SMALL_BEDROOM, null));
 
-                // borders
                 world.spawn(Entity.builder()
-                                  .component(new PhysicsBody(-1.0f, 1.0f, 1.0f, 2.0f)));
-                world.spawn(Entity.builder()
-                                  .component(new PhysicsBody(101.0f, 1.0f, 1.0f, 2.0f)));
+                        .component(new PhysicsBody(13.5f, 1.0f, 1.0f, 1.0f))
+                        .component(new Trigger())
+                );
             }
         };
     }

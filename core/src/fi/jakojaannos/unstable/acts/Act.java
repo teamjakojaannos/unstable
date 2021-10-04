@@ -33,6 +33,7 @@ public interface Act {
                 new PlayerLocatorSystem(),
                 new CameraFollowsPlayerSystem(),
                 new CollectInteractablesSystem(),
+                new TriggerObserverSystem(),
                 new PlayerActionSystem()
         );
     }
