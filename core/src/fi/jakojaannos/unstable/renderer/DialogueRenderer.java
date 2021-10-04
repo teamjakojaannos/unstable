@@ -77,9 +77,7 @@ public class DialogueRenderer implements EcsSystem<DialogueRenderer.Input>, Auto
         this.batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         this.batch.end();
 
-        System.out.println("WHAT THE ABSOLUTE FUCK");
         if (player.map(i -> i.playerInput().actionPressed).orElse(false) && !resources.timers.isActiveAndValid(resources.interactCooldown)) {
-            System.out.println("WHAT THE ABSOLUTE FUCK");
             resources.setInteractCooldown();
             resources.getDialogueText().remove(0);
             BreakableBlocker.state = false; // HACK: this is spaghetti and I dont want to untangle it

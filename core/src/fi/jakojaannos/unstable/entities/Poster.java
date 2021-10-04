@@ -186,6 +186,7 @@ public class Poster {
         Sofa,
         PhotoWhole,
         PhotoRipped,
-        Hammer, Haarniska,
+        Hammer,
+        Haarniska,
     }
 }

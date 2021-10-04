@@ -15,6 +15,6 @@ public class Act2 implements Act {
 
     @Override
     public Room defaultRoom() {
-        return null;
+        return MIRROR_ROOM;
     }
 }

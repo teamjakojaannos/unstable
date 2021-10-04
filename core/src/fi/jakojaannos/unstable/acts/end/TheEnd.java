@@ -8,6 +8,6 @@ public class TheEnd implements Act {
 
     @Override
     public Room defaultRoom() {
-        return null;
+        return THE_OFFICE;
     }
 }

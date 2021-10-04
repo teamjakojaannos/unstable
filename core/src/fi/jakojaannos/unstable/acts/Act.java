@@ -105,7 +105,7 @@ public interface Act {
                 new RenderMorko(batch),
                 new RenderNurse(batch),
                 new SetShader(batch, null, null),
-                new DebugRenderer(),
+                //new DebugRenderer(),
                 new TextRenderer(batch),
                 new DialogueRenderer(batch),
                 new RenderSoundTags(),

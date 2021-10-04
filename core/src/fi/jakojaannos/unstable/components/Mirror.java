@@ -47,6 +47,10 @@ public class Mirror implements Component<Mirror> {
                     nextState(resources, position);
                     if (s == State.LongBoiEnter) {
                         resources.entities.spawn(Morko.create(position.cpy()));
+                    } else if (s == State.GremlinsEnter) {
+                        resources.timers.set(4.5f, false, () -> {
+                            nextState(resources, position);
+                        });
                     }
                 });
     }

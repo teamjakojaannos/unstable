@@ -10,10 +10,9 @@ import java.util.Collection;
 import java.util.List;
 
 public class Act3 implements Act {
+    public static final Room WAITING_ROOM = WaitingRoom.create();
+    public static final Room LONG_HALLWAY = LongHallwayRoom.create();
     public static final Room CIGAR_ROOM = CigarRoom.create();
-
-    public static final Room LONG_HALLWAY = null;
-    public static final Room WAITING_ROOM = null;
 
     @Override
     public Room defaultRoom() {

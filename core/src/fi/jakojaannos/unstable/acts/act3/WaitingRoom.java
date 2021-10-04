@@ -1,6 +1,7 @@
 package fi.jakojaannos.unstable.acts.act3;
 
 import com.badlogic.gdx.math.Vector2;
+import fi.jakojaannos.unstable.acts.end.TheEnd;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Poster;
@@ -8,7 +9,7 @@ import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
 
-public class CigarRoom {
+public class WaitingRoom {
     private static final int WIDTH = 16;
     private static final int HEIGHT = 9;
     private static final String[] TILES = new String[]{
@@ -49,8 +50,8 @@ public class CigarRoom {
 
                 world.spawn(Poster.createDoor(
                         new Vector2(WIDTH - 2.0f, 1.0f),
-                        Act3.LONG_HALLWAY,
-                        null
+                        TheEnd.THE_OFFICE,
+                        new TheEnd()
                 ));
             }
         };
