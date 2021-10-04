@@ -1,13 +1,13 @@
-//plugins { id 'org.beryx.runtime' version '1.8.4' }
+plugins { id 'org.beryx.runtime' version '1.8.4' }
 
 sourceCompatibility = 17
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = ["src/"]
 sourceSets.main.resources.srcDirs = ["../core/assets"]
 
 project.ext.mainClassName = "fi.jakojaannos.unstable.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets")
 
-task run(dependsOn: classes, type: JavaExec) {
+run {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
@@ -52,7 +52,7 @@ task dist(type: Jar) {
 }
 
 
-/*dist.dependsOn classes
+dist.dependsOn classes
 
 jpackageImage.dependsOn dist
 
@@ -65,7 +65,7 @@ runtime {
                '--no-man-pages',
                '--strip-native-commands',
                '--vm', 'server']
-    modules = ['java.base' ,
+    modules = ['java.base',
                'java.desktop',
                'jdk.unsupported']
     distDir = file(buildDir)
@@ -82,4 +82,3 @@ runtime {
         }
     }
 }
-*/
