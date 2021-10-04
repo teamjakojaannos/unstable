@@ -26,6 +26,7 @@ public interface Act {
 
     default Collection<EcsSystem> systems() {
         return List.of(
+                new CollectBlockersSystem(),
                 new PlayerInputSystem(),
                 new MorkoInputSystem(),
                 new NurseInputSystem(),
@@ -96,6 +97,7 @@ public interface Act {
                 new RenderTiles(batch),
                 new RenderHidingSpot(batch),
                 new RenderPosters(batch),
+                new RenderBBs(batch),
                 new RenderMirror(batch),
                 new RenderPlayer(batch),
                 new RenderMorko(batch),

@@ -27,7 +27,7 @@ public class MoveCharacterSystem implements EcsSystem<MoveCharacterSystem.Input>
                  final var newX = MathUtils.clamp(
                          physics.getPosition().x + moveAmount,
                          worldBorders.min.x,
-                         worldBorders.max.x
+                         entity.playerTag.isPresent() ? Math.min(worldBorders.max.x, resources.blockerBound) : worldBorders.max.x
                  );
 
                  physics.facingRight = moveAmount == 0 ? physics.facingRight : moveAmount > 0;
@@ -41,6 +41,7 @@ public class MoveCharacterSystem implements EcsSystem<MoveCharacterSystem.Input>
             MovementAttributes attributes,
             PhysicsBody body,
             Optional<Tags.InAir> isInAir,
+            Optional<Tags.Player> playerTag,
             Without<Tags.FreezeInput> frozenInputTag,
             Without<Hiding> hidingTag
     ) {

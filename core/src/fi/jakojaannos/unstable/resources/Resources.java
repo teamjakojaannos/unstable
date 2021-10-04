@@ -40,6 +40,7 @@ public class Resources {
 
     public Inventory playerInventory = new Inventory();
     public TimerHandle interactCooldown;
+    public float blockerBound = Float.MAX_VALUE;
     private List<Collection<TextRenderer.TextOnScreen>> dialogueText;
 
     public Resources(
@@ -87,5 +88,6 @@ public class Resources {
 
     public static class Inventory {
         public boolean photo;
+        public boolean hammer;
     }
 }

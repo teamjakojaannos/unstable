@@ -172,5 +172,6 @@ public class Poster {
         Sofa,
         PhotoWhole,
         PhotoRipped,
+        Hammer,
     }
 }

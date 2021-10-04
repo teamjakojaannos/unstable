@@ -22,11 +22,14 @@ public class Nurse {
                 new TaskMove<>(new Vector2(x - 5.0f, y), targetDistance, false),
                 new TaskWait<>(1.5f, false)
         ), true);
+        return create2(position).component(tasks);
+    }
+
+    public static Entity.Builder create2(final Vector2 position) {
         return Entity.builder()
-                .component(new PhysicsBody(position, 1.0f, 1.3f))
-                .component(new MovementInput())
-                .component(new MovementAttributes(0.75f))
-                .component(tasks)
-                .component(new Tags.Nurse());
+                     .component(new PhysicsBody(position, 1.0f, 1.3f))
+                     .component(new MovementInput())
+                     .component(new MovementAttributes(0.75f))
+                     .component(new Tags.Nurse());
     }
 }

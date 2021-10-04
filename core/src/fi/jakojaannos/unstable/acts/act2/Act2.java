@@ -6,6 +6,10 @@ import fi.jakojaannos.unstable.level.Room;
 public class Act2 implements Act {
     public static final Room MANOR_ENTRY = ManorEntranceRoom.create();
     public static final Room SMALL_BEDROOM = SmallBedroom.create();
+
+    public static final Room NURSE_HALLWAY = ManorNurseHallwayRoom.create();
+    public static final Room HAMMER_ROOM = HammerRoom.create();
+
     public static final Room MIRROR_ROOM = MirrorRoom.create();
 
     @Override
