@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.acts.act3.Act3;
 import fi.jakojaannos.unstable.components.HidingSpot;
 import fi.jakojaannos.unstable.components.PhysicsBody;
+import fi.jakojaannos.unstable.components.SoundTags;
+import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Closet;
@@ -11,9 +13,11 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+import fi.jakojaannos.unstable.resources.Interactable;
+import fi.jakojaannos.unstable.resources.Resources;
 
 public class ManorEntranceRoom {
-    private static final int WIDTH = 24;
+    public static final int WIDTH = 24;
     private static final int HEIGHT = 9;
     private static final String[] TILES = new String[]{
             // @formatter:off
@@ -51,7 +55,29 @@ public class ManorEntranceRoom {
                         player,
                         Poster.Type.Indoordoor,
                         null,
-                        (s, r) -> r.nextAct = new Act3()));
+                        new Interactable.Action() {
+                            @Override
+                            public boolean condition(Entity self, Resources resources) {
+                                return !self.hasComponent(Tags.Locked.class);
+                            }
+
+                            @Override
+                            public void onExecuteFailed(Entity self, Resources resources) {
+                                self.addComponent(new SoundTags.Locked());
+                            }
+
+                            @Override
+                            public void execute(Entity s, Resources r) {
+                                r.nextAct = new Act3();
+                            }
+                        }).component(new Tags.Locked()));
+
+                world.spawn(Poster.create(
+                        new Vector2(WIDTH - 12, 1.0f),
+                        player,
+                        Poster.Type.Indoordoor,
+                        null,
+                        (s, r) -> r.nextRoom = Act2.SMALL_BEDROOM));
 
                 // borders
                 world.spawn(Entity.builder()

@@ -72,5 +72,7 @@ public class Poster {
         Indoordoor,
         Furnace,
         Sofa,
+        PhotoWhole,
+        PhotoRipped,
     }
 }

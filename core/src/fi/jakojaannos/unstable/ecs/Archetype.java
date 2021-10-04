@@ -13,6 +13,10 @@ public class Archetype {
     @SuppressWarnings("rawtypes")
     private final Map<Class, List<Component>> storages;
 
+    public Class<?>[] componentClasses() {
+        return this.storages.keySet().toArray(new Class[0]);
+    }
+
 
     public Archetype(final Class<?>[] components) {
         this.storages = Arrays.stream(components)

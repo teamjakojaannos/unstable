@@ -11,6 +11,11 @@ public class Interactable implements Component<Interactable> {
     }
 
     public void execute(Entity self, Resources resources) {
+        if (!this.action.condition(self, resources)) {
+            this.action.onExecuteFailed(self, resources);
+            return;
+        }
+
         this.action.execute(self, resources);
     }
 
@@ -20,6 +25,12 @@ public class Interactable implements Component<Interactable> {
     }
 
     public interface Action {
+        default boolean condition(Entity self, Resources resources) {
+            return true;
+        }
+
+        default void onExecuteFailed(Entity self, Resources resources) {/* NOOP */}
+
         void execute(Entity self, Resources resources);
     }
 }

@@ -33,4 +33,10 @@ public class Tags {
         }
     }
 
+    public static class Locked implements Component<Locked> {
+        @Override
+        public Locked cloneComponent() {
+            return new Locked();
+        }
+    }
 }

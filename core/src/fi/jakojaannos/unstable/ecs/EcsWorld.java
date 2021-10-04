@@ -25,6 +25,8 @@ public interface EcsWorld {
 
     void queueSpawn(final Entity.Builder entity);
 
+    void spawn_player_hack(Entity player);
+
     class Impl implements EcsWorld {
         public List<Entity.Builder> spawnQueue = new ArrayList<>();
 
@@ -92,6 +94,23 @@ public interface EcsWorld {
         @Override
         public void queueSpawn(final Entity.Builder entity) {
             this.spawnQueue.add(entity);
+        }
+
+        @Override
+        public void spawn_player_hack(Entity player) {
+            final var removedComponents = player.drainRemovedComponents();
+            final var components = player.drainComponents()
+                                         .stream()
+                                         .filter(component -> !removedComponents.contains(component.getClass()))
+                                         .toList();
+
+            final var componentClasses = components
+                    .stream()
+                    .map(Object::getClass)
+                    .toArray(Class[]::new);
+
+            final var newArchetype = findOrCreateArchetype(componentClasses);
+            player.moveToArchetype(newArchetype, components.toArray(Component[]::new));
         }
 
         private Archetype findOrCreateArchetype(Class<?>[] components) {

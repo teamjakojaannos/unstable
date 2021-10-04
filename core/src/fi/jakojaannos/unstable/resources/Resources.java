@@ -6,10 +6,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import fi.jakojaannos.unstable.InputManager;
 import fi.jakojaannos.unstable.acts.Act;
+import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
+import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.renderer.Camera;
 
+import java.util.List;
 import java.util.Optional;
 
 public class Resources {
@@ -29,6 +32,8 @@ public class Resources {
     public Room nextRoom;
     public Act nextAct;
     public boolean stormy;
+    public Vector2 spawnPos;
+    public Entity player;
 
     public Resources(
             final EcsWorld world,
@@ -56,5 +61,12 @@ public class Resources {
 
     public Optional<Vector2> playerPosition() {
         return this.players.getPlayerPosition();
+    }
+
+    public void resetPlayer() {
+        final var componentsToRemove = List.of(
+                Tags.FreezeInput.class
+        );
+        componentsToRemove.forEach(clazz -> this.player.removeComponent(clazz));
     }
 }

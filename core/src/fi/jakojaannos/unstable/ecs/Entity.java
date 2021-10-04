@@ -87,6 +87,10 @@ public class Entity implements Component<Entity> {
         return this;
     }
 
+    public Class<Component>[] componentClasses() {
+        return (Class<Component>[]) this.archetype.componentClasses();
+    }
+
     public static Entity.Builder builder() {
         return new Builder();
     }
