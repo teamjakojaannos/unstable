@@ -27,6 +27,8 @@ public class MorkoAi implements Component<MorkoAi> {
 
     @Null
     private Vector2 targetPos = null;
+    @Null
+    private Vector2 attackTarget = null;
 
     public MorkoAi(float sightRadius, float loseAggroTime, float idleTime, State state, TaskList<State> taskList) {
         this.sightRadius = sightRadius;
@@ -44,10 +46,6 @@ public class MorkoAi implements Component<MorkoAi> {
         this(sightRadius, loseAggroTime, idleTime, State.IDLING);
     }
 
-    public void clearTargetPos() {
-        this.targetPos = null;
-    }
-
     public Optional<Vector2> getTargetPos() {
         return Optional.ofNullable(targetPos);
     }
@@ -58,6 +56,22 @@ public class MorkoAi implements Component<MorkoAi> {
         } else {
             this.targetPos.set(target);
         }
+    }
+
+    public Optional<Vector2> getAttackTargetPos() {
+        return Optional.ofNullable(this.attackTarget);
+    }
+
+    public void setAttackTarget(Vector2 target) {
+        if (this.attackTarget == null) {
+            this.attackTarget = new Vector2(target);
+        } else {
+            this.attackTarget.set(target);
+        }
+    }
+
+    public void clearAttackTarget() {
+        this.attackTarget = null;
     }
 
     @Override

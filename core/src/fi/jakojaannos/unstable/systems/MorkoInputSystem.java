@@ -8,6 +8,9 @@ import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
 public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
     @Override
     public void tick(SystemInput<Input> input, Resources resources) {
@@ -20,19 +23,17 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
 // ========== MOVEMENT ==========
 
     private void doMovement(Input entity, Resources resources) {
-        final var targetDistance2 = 0.5f;
 
         final var ai = entity.ai;
         switch (ai.state) {
             case IDLING, ATTACKING -> entity.input.direction.setZero();
-            case CHASING, WANDERING, SEARCHING -> ai.getTargetPos().ifPresent(target -> {
-                var direction = target.cpy().sub(entity.body.getPosition());
-                if (direction.len2() >= targetDistance2) {
-                    entity.input.direction.set(direction).nor();
-                } else {
-                    entity.input.direction.setZero();
-                }
-            });
+            case SEARCHING -> ai.getAttackTargetPos()
+                    .or(ai::getTargetPos)
+                    .ifPresent(target ->
+                            setInputTowards(entity, target, Math.min(ai.attackRadius2, ai.targetDistance2))
+                    );
+            case CHASING, WANDERING -> ai.getTargetPos()
+                    .ifPresent(target -> setInputTowards(entity, target, 0.5f));
             case TASK -> ai.taskList.currentTask()
                     .ifPresentOrElse(
                             _task -> {
@@ -44,6 +45,15 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
                                 wanderOrIdle(entity, resources);
                             }
                     );
+        }
+    }
+
+    private void setInputTowards(Input entity, Vector2 target, float targetDistance2) {
+        var direction = target.cpy().sub(entity.body.getPosition());
+        if (direction.len2() >= targetDistance2) {
+            entity.input.direction.set(direction).nor();
+        } else {
+            entity.input.direction.setZero();
         }
     }
 
@@ -77,13 +87,16 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
 
     private void updateSearchState(Input entity, Resources resources) {
         // if I'm near my target -> attack it to check for player
-        if (nearMyTarget(entity)) {
-            // TODO: set target to nearest closet
+        if (nearMyAttackTarget(entity)) {
             attack(entity, resources);
             return;
         }
 
-        if (tiredOfSearching(entity, resources)) {
+        final var noAttackTarget = entity.ai.getAttackTargetPos().isEmpty();
+        if ((noAttackTarget && nearMyTarget(entity))
+                || tiredOfSearching(entity, resources)
+        ) {
+            // I lost player and can't find hiding spots, or I got bored
             wanderOrIdle(entity, resources);
         }
     }
@@ -161,7 +174,10 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
 
         resources.players
                 .getPlayerPosition()
-                .ifPresent(entity.ai::setTargetPos);
+                .ifPresent(pos -> {
+                    entity.ai.setTargetPos(pos);
+                    entity.ai.setAttackTarget(pos);
+                });
     }
 
     private void search(Input entity, Resources resources) {
@@ -171,6 +187,35 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
             entity.ai.searchHandle = resources.timers.set(entity.ai.loseAggroTime, false, () -> {
             });
         }
+
+        final var radius = entity.ai.sightRadius / 4.0f;
+        entity.ai.getTargetPos()
+                .flatMap(target -> getNearestAttackTarget(target, resources, radius))
+                .ifPresentOrElse(
+                        entity.ai::setAttackTarget,
+                        entity.ai::clearAttackTarget
+                );
+    }
+
+    /**
+     * Excludes player, finds closets and other hidings spots.
+     *
+     * @param pos get hiding spots near this position
+     */
+    private Optional<Vector2> getNearestAttackTarget(
+            Vector2 pos,
+            Resources resources,
+            float searchRadius
+    ) {
+        return new ArrayList<>(resources.interactItems.items)
+                .stream()
+                .filter(item -> item.entity().hasComponent(HidingSpot.class))
+                .filter(item -> item.body().getPosition().dst2(pos) <= searchRadius * searchRadius)
+                .min((o1, o2) -> Float.compare(
+                        // find the closest one
+                        o1.body().getPosition().dst2(pos),
+                        o2.body().getPosition().dst2(pos)))
+                .map(item -> item.body().getPosition());
     }
 
     private void attack(Input entity, Resources resources) {
@@ -226,6 +271,12 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
 
         return player.getComponent(PhysicsBody.class)
                 .map(playerBody -> playerBody.getPosition().dst2(body.getPosition()) <= ai.attackRadius2)
+                .orElse(false);
+    }
+
+    private boolean nearMyAttackTarget(Input entity) {
+        return entity.ai.getAttackTargetPos()
+                .map(target -> target.dst2(entity.body.getPosition()) <= entity.ai.attackRadius2)
                 .orElse(false);
     }
 

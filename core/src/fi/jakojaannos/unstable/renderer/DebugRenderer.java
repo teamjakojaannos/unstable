@@ -1,6 +1,5 @@
 package fi.jakojaannos.unstable.renderer;
 
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import fi.jakojaannos.unstable.UnstableGame;
 import fi.jakojaannos.unstable.components.MorkoAi;
@@ -10,8 +9,6 @@ import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.Optional;
-
-import static com.badlogic.gdx.Gdx.gl;
 
 public class DebugRenderer implements EcsSystem<DebugRenderer.Input>, AutoCloseable {
 
@@ -37,9 +34,8 @@ public class DebugRenderer implements EcsSystem<DebugRenderer.Input>, AutoClosea
             renderer.begin(ShapeRenderer.ShapeType.Line);
             renderer.setColor(1.0f, 0.0f, 0.0f, 1.0f);
             renderer.rect(min.x, min.y, width, height);
+
             /*
-
-
             entity.morkoAi
                     .flatMap(MorkoAi::getTargetPos)
                     .ifPresent(target -> {
@@ -48,7 +44,15 @@ public class DebugRenderer implements EcsSystem<DebugRenderer.Input>, AutoClosea
                         renderer.rect(target.x - size / 2.0f, target.y - size / 2.0f, size, size);
                     });
 
+            entity.morkoAi
+                    .flatMap(MorkoAi::getAttackTargetPos)
+                    .ifPresent(target -> {
+                        renderer.setColor(0.0f, 1.0f, 0.0f, 1.0f);
+                        final var size = 0.5f;
+                        renderer.rect(target.x - size / 2.0f, target.y - size / 2.0f, size, size);
+                    });
             */
+
             renderer.end();
         });
     }
