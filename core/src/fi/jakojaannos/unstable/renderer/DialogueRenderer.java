@@ -55,10 +55,11 @@ public class DialogueRenderer implements EcsSystem<DialogueRenderer.Input>, Auto
 
         this.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         final var lineHeight = this.font.getLineHeight();
+        final var xOffs = 20;
         var yOffs = 0;
         for (var line : lines) {
-            final var xPos = line.xPos() * boxW;
-            final var yPos = line.yPos() * boxH + boxH + yOffs;
+            final var xPos = line.xPos() * boxW + xOffs;
+            final var yPos = line.yPos() * boxH + boxH + yOffs - 20;
 
             this.font.setColor(line.color());
             this.font.draw(

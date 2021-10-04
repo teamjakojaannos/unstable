@@ -88,8 +88,8 @@ public class CafeIntroRoom {
                                 List.of(new TextRenderer.TextOnScreen("They disappeared right after they went to"),
                                         new TextRenderer.TextOnScreen("visit that old castle…")),
                                 List.of(new TextRenderer.TextOnScreen("Guess that’s where I'm headed next.")),
-                                List.of(new TextRenderer.TextOnScreen("There is something oddly familiar about that picture…"),
-                                        new TextRenderer.TextOnScreen("...why do I feel like I’ve seen it before?"))
+                                List.of(new TextRenderer.TextOnScreen("There is something oddly familiar about that"),
+                                        new TextRenderer.TextOnScreen("picture ...why do I feel like I’ve seen it before?"))
                         )));
 
                 world.spawn(Poster.create(
