@@ -6,6 +6,7 @@ import fi.jakojaannos.unstable.entities.Poster;
 public class PosterState implements Component<PosterState> {
     public boolean active;
     public Poster.Type type;
+    public boolean dialogueShown;
     private boolean wasActive;
 
     public PosterState(Poster.Type type) {

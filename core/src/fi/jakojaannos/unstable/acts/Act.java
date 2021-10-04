@@ -99,6 +99,7 @@ public interface Act {
                 new SetShader(batch, null, null),
                 new DebugRenderer(),
                 new TextRenderer(batch),
+                new DialogueRenderer(batch),
                 new RenderSoundTags(),
                 new RenderAmbience()
         );

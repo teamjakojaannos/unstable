@@ -76,7 +76,21 @@ public class CafeIntroRoom {
                                                                         0.6f,
                                                                         0.45f)),
                                   PopUp.Background.Newspaper),
-                        (s, r) -> r.nextAct = new Act2()));
+                        (s, r) -> {
+                            // TODO: open another popup, a close-up of the image before changing the act
+                            //  - should have a dimmer to hide the background transition
+                            r.nextAct = new Act2();
+                            return true;
+                        },
+                        List.of(
+                                List.of(new TextRenderer.TextOnScreen("Hey… wait a minute, there is an article"),
+                                        new TextRenderer.TextOnScreen("about my missing buddies here?")),
+                                List.of(new TextRenderer.TextOnScreen("They disappeared right after they went to"),
+                                        new TextRenderer.TextOnScreen("visit that old castle…")),
+                                List.of(new TextRenderer.TextOnScreen("Guess that’s where I'm headed next.")),
+                                List.of(new TextRenderer.TextOnScreen("There is something oddly familiar about that picture…"),
+                                        new TextRenderer.TextOnScreen("...why do I feel like I’ve seen it before?"))
+                        )));
 
                 world.spawn(Poster.create(
                         new Vector2(WIDTH - 8 + 0.75f, 2.05f),

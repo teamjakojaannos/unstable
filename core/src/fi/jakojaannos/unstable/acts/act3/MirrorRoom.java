@@ -45,7 +45,10 @@ public class MirrorRoom {
                         player,
                         Poster.Type.Indoordoor,
                         null,
-                        (s, r) -> r.nextAct = new Act5()));
+                        (s, r) -> {
+                            r.nextAct = new Act5();
+                            return true;
+                        }));
             }
         };
     }

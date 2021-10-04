@@ -45,6 +45,8 @@ public class Closet {
                              player.removeComponent(Hiding.class);
                              hidingSpot.occupied = false;
                          }
+
+                         return true;
                      }))
                      .component(new HidingSpot(type));
     }

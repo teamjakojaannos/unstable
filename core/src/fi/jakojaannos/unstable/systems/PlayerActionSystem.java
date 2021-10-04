@@ -1,5 +1,6 @@
 package fi.jakojaannos.unstable.systems;
 
+import fi.jakojaannos.unstable.UnstableGame;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.components.PlayerHudComponent;
 import fi.jakojaannos.unstable.components.PlayerInput;
@@ -23,9 +24,15 @@ public class PlayerActionSystem implements EcsSystem<PlayerActionSystem.Input> {
                     entity.hud.currentIndicator = item.icon();
 
                     if (entity.input.actionPressed) {
-                        item.action().execute(item.entity(), resources);
+                        if (resources.timers.isActiveAndValid(resources.interactCooldown)) {
+                            continue;
+                        }
+
+                        if (item.action().execute(item.entity(), resources)) {
+                            resources.interactCooldown = resources.timers.set(UnstableGame.Constants.INTERACT_COOLDOWN, false, () -> {});
+                            break;
+                        }
                     }
-                    break;
                 }
             }
         });

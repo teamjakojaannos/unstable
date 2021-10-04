@@ -119,6 +119,8 @@ public class UnstableGame extends ApplicationAdapter {
     }
 
     public static class Constants {
+        public static final float INTERACT_COOLDOWN = 0.5f;
+
         public static class GameLoop {
             public static final int TICKS_PER_SECOND = 50;
             public static final float TIME_STEP = 1.0f / TICKS_PER_SECOND;

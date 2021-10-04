@@ -67,8 +67,10 @@ public class ManorEntranceRoom {
                             }
 
                             @Override
-                            public void execute(Entity s, Resources r) {
+                            public boolean execute(Entity s, Resources r) {
                                 r.nextAct = new Act3();
+
+                                return true;
                             }
                         }).component(new Tags.Locked()));
 
@@ -77,7 +79,10 @@ public class ManorEntranceRoom {
                         player,
                         Poster.Type.Indoordoor,
                         null,
-                        (s, r) -> r.nextRoom = Act2.SMALL_BEDROOM));
+                        (s, r) -> {
+                            r.nextRoom = Act2.SMALL_BEDROOM;
+                            return true;
+                        }));
 
                 // borders
                 world.spawn(Entity.builder()

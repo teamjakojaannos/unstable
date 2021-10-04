@@ -11,7 +11,10 @@ import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.renderer.Camera;
+import fi.jakojaannos.unstable.renderer.TextRenderer;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +39,8 @@ public class Resources {
     public Entity player;
 
     public Inventory playerInventory = new Inventory();
+    public TimerHandle interactCooldown;
+    private List<Collection<TextRenderer.TextOnScreen>> dialogueText;
 
     public Resources(
             final EcsWorld world,
@@ -70,6 +75,14 @@ public class Resources {
                 Tags.FreezeInput.class
         );
         componentsToRemove.forEach(clazz -> this.player.removeComponent(clazz));
+    }
+
+    public List<Collection<TextRenderer.TextOnScreen>> getDialogueText() {
+        return this.dialogueText;
+    }
+
+    public void setDialogueText(Collection<Collection<TextRenderer.TextOnScreen>> lists) {
+        this.dialogueText = lists == null ? null : new ArrayList<>(lists);
     }
 
     public static class Inventory {

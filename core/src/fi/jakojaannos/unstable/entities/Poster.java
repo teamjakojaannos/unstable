@@ -8,8 +8,12 @@ import fi.jakojaannos.unstable.components.PlayerHudComponent;
 import fi.jakojaannos.unstable.components.PosterState;
 import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.Entity;
+import fi.jakojaannos.unstable.renderer.TextRenderer;
 import fi.jakojaannos.unstable.resources.Interactable;
 import fi.jakojaannos.unstable.resources.PopUp;
+
+import java.util.Collection;
+import java.util.List;
 
 public class Poster {
     public static Entity.Builder create(Vector2 position, Entity player, Type type, PopUp popUp) {
@@ -23,6 +27,17 @@ public class Poster {
             PopUp popUp,
             Interactable.Action extraAction
     ) {
+        return create(position, player, type, popUp, extraAction, List.of());
+    }
+
+    public static Entity.Builder create(
+            Vector2 position,
+            Entity player,
+            Type type,
+            PopUp popUp,
+            Interactable.Action extraAction,
+            List<Collection<TextRenderer.TextOnScreen>> preCloseDialogue
+    ) {
         final var builder = Entity
                 .builder()
                 .component(new PhysicsBody(position.cpy(), variantSize(type)))
@@ -30,18 +45,35 @@ public class Poster {
 
         if (popUp != null) {
             builder.component(new Interactable((self, resources) -> {
-                       if (resources.popup == null) {
+                       System.out.println("HANDLER");
+                       final var isOpen = self.getComponent(PosterState.class).map(s -> s.active).orElse(false);
+
+                       if (resources.popup == null && !isOpen) {
                            resources.popup = popUp;
                            self.getComponent(PosterState.class).ifPresent(state -> state.active = true);
                            player.addComponent(new Tags.FreezeInput());
-                       } else {
-                           resources.popup = null;
-                           self.getComponent(PosterState.class).ifPresent(state -> state.active = false);
-                           player.removeComponent(Tags.FreezeInput.class);
 
-                           if (extraAction != null) {
-                               extraAction.execute(self, resources);
+                           return true;
+                       } else {
+                           if (!preCloseDialogue.isEmpty() && resources.getDialogueText() == null && self.getComponent(PosterState.class).map(state -> !state.dialogueShown).orElse(false)) {
+                               resources.setDialogueText(preCloseDialogue);
+                               self.getComponent(PosterState.class).map(state -> state.dialogueShown = true);
+                               return true;
                            }
+
+                           if (preCloseDialogue.isEmpty() || resources.getDialogueText() == null || resources.getDialogueText().isEmpty()) {
+                               resources.popup = null;
+                               self.getComponent(PosterState.class).map(state -> state.dialogueShown = false);
+                               self.getComponent(PosterState.class).ifPresent(state -> state.active = false);
+                               player.removeComponent(Tags.FreezeInput.class);
+
+                               if (extraAction != null) {
+                                   extraAction.execute(self, resources);
+                               }
+
+                               return true;
+                           }
+                           return false;
                        }
                    }))
                    .component(PlayerHudComponent.Indicator.QUESTION);

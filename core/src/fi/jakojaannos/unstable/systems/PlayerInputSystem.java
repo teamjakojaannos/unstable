@@ -22,6 +22,10 @@ public class PlayerInputSystem implements EcsSystem<PlayerInputSystem.Input> {
                  final var xAxis = asInt(inputState.getState(RIGHT)) - asInt(inputState.getState(LEFT));
                  movementInput.direction.set(xAxis, 0.0f);
 
+                 if (resources.getDialogueText() != null && !resources.getDialogueText().isEmpty()) {
+                     movementInput.direction.set(0.0f, 0.0f);
+                 }
+
                  // set to false when DOWN or RELEASED
                  entity.playerInput.actionPressed = (inputState.getState(ACTION) == InputManager.State.PRESSED);
              });

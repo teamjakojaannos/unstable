@@ -8,6 +8,7 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+import fi.jakojaannos.unstable.renderer.TextRenderer;
 import fi.jakojaannos.unstable.resources.PopUp;
 
 import java.util.List;
@@ -62,6 +63,7 @@ public class SmallBedroom {
                         (s, r) -> {
                             r.nextRoom = Act2.MANOR_ENTRY;
                             r.spawnPos = new Vector2(ManorEntranceRoom.WIDTH - 12, 1.0f);
+                            return true;
                         }));
 
                 world.spawn(Poster.create(
@@ -70,10 +72,23 @@ public class SmallBedroom {
                         Poster.Type.PhotoRipped,
                         new PopUp(List.of(), PopUp.Background.Photo),
                         (s, r) -> {
+                            r.setDialogueText(List.of(
+                                    List.of(new TextRenderer.TextOnScreen("What was that?")),
+                                    List.of(new TextRenderer.TextOnScreen("Sounds like a door opened somewhere"))
+                            ));
+
                             r.player.addComponent(new SoundTags.DoorCreak());
                             r.playerInventory.photo = true;
                             s.destroy();
-                        }));
+
+                            return true;
+                        },
+                        List.of(
+                                List.of(new TextRenderer.TextOnScreen("...this photo")),
+                                List.of(new TextRenderer.TextOnScreen("I saw it on the newspaper"),
+                                        new TextRenderer.TextOnScreen("back in the cafe.")),
+                                List.of(new TextRenderer.TextOnScreen("I'm sure of it"))
+                        )));
             }
         };
     }

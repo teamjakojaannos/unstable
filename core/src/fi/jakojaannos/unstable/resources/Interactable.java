@@ -1,5 +1,6 @@
 package fi.jakojaannos.unstable.resources;
 
+import fi.jakojaannos.unstable.components.PosterState;
 import fi.jakojaannos.unstable.ecs.Component;
 import fi.jakojaannos.unstable.ecs.Entity;
 
@@ -10,13 +11,13 @@ public class Interactable implements Component<Interactable> {
         this.action = action;
     }
 
-    public void execute(Entity self, Resources resources) {
+    public boolean execute(Entity self, Resources resources) {
         if (!this.action.condition(self, resources)) {
             this.action.onExecuteFailed(self, resources);
-            return;
+            return false;
         }
 
-        this.action.execute(self, resources);
+        return this.action.execute(self, resources);
     }
 
     @Override
@@ -31,6 +32,6 @@ public class Interactable implements Component<Interactable> {
 
         default void onExecuteFailed(Entity self, Resources resources) {/* NOOP */}
 
-        void execute(Entity self, Resources resources);
+        boolean execute(Entity self, Resources resources);
     }
 }

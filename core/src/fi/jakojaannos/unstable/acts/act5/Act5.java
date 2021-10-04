@@ -20,13 +20,16 @@ public class Act5 implements Act {
     @Override
     public Collection<EcsSystem> renderSystems(SpriteBatch batch) {
         return List.of(
+                new SetCafeUniforms(),
                 new RenderTiles(batch),
                 new RenderHidingSpot(batch),
                 new RenderPosters(batch),
                 new RenderPlayer(batch),
                 new RenderMorko(batch),
-                //new DebugRenderer(),
-                new TextRenderer(batch)
+                new TextRenderer(batch),
+                new DialogueRenderer(batch),
+                new RenderSoundTags(),
+                new RenderAmbience()
         );
     }
 }

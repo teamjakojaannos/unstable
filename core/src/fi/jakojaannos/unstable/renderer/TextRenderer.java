@@ -131,5 +131,9 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
         ) {
             this(content, xPos, yPos, targetWidth, new Color(0xffffffff));
         }
+
+        public TextOnScreen(String content) {
+            this(content, 0, 0, 1.0f);
+        }
     }
 }
