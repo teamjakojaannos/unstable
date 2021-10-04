@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.acts.act2.Act2;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
-import fi.jakojaannos.unstable.entities.Morko;
 import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
@@ -63,8 +62,8 @@ public class CafeIntroRoom {
                                                                                                   Han pakeni paikalta traktorilla ja soitti sakkipillia aamunkoittoon asti.""",
                                                                                           0.05f,
                                                                                           0.6f,
-                                                                                          0.45f))
-                                          )));
+                                                                                          0.45f)),
+                                                    PopUp.Background.Newspaper)));
 
                 world.spawn(Poster.create(
                         new Vector2(WIDTH - 8, 1.0f),
@@ -75,8 +74,8 @@ public class CafeIntroRoom {
                                                                                 """,
                                                                         0.05f,
                                                                         0.6f,
-                                                                        0.45f))
-                        ),
+                                                                        0.45f)),
+                                  PopUp.Background.Newspaper),
                         (s, r) -> r.nextAct = new Act2()));
 
                 world.spawn(Poster.create(

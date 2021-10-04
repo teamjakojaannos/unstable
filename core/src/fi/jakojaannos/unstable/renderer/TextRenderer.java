@@ -13,18 +13,18 @@ import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseable {
     private final SpriteBatch batch;
     private final BitmapFont font;
-    private final Texture newspaper;
+    private final Texture[] backgrounds;
     private final Texture pixel;
     private final Color orange = new Color(0xA06345FF);
 
     public TextRenderer(SpriteBatch batch) {
-        this.newspaper = new Texture("newspaper.png");
+        this.backgrounds = new Texture[]{
+                new Texture("newspaper.png"),
+                new Texture("Kuva_Hajonnut.png"),
+        };
         this.pixel = new Texture("pixel.png");
 
         this.batch = batch;
@@ -44,29 +44,38 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
         }
 
         final var lines = resources.popup.lines();
+        final var bgType = resources.popup.photo();
+        final var bg = this.backgrounds[bgType.ordinal()];
+
 
         this.batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         this.batch.begin();
 
-        final var ratio = ((float) newspaper.getWidth()) / newspaper.getHeight();
-        final var newspaperHeight = Gdx.graphics.getHeight();
+        final var ratio = ((float) bg.getWidth()) / bg.getHeight();
+
+        final var vOffs = (Gdx.graphics.getHeight() * (1.0f - bgType.height())) / 2.0f;
+
+        final var newspaperHeight = Gdx.graphics.getHeight() * bgType.height();
         final var newspaperWidth = newspaperHeight * ratio;
 
         final var excessSpace = Gdx.graphics.getWidth() - newspaperWidth;
         final var newspaperX = excessSpace / 2.0f;
 
-        this.batch.setColor(this.orange);
-        this.batch.draw(pixel,
-                        newspaperX,
-                        0.0f,
-                        newspaperWidth,
-                        newspaperHeight
-        );
+        if (bgType.needsPixel()) {
+            this.batch.setColor(this.orange);
+            this.batch.draw(pixel,
+                            newspaperX,
+                            vOffs,
+                            newspaperWidth,
+                            newspaperHeight
+            );
+        }
+
 
         this.batch.draw(
-                this.newspaper,
+                bg,
                 newspaperX,
-                0.0f,
+                vOffs,
                 newspaperWidth,
                 newspaperHeight
         );
@@ -97,6 +106,9 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
     @Override
     public void close() {
         this.font.dispose();
+        for (Texture background : this.backgrounds) {
+            background.dispose();
+        }
     }
 
     public record Input(

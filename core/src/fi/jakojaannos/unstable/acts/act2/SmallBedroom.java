@@ -8,6 +8,9 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+import fi.jakojaannos.unstable.resources.PopUp;
+
+import java.util.List;
 
 public class SmallBedroom {
     private static final int WIDTH = 16;
@@ -65,7 +68,7 @@ public class SmallBedroom {
                         new Vector2(10.0f, 1.0f),
                         player,
                         Poster.Type.PhotoRipped,
-                        null,
+                        new PopUp(List.of(), PopUp.Background.Photo),
                         (s, r) -> {
                             r.player.addComponent(new SoundTags.DoorCreak());
                             r.playerInventory.photo = true;
