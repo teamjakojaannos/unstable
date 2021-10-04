@@ -14,17 +14,18 @@ public class TaskWait implements Task {
     }
 
     @Override
+    public void initialize(Entity entity, Resources resources) {
+        this.handle = resources.timers.set(this.duration, false, () -> {
+        });
+    }
+
+    @Override
     public boolean isCompleted(Entity entity, Resources resources) {
-        return !resources.timers.isActiveAndValid(this.handle);
+        final var isActive = resources.timers.isActiveAndValid(this.handle);
+        return !isActive;
     }
 
     @Override
     public void doAction(Entity entity, Resources resources) {
-        var timers = resources.timers;
-        if (timers.isActiveAndValid(this.handle)) {
-            return;
-        }
-
-        this.handle = timers.set(this.duration, false, () -> {});
     }
 }

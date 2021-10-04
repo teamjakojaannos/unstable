@@ -17,27 +17,32 @@ public class TaskList implements Component<TaskList> {
 
     private boolean firstUpdate = true;
 
+    // TODO: rework so that tasks have 3 funcs: init, check and action
+    //   switching tasks would call init. this would make possible to do some kind of wander action
+    //   and relative movement
     public TaskList(List<Task> tasks, boolean looping) {
         this.tasks = new ArrayList<>(tasks);
         this.looping = looping;
     }
 
     public void update(Entity entity, Resources resources) {
-        if (firstUpdate) {
-            firstUpdate = false;
-            currentTask().ifPresent(task -> task.doAction(entity, resources));
+        final var optTask = currentTask();
+        if (optTask.isEmpty()) {
             return;
         }
 
-        var done = currentTask()
-                .map(task -> task.isCompleted(entity, resources))
-                .orElse(false);
+        final var task = optTask.get();
 
-        if (done) {
-            this.currentTaskIndex++;
+        if (firstUpdate) {
+            firstUpdate = false;
+            task.initialize(entity, resources);
         }
 
-        currentTask().ifPresent(task -> task.doAction(entity, resources));
+        task.doAction(entity, resources);
+        if (task.isCompleted(entity, resources)) {
+            this.currentTaskIndex++;
+            currentTask().ifPresent(newTask -> newTask.initialize(entity, resources));
+        }
     }
 
     private Optional<Task> currentTask() {

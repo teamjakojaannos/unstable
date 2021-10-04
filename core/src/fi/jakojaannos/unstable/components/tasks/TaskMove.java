@@ -17,6 +17,10 @@ public class TaskMove implements Task {
     }
 
     @Override
+    public void initialize(Entity entity, Resources resources) {
+    }
+
+    @Override
     public boolean isCompleted(Entity entity, Resources resources) {
         return entity.getComponent(PhysicsBody.class)
                 .map(body -> body.getPosition().dst2(this.target) <= this.targetDistance2)
