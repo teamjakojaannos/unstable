@@ -58,7 +58,7 @@ public class ManorEntranceRoom {
                         new Interactable.Action() {
                             @Override
                             public boolean condition(Entity self, Resources resources) {
-                                return !self.hasComponent(Tags.Locked.class);
+                                return resources.playerInventory.photo;
                             }
 
                             @Override

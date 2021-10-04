@@ -35,6 +35,8 @@ public class Resources {
     public Vector2 spawnPos;
     public Entity player;
 
+    public Inventory playerInventory = new Inventory();
+
     public Resources(
             final EcsWorld world,
             final BoundingBox worldBounds,
@@ -68,5 +70,9 @@ public class Resources {
                 Tags.FreezeInput.class
         );
         componentsToRemove.forEach(clazz -> this.player.removeComponent(clazz));
+    }
+
+    public static class Inventory {
+        public boolean photo;
     }
 }

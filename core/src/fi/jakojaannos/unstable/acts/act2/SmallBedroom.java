@@ -1,6 +1,7 @@
 package fi.jakojaannos.unstable.acts.act2;
 
 import com.badlogic.gdx.math.Vector2;
+import fi.jakojaannos.unstable.components.SoundTags;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Poster;
@@ -40,7 +41,7 @@ public class SmallBedroom {
             @Override
             public void spawnInitialEntities(EcsWorld world, Entity player) {
                 world.spawn(Poster.create(
-                        new Vector2(3.0f, 1.0f),
+                        new Vector2(5.0f, 1.0f),
                         player,
                         Poster.Type.Sofa,
                         null,
@@ -58,6 +59,17 @@ public class SmallBedroom {
                         (s, r) -> {
                             r.nextRoom = Act2.MANOR_ENTRY;
                             r.spawnPos = new Vector2(ManorEntranceRoom.WIDTH - 12, 1.0f);
+                        }));
+
+                world.spawn(Poster.create(
+                        new Vector2(10.0f, 1.0f),
+                        player,
+                        Poster.Type.PhotoRipped,
+                        null,
+                        (s, r) -> {
+                            r.player.addComponent(new SoundTags.DoorCreak());
+                            r.playerInventory.photo = true;
+                            s.destroy();
                         }));
             }
         };

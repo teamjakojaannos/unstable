@@ -9,7 +9,9 @@ import fi.jakojaannos.unstable.UnstableGame;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.components.PosterState;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
+import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.ecs.SystemInput;
+import fi.jakojaannos.unstable.resources.Interactable;
 import fi.jakojaannos.unstable.resources.Resources;
 
 public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoCloseable {
@@ -109,6 +111,11 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                      default -> false;
                  };
 
+                 final var isDoor = switch (poster.type) {
+                     case Indoordoor -> true;
+                     default -> false;
+                 };
+
                  TextureRegion region;
                  if (isAnimated) {
                      final var tick = resources.timeManager.currentTick();
@@ -121,6 +128,13 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
 
                      final var scaledTick = ((float) tick / (float) UnstableGame.Constants.GameLoop.TICKS_PER_SECOND) / (loopDuration / framesToUse.length);
                      region = framesToUse[((int) scaledTick) % framesToUse.length];
+                 } else if (isDoor) {
+                     final var isLocked = entity.handle
+                             .getComponent(Interactable.class)
+                             .map(i -> i.action.condition(entity.handle, resources))
+                             .orElse(false);
+
+                     region = this.variants[poster.type.ordinal()][isLocked ? 0 : 1];
                  } else {
                      region = this.variants[poster.type.ordinal()][resources.spoopy ? 1 : 0];
                  }
@@ -147,6 +161,7 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
     }
 
     public record Input(
+            Entity handle,
             PhysicsBody body,
             PosterState poster
     ) {}

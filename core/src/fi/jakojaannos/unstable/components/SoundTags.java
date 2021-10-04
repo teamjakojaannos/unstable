@@ -13,4 +13,11 @@ public class SoundTags {
             return new Locked();
         }
     }
+
+    public static class DoorCreak implements Component<DoorCreak> {
+        @Override
+        public DoorCreak cloneComponent() {
+            return new DoorCreak();
+        }
+    }
 }
