@@ -15,7 +15,7 @@ public class MorkoAi implements Component<MorkoAi> {
     public final float loseAggroTime;
     public final float idleTime;
     public final float attackDuration = 0.66f;
-    public final TaskList taskList;
+    public final TaskList<State> taskList;
     public State state;
 
     @Null
@@ -28,7 +28,7 @@ public class MorkoAi implements Component<MorkoAi> {
     @Null
     private Vector2 targetPos = null;
 
-    public MorkoAi(float sightRadius, float loseAggroTime, float idleTime, State state, TaskList taskList) {
+    public MorkoAi(float sightRadius, float loseAggroTime, float idleTime, State state, TaskList<State> taskList) {
         this.sightRadius = sightRadius;
         this.loseAggroTime = loseAggroTime;
         this.idleTime = idleTime;
@@ -37,7 +37,7 @@ public class MorkoAi implements Component<MorkoAi> {
     }
 
     public MorkoAi(float sightRadius, float loseAggroTime, float idleTime, State state) {
-        this(sightRadius, loseAggroTime, idleTime, state, new TaskList(new ArrayList<>(), false));
+        this(sightRadius, loseAggroTime, idleTime, state, new TaskList<>(new ArrayList<>(), false));
     }
 
     public MorkoAi(float sightRadius, float loseAggroTime, float idleTime) {

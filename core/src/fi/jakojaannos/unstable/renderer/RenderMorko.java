@@ -79,12 +79,22 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
                             .playerPosition()
                             .map(pos -> pos.dst(physics.getPosition()));
 
-                    final var framesToUse = switch (ai.state) {
+                    var framesToUse = switch (ai.state) {
                         case IDLING -> this.idleFrames;
                         case WANDERING, CHASING -> this.walkFrames;
                         case SEARCHING -> this.searchFrames;
-                        case ATTACKING, TASK -> this.attackFrames;
+                        case ATTACKING -> this.attackFrames;
+                        case TASK -> ai.taskList.currentTask().map(
+                                task -> switch (task.getState()) {
+                                    case SEARCHING, WANDERING -> this.walkFrames;
+                                    default -> this.idleFrames;
+                                }).orElse(this.idleFrames);
                     };
+
+                    // ide was crying something about null, that should never be null though
+                    if (framesToUse == null) {
+                        framesToUse = this.idleFrames;
+                    }
 
                     final var loopDuration = switch (ai.state) {
                         case SEARCHING -> 1.5;

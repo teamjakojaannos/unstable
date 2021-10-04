@@ -6,6 +6,8 @@ import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.components.SoundTags;
 import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.components.Trigger;
+import fi.jakojaannos.unstable.components.*;
+import fi.jakojaannos.unstable.components.tasks.TaskDestroySelf;
 import fi.jakojaannos.unstable.components.tasks.TaskMove;
 import fi.jakojaannos.unstable.components.tasks.TaskWait;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
@@ -66,9 +68,10 @@ public class ManorEntranceRoom {
                                 res -> res.entities.spawn(
                                         Morko.create(new Vector2(28.0f, 1.0f),
                                                 List.of(
-                                                        new TaskMove(new Vector2(5.0f, 1.0f), 1.0f),
-                                                        new TaskWait(2.5f),
-                                                        new TaskMove(new Vector2(35.0f, 1.0f), 1.0f)
+                                                        new TaskMove<>(new Vector2(5.0f, 1.0f), 1.0f, MorkoAi.State.WANDERING),
+                                                        new TaskWait<>(2.5f, MorkoAi.State.IDLING),
+                                                        new TaskMove<>(new Vector2(35.0f, 1.0f), 1.0f, MorkoAi.State.WANDERING),
+                                                        new TaskDestroySelf<>(MorkoAi.State.IDLING)
                                                 )
                                         )
                                 )))

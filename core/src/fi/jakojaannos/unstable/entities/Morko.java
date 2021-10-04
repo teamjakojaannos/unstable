@@ -20,8 +20,8 @@ public class Morko {
                 .component(new Tags.Morko());
     }
 
-    public static Entity.Builder create(final Vector2 position, List<Task> tasks) {
-        final var taskList = new TaskList(tasks, false);
+    public static Entity.Builder create(final Vector2 position, List<Task<MorkoAi.State>> tasks) {
+        final var taskList = new TaskList<>(tasks, false);
 
         return Entity.builder()
                 .component(new PhysicsBody(position, 2.0f, 4.0f))

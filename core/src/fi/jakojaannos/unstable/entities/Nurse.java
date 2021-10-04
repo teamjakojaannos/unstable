@@ -16,11 +16,11 @@ public class Nurse {
         final var x = position.x;
         final var y = position.y;
         final var targetDistance = 1.0f;
-        final var tasks = new TaskList(List.of(
-                new TaskMove(new Vector2(x + 5.0f, y), targetDistance),
-                new TaskWait(1.0f),
-                new TaskMove(new Vector2(x - 5.0f, y), targetDistance),
-                new TaskWait(1.5f)
+        final var tasks = new TaskList<>(List.of(
+                new TaskMove<>(new Vector2(x + 5.0f, y), targetDistance, false),
+                new TaskWait<>(1.0f, false),
+                new TaskMove<>(new Vector2(x - 5.0f, y), targetDistance, false),
+                new TaskWait<>(1.5f, false)
         ), true);
         return Entity.builder()
                 .component(new PhysicsBody(position, 1.0f, 1.3f))

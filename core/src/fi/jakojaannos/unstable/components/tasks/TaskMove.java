@@ -6,14 +6,16 @@ import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.resources.Resources;
 
-public class TaskMove implements Task {
-
+public class TaskMove<EntityState> implements Task<EntityState> {
     private final Vector2 target;
     private final float targetDistance2;
 
-    public TaskMove(Vector2 target, float targetDistance) {
+    private final EntityState state;
+
+    public TaskMove(Vector2 target, float targetDistance, EntityState state) {
         this.target = target;
         this.targetDistance2 = targetDistance * targetDistance;
+        this.state = state;
     }
 
     @Override
@@ -41,5 +43,10 @@ public class TaskMove implements Task {
                 .set(this.target)
                 .sub(body.getPosition())
                 .nor();
+    }
+
+    @Override
+    public EntityState getState() {
+        return this.state;
     }
 }
