@@ -41,14 +41,12 @@ public class CigarRoom {
             public void spawnInitialEntities(EcsWorld world, Entity player) {
                 world.spawn(Poster.create(
                         new Vector2(8.0f, 1.0f),
-                        player,
                         Poster.Type.Furnace,
                         null
                 ));
 
                 world.spawn(Poster.create(
                         new Vector2(3.0f, 1.0f),
-                        player,
                         Poster.Type.Sofa,
                         null,
                         (s, r) -> {

@@ -51,7 +51,7 @@ public class CafeIntroRoom {
 
             @Override
             public void spawnInitialEntities(EcsWorld world, Entity player) {
-                world.spawn(Poster.create(new Vector2(14.0f, 2.5f), player, Poster.Type.POSTER,
+                world.spawn(Poster.create(new Vector2(14.0f, 2.5f), Poster.Type.POSTER,
                                           new PopUp(List.of(new TextRenderer.TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari",
                                                                                           0.55f,
                                                                                           0.60f,
@@ -67,7 +67,6 @@ public class CafeIntroRoom {
 
                 world.spawn(Poster.create(
                         new Vector2(WIDTH - 8, 1.0f),
-                        player,
                         Poster.Type.CAFE_COUNTER,
                         new PopUp(List.of(new TextRenderer.TextOnScreen("""
                                                                                 Group of youngsters disappeared near {{ family name }} manor.
@@ -94,14 +93,12 @@ public class CafeIntroRoom {
 
                 world.spawn(Poster.create(
                         new Vector2(WIDTH - 8 + 0.75f, 2.05f),
-                        player,
                         Poster.Type.NEWSPAPER_ABOUT_TO_FALL,
                         null));
 
                 for (int i = 0; i < 3; i++) {
                     world.spawn(Poster.create(
                             new Vector2(2.0f + i * 7.0f, 2.0f),
-                            player,
                             Poster.Type.WINDOW,
                             null));
                 }

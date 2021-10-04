@@ -1,11 +1,8 @@
 package fi.jakojaannos.unstable.acts.act2;
 
 import com.badlogic.gdx.math.Vector2;
-import fi.jakojaannos.unstable.acts.act3.Act3;
 import fi.jakojaannos.unstable.components.HidingSpot;
 import fi.jakojaannos.unstable.components.PhysicsBody;
-import fi.jakojaannos.unstable.components.SoundTags;
-import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Closet;
@@ -13,8 +10,6 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
-import fi.jakojaannos.unstable.resources.Interactable;
-import fi.jakojaannos.unstable.resources.Resources;
 
 public class ManorEntranceRoom {
     public static final int WIDTH = 24;
@@ -50,39 +45,12 @@ public class ManorEntranceRoom {
                 world.spawn(Closet.create(new Vector2(1.0f, 1.0f), player, HidingSpot.Type.MansionClosetLarge));
                 world.spawn(Closet.create(new Vector2(6.0f, 1.0f), player, HidingSpot.Type.WallHole));
 
-                world.spawn(Poster.create(
-                        new Vector2(WIDTH - 6, 1.0f),
-                        player,
-                        Poster.Type.Indoordoor,
-                        null,
-                        new Interactable.Action() {
-                            @Override
-                            public boolean condition(Entity self, Resources resources) {
-                                return resources.playerInventory.photo;
-                            }
-
-                            @Override
-                            public void onExecuteFailed(Entity self, Resources resources) {
-                                self.addComponent(new SoundTags.Locked());
-                            }
-
-                            @Override
-                            public boolean execute(Entity s, Resources r) {
-                                r.nextAct = new Act3();
-
-                                return true;
-                            }
-                        }).component(new Tags.Locked()));
-
-                world.spawn(Poster.create(
-                        new Vector2(WIDTH - 12, 1.0f),
-                        player,
-                        Poster.Type.Indoordoor,
-                        null,
-                        (s, r) -> {
-                            r.nextRoom = Act2.SMALL_BEDROOM;
-                            return true;
-                        }));
+                world.spawn(Poster.createDoor(new Vector2(WIDTH - 6, 1.0f),
+                                              Act2.MIRROR_ROOM,
+                                              null,
+                                              null,
+                                              (s, r) -> r.playerInventory.photo));
+                world.spawn(Poster.createDoor(new Vector2(WIDTH - 12, 1.0f), Act2.SMALL_BEDROOM, null));
 
                 // borders
                 world.spawn(Entity.builder()

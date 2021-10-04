@@ -49,7 +49,6 @@ public class RenderSoundTags implements EcsSystem<RenderSoundTags.Input>, AutoCl
             float pitchMax
     ) {
         return ignored -> {
-            System.out.printf("foobar, tag: %s\n", tag.getSimpleName());
             final var volume = this.random.nextFloat(volumeMin, volumeMax);
             final var pitch = this.random.nextFloat(pitchMin, pitchMax);
 

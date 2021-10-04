@@ -46,7 +46,6 @@ public class SmallBedroom {
             public void spawnInitialEntities(EcsWorld world, Entity player) {
                 world.spawn(Poster.create(
                         new Vector2(5.0f, 1.0f),
-                        player,
                         Poster.Type.Sofa,
                         null,
                         (s, r) -> {
@@ -55,20 +54,16 @@ public class SmallBedroom {
                         }
                 ));
 
-                world.spawn(Poster.create(
+                world.spawn(Poster.createDoor(
                         new Vector2(2.0f, 1.0f),
-                        player,
-                        Poster.Type.Indoordoor,
+                        Act2.MANOR_ENTRY,
                         null,
-                        (s, r) -> {
-                            r.nextRoom = Act2.MANOR_ENTRY;
-                            r.spawnPos = new Vector2(ManorEntranceRoom.WIDTH - 12, 1.0f);
-                            return true;
-                        }));
+                        new Vector2(ManorEntranceRoom.WIDTH - 12, 1.0f),
+                        null
+                ));
 
                 world.spawn(Poster.create(
                         new Vector2(10.0f, 1.0f),
-                        player,
                         Poster.Type.PhotoRipped,
                         new PopUp(List.of(), PopUp.Background.Photo),
                         (s, r) -> {

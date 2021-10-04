@@ -3,36 +3,35 @@ package fi.jakojaannos.unstable.entities;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
-import fi.jakojaannos.unstable.components.PhysicsBody;
-import fi.jakojaannos.unstable.components.PlayerHudComponent;
-import fi.jakojaannos.unstable.components.PosterState;
-import fi.jakojaannos.unstable.components.Tags;
+import fi.jakojaannos.unstable.acts.Act;
+import fi.jakojaannos.unstable.components.*;
 import fi.jakojaannos.unstable.ecs.Entity;
+import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.renderer.TextRenderer;
 import fi.jakojaannos.unstable.resources.Interactable;
 import fi.jakojaannos.unstable.resources.PopUp;
+import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public class Poster {
-    public static Entity.Builder create(Vector2 position, Entity player, Type type, PopUp popUp) {
-        return create(position, player, type, popUp, null);
+    public static Entity.Builder create(Vector2 position, Type type, PopUp popUp) {
+        return create(position, type, popUp, null);
     }
 
     public static Entity.Builder create(
             Vector2 position,
-            Entity player,
             Type type,
             PopUp popUp,
             Interactable.Action extraAction
     ) {
-        return create(position, player, type, popUp, extraAction, List.of());
+        return create(position, type, popUp, extraAction, List.of());
     }
 
     public static Entity.Builder create(
             Vector2 position,
-            Entity player,
             Type type,
             PopUp popUp,
             Interactable.Action extraAction,
@@ -51,7 +50,7 @@ public class Poster {
                        if (resources.popup == null && !isOpen) {
                            resources.popup = popUp;
                            self.getComponent(PosterState.class).ifPresent(state -> state.active = true);
-                           player.addComponent(new Tags.FreezeInput());
+                           resources.player.addComponent(new Tags.FreezeInput());
 
                            return true;
                        } else {
@@ -65,7 +64,7 @@ public class Poster {
                                resources.popup = null;
                                self.getComponent(PosterState.class).map(state -> state.dialogueShown = false);
                                self.getComponent(PosterState.class).ifPresent(state -> state.active = false);
-                               player.removeComponent(Tags.FreezeInput.class);
+                               resources.player.removeComponent(Tags.FreezeInput.class);
 
                                if (extraAction != null) {
                                    extraAction.execute(self, resources);
@@ -92,6 +91,51 @@ public class Poster {
             default -> new BoundingBox(new Vector3(0, 0, 0),
                                        new Vector3(1, 1, 0));
         };
+    }
+
+    public static Entity.Builder createDoor(
+            Vector2 position,
+            Room nextRoom,
+            Act nextAct
+    ) {
+        return createDoor(position, nextRoom, nextAct, null, null);
+    }
+
+    public static Entity.Builder createDoor(
+            Vector2 position,
+            Room nextRoom,
+            Act nextAct,
+            Vector2 spawnPos,
+            BiFunction<Entity, Resources, Boolean> condition
+    ) {
+        return Poster.create(position,
+                             Type.Indoordoor,
+                             null,
+                             new Interactable.Action() {
+                                 @Override
+                                 public boolean condition(Entity self, Resources resources) {
+                                     return condition != null ? condition.apply(self, resources) : true;
+                                 }
+
+                                 @Override
+                                 public void onExecuteFailed(Entity self, Resources resources) {
+                                     self.addComponent(new SoundTags.Locked());
+                                 }
+
+                                 @Override
+                                 public boolean execute(Entity s, Resources r) {
+                                     if (nextRoom != null) {
+                                         r.nextRoom = nextRoom;
+                                     }
+                                     if (nextAct != null) {
+                                         r.nextAct = nextAct;
+                                     }
+                                     if (spawnPos != null) {
+                                         r.spawnPos = spawnPos;
+                                     }
+                                     return true;
+                                 }
+                             });
     }
 
     // DO NOT REORDER: rendering relies on ordinals

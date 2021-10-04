@@ -1,4 +1,4 @@
-package fi.jakojaannos.unstable.acts.act3;
+package fi.jakojaannos.unstable.acts.act2;
 
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.acts.act5.Act5;
@@ -40,15 +40,7 @@ public class MirrorRoom {
 
             @Override
             public void spawnInitialEntities(EcsWorld world, Entity player) {
-                world.spawn(Poster.create(
-                        new Vector2(WIDTH - 6, 1.0f),
-                        player,
-                        Poster.Type.Indoordoor,
-                        null,
-                        (s, r) -> {
-                            r.nextAct = new Act5();
-                            return true;
-                        }));
+                world.spawn(Poster.createDoor(new Vector2(WIDTH - 6, 1.0f), null, new Act5()));
             }
         };
     }

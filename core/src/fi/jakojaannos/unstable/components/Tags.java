@@ -32,11 +32,4 @@ public class Tags {
             return new Morko();
         }
     }
-
-    public static class Locked implements Component<Locked> {
-        @Override
-        public Locked cloneComponent() {
-            return new Locked();
-        }
-    }
 }
