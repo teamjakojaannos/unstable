@@ -31,6 +31,16 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
                 new Texture("Painting_Zero.png"),
                 new Texture("taulu_iso.png"),
                 new Texture("taulu2_iso.png"),
+
+                new Texture("Note_1.png"),
+                new Texture("Note_2.png"),
+                new Texture("Note_3.png"),
+                new Texture("Note_4.png"),
+                new Texture("Note_5.png"),
+
+                new Texture("Article_1.png"),
+                new Texture("Article_2.png"),
+                new Texture("Article_3.png"),
         };
         this.pixel = new Texture("pixel.png");
 

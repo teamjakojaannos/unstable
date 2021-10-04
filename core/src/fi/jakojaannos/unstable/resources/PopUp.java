@@ -19,7 +19,10 @@ public record PopUp(
         Note2,
         Note3,
         Note4,
-        Note5;
+        Note5,
+        Article1,
+        Article2,
+        Article3;
 
         public float height() {
             return switch (this) {
