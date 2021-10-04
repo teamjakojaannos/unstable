@@ -3,6 +3,7 @@ package fi.jakojaannos.unstable;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -27,6 +28,7 @@ public class UnstableGame extends ApplicationAdapter {
     private SystemDispatcher dispatcher;
     private SystemDispatcher renderer;
     private Act currentAct;
+    private Texture[] credits;
 
     public UnstableGame() {
         this.timeState = new TimeState();
@@ -34,6 +36,10 @@ public class UnstableGame extends ApplicationAdapter {
 
     @Override
     public void create() {
+        this.credits = new Texture[] {
+                
+        };
+
         final var worldBoundLeft = 0.0f;
         final var worldBoundRight = 100.0f;
 
@@ -66,6 +72,11 @@ public class UnstableGame extends ApplicationAdapter {
 
     @Override
     public void render() {
+        if (resources.credits) {
+            credits();
+            return;
+        }
+
         update(Gdx.graphics.getDeltaTime());
 
         if (this.renderer == null) {
@@ -86,6 +97,10 @@ public class UnstableGame extends ApplicationAdapter {
             final var yRelativeToCam = cameraPos.y + yUnits;
             System.out.printf("clicked (%.2f, %.2f)\n", xRelativeToCam, yRelativeToCam);
         }
+    }
+
+    private void credits() {
+
     }
 
     private void update(final float deltaSeconds) {
@@ -132,8 +147,16 @@ public class UnstableGame extends ApplicationAdapter {
             if (this.resources.nextRoom == TheEnd.THE_OFFICE_UNSPOOPED) {
                 resources.player.addComponent(new Tags.FreezeInput());
             }
+
+            if (this.resources.nextRoom == Intro.CAFE) {
+                //this.gameState.world().spawn()
+            }
             this.resources.nextRoom = null;
 
+        }
+
+        if (resources.creditsAvailable && Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+            resources.credits = true;
         }
 
         if (resources.inOffice && (resources.getDialogueText() == null || resources.getDialogueText().isEmpty()) && !this.resources.endFadeToBlackStarted) {
@@ -144,6 +167,9 @@ public class UnstableGame extends ApplicationAdapter {
                 this.resources.nextRoom = TheEnd.THE_OFFICE_UNSPOOPED;
                 this.resources.spoopy = false;
                 this.resources.fadeToBlack = resources.timers.set(2.0f, false, () -> {
+                    this.resources.timers.set(10.0f, false, () -> {
+                        this.resources.creditsAvailable = true;
+                    });
                 });
             });
         }

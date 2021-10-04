@@ -51,6 +51,8 @@ public class Resources {
     public TimerHandle fadeToBlack;
     public boolean endFadeToBlackStarted;
     public boolean endFadeToBlackStarted2;
+    public boolean creditsAvailable;
+    public boolean credits;
 
     private List<Collection<TextRenderer.TextOnScreen>> dialogueText;
 
