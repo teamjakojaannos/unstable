@@ -12,29 +12,31 @@ import java.util.List;
 import java.util.function.Function;
 
 public class BreakableBlocker implements Component<BreakableBlocker> {
+    public static boolean state = false;
     public Type type;
     public boolean broken;
+    public boolean idestructibbelbe;
 
     public BreakableBlocker(Type type) {
         this.type = type;
         this.broken = false;
+        this.idestructibbelbe = false;
     }
 
-    public BreakableBlocker(Type type, boolean broken) {
+    public BreakableBlocker(Type type, boolean broken, boolean foobar) {
         this.type = type;
         this.broken = broken;
+        this.idestructibbelbe = foobar;
     }
 
     @Override
     public BreakableBlocker cloneComponent() {
-        return new BreakableBlocker(this.type, this.broken);
+        return new BreakableBlocker(this.type, this.broken, this.idestructibbelbe);
     }
-
-    public static boolean state = false;
 
     public static Entity.Builder create(Vector2 position, Type type, Function<Resources.Inventory, Boolean> condition) {
         return Entity.builder()
-                     .component(new BreakableBlocker(type))
+                     .component(new BreakableBlocker(type, false, type == Type.Invisible))
                      .component(new PhysicsBody(position, 1.0f, 1.0f))
                      .component(new Interactable(new Interactable.Action() {
                          @Override
@@ -63,6 +65,7 @@ public class BreakableBlocker implements Component<BreakableBlocker> {
     }
 
     public enum Type {
-        Vase
+        Vase,
+        Invisible,
     }
 }

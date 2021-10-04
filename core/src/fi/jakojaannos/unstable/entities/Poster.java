@@ -44,7 +44,6 @@ public class Poster {
 
         if (popUp != null) {
             builder.component(new Interactable((self, resources) -> {
-                       System.out.println("HANDLER");
                        final var isOpen = self.getComponent(PosterState.class).map(s -> s.active).orElse(false);
 
                        if (resources.popup == null && !isOpen) {
@@ -86,8 +85,12 @@ public class Poster {
 
     private static BoundingBox variantSize(Type type) {
         return switch (type) {
-            case Sofa -> new BoundingBox(new Vector3(1.0f, 0, 0),
-                                         new Vector3(2.5f, 1, 0));
+            case Sofa, PuzzlePaintingA, PuzzlePaintingB, PuzzlePaintingC -> new BoundingBox(new Vector3(1.0f, 0, 0),
+                                                                                            new Vector3(2.5f, 1, 0));
+            case Kaappi -> new BoundingBox(new Vector3(-2.5f, 0, 0),
+                                           new Vector3(1.0f, 1, 0));
+            case Indoordoor -> new BoundingBox(new Vector3(0, 0, 0),
+                                               new Vector3(2, 1, 0));
             default -> new BoundingBox(new Vector3(0, 0, 0),
                                        new Vector3(1, 1, 0));
         };
@@ -188,5 +191,10 @@ public class Poster {
         PhotoRipped,
         Hammer,
         Haarniska,
+        KaappiNurin,
+        Kaappi,
+        PuzzlePaintingA,
+        PuzzlePaintingB,
+        PuzzlePaintingC,
     }
 }

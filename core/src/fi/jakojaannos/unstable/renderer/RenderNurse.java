@@ -10,6 +10,8 @@ import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
 
+import java.util.Optional;
+
 public class RenderNurse implements EcsSystem<RenderNurse.Input>, AutoCloseable {
 
     private final SpriteBatch spriteBatch;
@@ -58,10 +60,12 @@ public class RenderNurse implements EcsSystem<RenderNurse.Input>, AutoCloseable 
             final var isWalking = body.speed > 0.001f;
             TextureRegion[] framesToUse;
 
+            final var isSpoopy = resources.spoopy || entity.spoopy.isPresent();
+
             if (isWalking) {
-                framesToUse = resources.spoopy ? this.walkFramesSpooky : this.walkFrames;
+                framesToUse = isSpoopy ? this.walkFramesSpooky : this.walkFrames;
             } else {
-                framesToUse = resources.spoopy ? this.idleFramesSpooky : this.idleFrames;
+                framesToUse = isSpoopy ? this.idleFramesSpooky : this.idleFrames;
             }
 
             final var scaledTick = ((float) tick / (float) UnstableGame.Constants.GameLoop.TICKS_PER_SECOND) / (loopDuration / framesToUse.length);
@@ -92,7 +96,8 @@ public class RenderNurse implements EcsSystem<RenderNurse.Input>, AutoCloseable 
 
     public record Input(
             PhysicsBody body,
-            Tags.Nurse tag
+            Tags.Nurse tag,
+            Optional<Tags.Spoopy> spoopy
     ) {
     }
 }

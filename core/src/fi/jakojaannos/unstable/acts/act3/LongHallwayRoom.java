@@ -1,8 +1,11 @@
 package fi.jakojaannos.unstable.acts.act3;
 
 import com.badlogic.gdx.math.Vector2;
+import fi.jakojaannos.unstable.components.PhysicsBody;
+import fi.jakojaannos.unstable.components.PlayerHudComponent;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
+import fi.jakojaannos.unstable.entities.BreakableBlocker;
 import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
@@ -34,16 +37,50 @@ public class LongHallwayRoom {
 
             @Override
             public Vector2 playerStartPosition() {
-                return new Vector2(2.0f, 1.0f);
+                return new Vector2(WIDTH - 8.0f, 1.0f);
             }
 
             @Override
             public void spawnInitialEntities(EcsWorld world, Entity player) {
+                // Dummy door
+                world.spawn(Poster.createDoor(new Vector2(WIDTH - 7.0f, 1.0f),
+                                              null,
+                                              null,
+                                              null,
+                                              (s, r) -> false));
+
                 world.spawn(Poster.createDoor(
-                        new Vector2(WIDTH - 4.0f, 1.0f),
+                        new Vector2(4.0f, 1.0f),
                         Act3.WAITING_ROOM,
                         null
                 ));
+
+                world.spawn(Poster.create(
+                        new Vector2(8.0f, 1.0f),
+                        Poster.Type.Kaappi,
+                        null,
+                        (self, resources) -> {
+                            final var pos = self
+                                    .getComponent(PhysicsBody.class)
+                                    .orElseThrow()
+                                    .getPosition()
+                                    .cpy();
+
+                            resources.entities.spawn(Poster.create(
+                                    pos,
+                                    Poster.Type.KaappiNurin,
+                                    null
+                            ));
+                            resources.entities.spawn(BreakableBlocker.create(
+                                    pos,
+                                    BreakableBlocker.Type.Invisible,
+                                    inventory -> true
+                            ));
+
+                            self.destroy();
+                            return true;
+                        }
+                ).component(PlayerHudComponent.Indicator.QUESTION));
             }
         };
     }

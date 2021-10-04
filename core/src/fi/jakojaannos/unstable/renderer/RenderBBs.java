@@ -33,6 +33,7 @@ public class RenderBBs implements EcsSystem<RenderBBs.Input>, AutoCloseable {
     ) {
         spriteBatch.begin();
         input.entities()
+             .filter(e -> e.bb.type != BreakableBlocker.Type.Invisible)
              .forEach(entity -> {
                  final var body = entity.body;
                  final var bb = entity.bb;

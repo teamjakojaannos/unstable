@@ -22,11 +22,16 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
     private final Texture furnace;
     private final Texture hammer;
     private final Texture haarniska;
+    private final Texture maaliA;
+    private final Texture maaliB;
+    private final Texture maaliC;
     private final TextureRegion[][] variants;
     private final SpriteBatch spriteBatch;
 
     private final Sound interact;
     private final Sound interact2;
+    private final Texture kaappi;
+    private final Texture kaappiNurin;
 
     public RenderPosters(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
@@ -37,6 +42,12 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
         this.furnace = new Texture("Furnace_Sheet.png");
         this.hammer = new Texture("Hammer.png");
         this.haarniska = new Texture("haarniska.png");
+        this.kaappi = new Texture("Kaappi.png");
+        this.kaappiNurin = new Texture("KaappiKaatunut.png");
+        this.maaliA = new Texture("Painting_Zero_Small.png");
+        this.maaliB = new Texture("taulu_pieni.png");
+        this.maaliC = new Texture("taulu2_pieni.png");
+
         this.variants = new TextureRegion[][]{
                 {
                         new TextureRegion(this.texture, 0, 0, 16, 16),
@@ -82,12 +93,32 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                         new TextureRegion(this.texture, 48, 0, 16, 16),
                 },
                 {
-                        new TextureRegion(this.hammer, 0, 0, 16, 16),
-                        new TextureRegion(this.hammer, 0, 0, 16, 16),
+                        new TextureRegion(this.hammer),
+                        new TextureRegion(this.hammer),
                 },
                 {
                         new TextureRegion(this.haarniska, 0, 0, 32, 64),
                         new TextureRegion(this.haarniska, 32, 0, 32, 64),
+                },
+                {
+                        new TextureRegion(this.kaappiNurin),
+                        new TextureRegion(this.kaappiNurin),
+                },
+                {
+                        new TextureRegion(this.kaappi),
+                        new TextureRegion(this.kaappi),
+                },
+                {
+                        new TextureRegion(this.maaliA),
+                        new TextureRegion(this.maaliA),
+                },
+                {
+                        new TextureRegion(this.maaliB),
+                        new TextureRegion(this.maaliB),
+                },
+                {
+                        new TextureRegion(this.maaliC),
+                        new TextureRegion(this.maaliC),
                 },
         };
 

@@ -10,7 +10,10 @@ public record PopUp(
 ) {
     public enum Background {
         Newspaper,
-        Photo;
+        Photo,
+        PuzzlePaintingA,
+        PuzzlePaintingB,
+        PuzzlePaintingC;
 
         public float height() {
             return switch (this) {

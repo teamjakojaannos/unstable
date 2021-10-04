@@ -107,7 +107,7 @@ public interface Act {
                 new RenderNurse(batch),
                 new RenderParticles(batch),
                 new SetShader(batch, null, null),
-                //new DebugRenderer(),
+                new DebugRenderer(),
                 new TextRenderer(batch),
                 new DialogueRenderer(batch),
                 new RenderSoundTags(),

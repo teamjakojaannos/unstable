@@ -1,6 +1,7 @@
 package fi.jakojaannos.unstable.acts.act3;
 
 import com.badlogic.gdx.math.Vector2;
+import fi.jakojaannos.unstable.acts.act2.Act2;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Poster;
@@ -50,7 +51,7 @@ public class CigarRoom {
                 world.spawn(Poster.createDoor(
                         new Vector2(WIDTH - 2.0f, 1.0f),
                         Act3.LONG_HALLWAY,
-                        null
+                        new Act2() // HACK: use act2 to re-enable special rendering
                 ));
             }
         };

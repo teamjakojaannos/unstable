@@ -46,4 +46,11 @@ public class Tags {
             return new Nurse();
         }
     }
+
+    public static class Spoopy implements Component<Spoopy> {
+        @Override
+        public Spoopy cloneComponent() {
+            return new Spoopy();
+        }
+    }
 }

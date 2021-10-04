@@ -6,8 +6,7 @@ import fi.jakojaannos.unstable.level.Room;
 public class Act2 implements Act {
     public static final Room MIRROR_ROOM = MirrorRoom.create();
 
-    public static final Room CHASE_ROOM_A = null;
-    public static final Room CHASE_ROOM_B = null;
+    public static final Room PUZZLE_ROOM = PaintingRoom.create();
 
     public static final Room MIRROR_ROOM_SPOOPY = MirrorRoom.create();
 
