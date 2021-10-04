@@ -213,5 +213,8 @@ public class Poster {
         Lambu,
         NpcNAINE,
         NpcNAINE2,
+        JalkaKynttila,
+        SeinaKynttila,
+        Pouta
     }
 }

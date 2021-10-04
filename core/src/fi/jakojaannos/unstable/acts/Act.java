@@ -51,6 +51,7 @@ public interface Act {
     }
 
     default GameState state(Room room, Resources resources) {
+        resources.worldBounds.max.x = room.width();
         if (states.containsKey(room)) {
             final var state = states.get(room);
 
@@ -107,7 +108,7 @@ public interface Act {
                 new RenderNurse(batch),
                 new RenderParticles(batch),
                 new SetShader(batch, null, null),
-                new DebugRenderer(),
+                //new DebugRenderer(),
                 new TextRenderer(batch),
                 new DialogueRenderer(batch),
                 new RenderSoundTags(),

@@ -88,6 +88,11 @@ public class ManorNurseHallwayRoom {
 
                 world.spawn(BreakableBlocker.create(new Vector2(24.0f, 1.0f), BreakableBlocker.Type.Vase, (i) -> i.hammer));
             }
+
+            @Override
+            public int width() {
+                return WIDTH;
+            }
         };
     }
 }

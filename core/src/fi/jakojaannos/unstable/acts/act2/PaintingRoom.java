@@ -33,6 +33,11 @@ public class PaintingRoom {
 
     public static Room create() {
         return new Room() {
+
+            @Override
+            public int width() {
+                return WIDTH;
+            }
             @Override
             public TileMap createMap() {
                 return TileMap.parse(TileSet.MANSION, TILES, WIDTH, HEIGHT);

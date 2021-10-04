@@ -137,7 +137,7 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                      final var iconSize = 0.5f;
                      this.spriteBatch.draw(
                              this.closetIconFrames[displayIcon],
-                             x + width / 2.0f - iconSize / 2.0f,
+                             x - width / 4.0f + iconSize / 2.0f,
                              y + height + 0.25f,
                              iconSize, iconSize
                      );

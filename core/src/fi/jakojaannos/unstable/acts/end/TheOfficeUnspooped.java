@@ -29,6 +29,10 @@ public class TheOfficeUnspooped {
     public static Room create(boolean spoopy) {
         return new Room() {
             @Override
+            public int width() {
+                return WIDTH;
+            }
+            @Override
             public TileMap createMap() {
                 return TileMap.parse(TileSet.CAFE, TILES, WIDTH, HEIGHT);
             }

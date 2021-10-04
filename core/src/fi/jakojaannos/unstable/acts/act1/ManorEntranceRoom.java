@@ -55,7 +55,32 @@ public class ManorEntranceRoom {
                                               null,
                                               (s, r) -> false));
 
+                world.spawn(Poster.create(
+                        new Vector2(5.25f, 4.0f),
+                        Poster.Type.SeinaKynttila,
+                        null));
+
+                world.spawn(Poster.create(
+                        new Vector2(10f, 4.0f),
+                        Poster.Type.SeinaKynttila,
+                        null));
+
+                world.spawn(Poster.create(
+                        new Vector2(16f, 4.0f),
+                        Poster.Type.SeinaKynttila,
+                        null));
+
+                world.spawn(Poster.create(
+                        new Vector2(21f, 4.0f),
+                        Poster.Type.SeinaKynttila,
+                        null));
+
                 world.spawn(Poster.createDoor(new Vector2(WIDTH - 6, 1.0f), Act1.SOME_ROOM, null));
+            }
+
+            @Override
+            public int width() {
+                return WIDTH;
             }
         };
     }

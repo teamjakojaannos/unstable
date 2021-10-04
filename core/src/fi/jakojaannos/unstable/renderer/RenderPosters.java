@@ -40,6 +40,9 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
     private final Texture npcMies2;
     private final Texture npcNaine;
     private final Texture npcNaine2;
+    private final Texture kynttila;
+    private final Texture kynttila2;
+    private final Texture poyta;
 
     public RenderPosters(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
@@ -63,6 +66,9 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
         this.npcMies2 = new Texture("npcmies2.png");
         this.npcNaine = new Texture("npcnaine1.png");
         this.npcNaine2 = new Texture("npcnaine2.png");
+        this.kynttila = new Texture("JalakasKynttilä.png");
+        this.kynttila2 = new Texture("SeinäKynttilät.png");
+        this.poyta = new Texture("Pöytä.png");
 
         this.variants = new TextureRegion[][]{
                 {
@@ -172,6 +178,18 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                         new TextureRegion(this.npcNaine2, 32, 0, -32, 48),
                         new TextureRegion(this.npcNaine2, 64, 0, -32, 48),
                 },
+                {
+                        new TextureRegion(this.kynttila, 0, 0, 29, 63),
+                        new TextureRegion(this.kynttila, 29, 0, 29, 63),
+                },
+                {
+                        new TextureRegion(this.kynttila2, 0, 0, 22, 24),
+                        new TextureRegion(this.kynttila2, 22, 0, 22, 24),
+                },
+                {
+                        new TextureRegion(this.poyta),
+                        new TextureRegion(this.poyta),
+                },
         };
 
         this.interact = Gdx.audio.newSound(Gdx.files.internal("PaperTurnPage.ogg"));
@@ -202,7 +220,7 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                  }
 
                  final var isAnimated = switch (poster.type) {
-                     case Furnace, NpcMIES, NpcMIES2, NpcNAINE, NpcNAINE2 -> true;
+                     case Furnace, NpcMIES, NpcMIES2, NpcNAINE, NpcNAINE2, JalkaKynttila, SeinaKynttila -> true;
                      default -> false;
                  };
 

@@ -5,11 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.ScreenUtils;
 import fi.jakojaannos.unstable.acts.Act;
-import fi.jakojaannos.unstable.acts.act2.Act2;
+import fi.jakojaannos.unstable.acts.act1.Act1;
 import fi.jakojaannos.unstable.acts.end.TheEnd;
 import fi.jakojaannos.unstable.acts.intro.Intro;
 import fi.jakojaannos.unstable.components.Tags;
@@ -21,9 +22,10 @@ import java.util.List;
 
 public class UnstableGame extends ApplicationAdapter {
     private final TimeState timeState;
+    int creditPage = 0;
+    boolean keyHeld = false;
     private GameState gameState = new GameState();
     private Resources resources;
-
     private SpriteBatch batch;
     private SystemDispatcher dispatcher;
     private SystemDispatcher renderer;
@@ -36,8 +38,9 @@ public class UnstableGame extends ApplicationAdapter {
 
     @Override
     public void create() {
-        this.credits = new Texture[] {
-                
+        this.credits = new Texture[]{
+                new Texture("Credits_FIN_1.png"),
+                new Texture("Credits_FIN_2.png"),
         };
 
         final var worldBoundLeft = 0.0f;
@@ -60,8 +63,8 @@ public class UnstableGame extends ApplicationAdapter {
 
         // Initialize act
         resources.nextAct = new Intro();
-        //resources.nextAct = new Act2();
-        //resources.nextRoom = Act2.MIRROR_ROOM;
+        //resources.nextAct = new TheEnd();
+        resources.nextRoom = Act1.MANOR_ENTRY;
     }
 
     @Override
@@ -100,7 +103,32 @@ public class UnstableGame extends ApplicationAdapter {
     }
 
     private void credits() {
+        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+            if (!keyHeld) {
+                creditPage++;
+            }
+            keyHeld = true;
+        } else {
+            keyHeld = false;
+        }
 
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            System.exit(0);
+            return;
+        }
+
+        this.batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        this.batch.begin();
+
+        final var credit = this.credits[creditPage % this.credits.length];
+        final var w = credit.getWidth() / 2.0f;
+        final var h = credit.getHeight() / 2.0f;
+        final var x = Gdx.graphics.getWidth() / 2.0f - w / 2;
+        final var y = Gdx.graphics.getHeight() / 2 - h / 2;
+
+        this.batch.draw(credit, x, y, w, h);
+
+        this.batch.end();
     }
 
     private void update(final float deltaSeconds) {

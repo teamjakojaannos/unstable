@@ -86,6 +86,11 @@ public class HammerRoom {
                             return true;
                         }));
             }
+
+            @Override
+            public int width() {
+                return WIDTH;
+            }
         };
     }
 }

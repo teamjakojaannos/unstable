@@ -11,4 +11,6 @@ public interface Room {
     Vector2 playerStartPosition();
 
     void spawnInitialEntities(EcsWorld world, Resources res, Entity player);
+
+    int width();
 }

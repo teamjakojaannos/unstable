@@ -40,6 +40,11 @@ public class MirrorRoom {
 
     public static Room create(boolean spoopy) {
         return new Room() {
+
+            @Override
+            public int width() {
+                return WIDTH;
+            }
             @Override
             public TileMap createMap() {
                 return TileMap.parse(TileSet.MANSION, TILES, WIDTH, HEIGHT);
