@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import fi.jakojaannos.unstable.InputManager;
+import fi.jakojaannos.unstable.UnstableGame;
 import fi.jakojaannos.unstable.acts.Act;
 import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
@@ -84,6 +85,19 @@ public class Resources {
 
     public void setDialogueText(Collection<Collection<TextRenderer.TextOnScreen>> lists) {
         this.dialogueText = lists == null ? null : new ArrayList<>(lists);
+
+        if (lists == null) {
+            setInteractCooldown();
+        }
+    }
+
+    public void setInteractCooldown() {
+        timers.clear(interactCooldown);
+        interactCooldown = timers.set(
+                UnstableGame.Constants.INTERACT_COOLDOWN,
+                false,
+                () -> {}
+        );
     }
 
     public static class Inventory {

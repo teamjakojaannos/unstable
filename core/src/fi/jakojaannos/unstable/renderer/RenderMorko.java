@@ -115,15 +115,15 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
 
                     this.spriteBatch.begin();
                     this.spriteBatch.draw(region,
-                            physics.getPosition().x + width * offsetX - width * 0.75f,
-                            physics.getPosition().y - 0.25f,
-                            0.0f,
-                            0.0f,
-                            width,
-                            6.0f,
-                            1.0f,
-                            1.0f,
-                            0.0f);
+                                          physics.getPosition().x + width * offsetX - width * 0.75f,
+                                          physics.getPosition().y - 0.25f,
+                                          0.0f,
+                                          0.0f,
+                                          width,
+                                          6.0f,
+                                          1.0f,
+                                          1.0f,
+                                          0.0f);
                     this.spriteBatch.end();
 
                     return distanceToPlayer.orElse(min);
@@ -159,6 +159,12 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
         }
 
         return (resources.timers.getTimeElapsed(handle) / handle.duration());
+    }
+
+    @Override
+    public void onRoomTransition() {
+        this.scream.stop();
+        this.scream2.stop();
     }
 
     @Override

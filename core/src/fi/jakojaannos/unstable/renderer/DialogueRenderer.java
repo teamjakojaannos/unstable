@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Align;
-import fi.jakojaannos.unstable.UnstableGame;
 import fi.jakojaannos.unstable.components.PlayerInput;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
@@ -78,7 +77,7 @@ public class DialogueRenderer implements EcsSystem<DialogueRenderer.Input>, Auto
         this.batch.end();
 
         if (player.map(i -> i.playerInput().actionPressed).orElse(false) && !resources.timers.isActiveAndValid(resources.interactCooldown)) {
-            resources.interactCooldown = resources.timers.set(UnstableGame.Constants.INTERACT_COOLDOWN, false, () -> {});
+            resources.setInteractCooldown();
             resources.getDialogueText().remove(0);
         }
     }

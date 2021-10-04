@@ -16,6 +16,8 @@ public interface SystemDispatcher extends AutoCloseable {
     @Override
     void close(); // HACK: removes the `throws Exception` from signature
 
+    void onRoomTransition();
+
     class Impl implements SystemDispatcher {
         @SuppressWarnings("rawtypes") private final List<SystemDispatchInfo> systems;
 
@@ -36,6 +38,11 @@ public interface SystemDispatcher extends AutoCloseable {
                     }
                 }
             });
+        }
+
+        @Override
+        public void onRoomTransition() {
+            this.systems.forEach(s -> s.system().onRoomTransition());
         }
 
         @Override

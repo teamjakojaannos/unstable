@@ -1,7 +1,7 @@
-package fi.jakojaannos.unstable.acts.act1;
+package fi.jakojaannos.unstable.acts.intro;
 
 import com.badlogic.gdx.math.Vector2;
-import fi.jakojaannos.unstable.acts.act2.Act2;
+import fi.jakojaannos.unstable.acts.act1.Act1;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Nurse;
@@ -79,7 +79,7 @@ public class CafeIntroRoom {
                         (s, r) -> {
                             // TODO: open another popup, a close-up of the image before changing the act
                             //  - should have a dimmer to hide the background transition
-                            r.nextAct = new Act2();
+                            r.nextAct = new Act1();
                             return true;
                         },
                         List.of(

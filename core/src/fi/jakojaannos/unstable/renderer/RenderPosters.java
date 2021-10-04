@@ -21,6 +21,7 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
     private final Texture Indoordoor;
     private final Texture furnace;
     private final Texture hammer;
+    private final Texture haarniska;
     private final TextureRegion[][] variants;
     private final SpriteBatch spriteBatch;
 
@@ -35,6 +36,7 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
         this.Indoordoor = new Texture("Indoordoor.png");
         this.furnace = new Texture("Furnace_Sheet.png");
         this.hammer = new Texture("Hammer.png");
+        this.haarniska = new Texture("haarniska.png");
         this.variants = new TextureRegion[][]{
                 {
                         new TextureRegion(this.texture, 0, 0, 16, 16),
@@ -82,6 +84,10 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                 {
                         new TextureRegion(this.hammer, 0, 0, 16, 16),
                         new TextureRegion(this.hammer, 0, 0, 16, 16),
+                },
+                {
+                        new TextureRegion(this.haarniska, 0, 0, 32, 64),
+                        new TextureRegion(this.haarniska, 32, 0, 32, 64),
                 },
         };
 
@@ -165,6 +171,7 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
         this.Indoordoor.dispose();
         this.furnace.dispose();
         this.hammer.dispose();
+        this.haarniska.dispose();
     }
 
     public record Input(

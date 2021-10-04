@@ -1,4 +1,4 @@
-package fi.jakojaannos.unstable.acts.act2;
+package fi.jakojaannos.unstable.acts.act1;
 
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.components.HidingSpot;
@@ -41,15 +41,16 @@ public class ManorEntranceRoom {
 
             @Override
             public void spawnInitialEntities(EcsWorld world, Entity player) {
-                world.spawn(Closet.create(new Vector2(1.0f, 1.0f), player, HidingSpot.Type.MansionClosetLarge));
-                world.spawn(Closet.create(new Vector2(6.0f, 1.0f), player, HidingSpot.Type.WallHole));
+                world.spawn(Closet.create(new Vector2(1.0f, 1.0f), player, HidingSpot.Type.MansionClosetThin));
 
+                // Dummy door
                 world.spawn(Poster.createDoor(new Vector2(WIDTH - 12, 1.0f),
-                                              Act2.NURSE_HALLWAY,
                                               null,
                                               null,
-                                              (s, r) -> r.playerInventory.photo));
-                world.spawn(Poster.createDoor(new Vector2(WIDTH - 6, 1.0f), Act2.SMALL_BEDROOM, null));
+                                              null,
+                                              (s, r) -> false));
+
+                world.spawn(Poster.createDoor(new Vector2(WIDTH - 6, 1.0f), Act1.SOME_ROOM, null));
             }
         };
     }

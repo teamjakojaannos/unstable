@@ -1,4 +1,4 @@
-package fi.jakojaannos.unstable.acts.act2;
+package fi.jakojaannos.unstable.acts.act1;
 
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
@@ -46,7 +46,7 @@ public class HammerRoom {
 
                 world.spawn(Poster.createDoor(
                         new Vector2(2.0f, 1.0f),
-                        Act2.NURSE_HALLWAY,
+                        Act1.NURSE_HALLWAY,
                         null,
                         new Vector2(19.0f, 1.0f),
                         null

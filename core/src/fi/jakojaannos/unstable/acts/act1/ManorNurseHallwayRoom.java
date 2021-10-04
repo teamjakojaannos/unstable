@@ -1,4 +1,4 @@
-package fi.jakojaannos.unstable.acts.act2;
+package fi.jakojaannos.unstable.acts.act1;
 
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.components.PhysicsBody;
@@ -48,10 +48,18 @@ public class ManorNurseHallwayRoom {
             @Override
             public void spawnInitialEntities(EcsWorld world, Entity player) {
                 final var nurse = world.spawn(Nurse.create2(new Vector2(28.0f, 1.0f)));
-                world.spawn(Poster.createDoor(new Vector2(19.0f, 1.0f), Act2.HAMMER_ROOM, null, null, null, (s, r) -> {
+                world.spawn(Poster.createDoor(new Vector2(19.0f, 1.0f), Act1.HAMMER_ROOM, null, null, null, (s, r) -> {
                     nurse.destroy();
                     return true;
                 }));
+
+                world.spawn(Poster.createDoor(
+                        new Vector2(WIDTH - 4.0f, 1.0f),
+                        Act1.SOME_ROOM_2,
+                        null,
+                        new Vector2(2.0f, 1.0f),
+                        null
+                ));
 
 
                 world.spawn(Entity.builder()

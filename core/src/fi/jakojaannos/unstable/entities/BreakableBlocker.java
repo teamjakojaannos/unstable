@@ -4,9 +4,11 @@ import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.ecs.Component;
 import fi.jakojaannos.unstable.ecs.Entity;
+import fi.jakojaannos.unstable.renderer.TextRenderer;
 import fi.jakojaannos.unstable.resources.Interactable;
 import fi.jakojaannos.unstable.resources.Resources;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class BreakableBlocker implements Component<BreakableBlocker> {
@@ -35,7 +37,14 @@ public class BreakableBlocker implements Component<BreakableBlocker> {
                      .component(new Interactable(new Interactable.Action() {
                          @Override
                          public boolean condition(Entity self, Resources resources) {
-                             return condition.apply(resources.playerInventory);
+                             final var x = condition.apply(resources.playerInventory);
+                             if (!x) {
+                                 resources.setDialogueText(List.of(
+                                         List.of(new TextRenderer.TextOnScreen("I need to get past this somehow"))
+                                 ));
+                                 resources.setInteractCooldown();
+                             }
+                             return x;
                          }
 
                          @Override
