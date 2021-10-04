@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import fi.jakojaannos.unstable.components.PlayerInput;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
+import fi.jakojaannos.unstable.entities.BreakableBlocker;
 import fi.jakojaannos.unstable.resources.Resources;
 
 public class DialogueRenderer implements EcsSystem<DialogueRenderer.Input>, AutoCloseable {
@@ -76,9 +77,12 @@ public class DialogueRenderer implements EcsSystem<DialogueRenderer.Input>, Auto
         this.batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         this.batch.end();
 
+        System.out.println("WHAT THE ABSOLUTE FUCK");
         if (player.map(i -> i.playerInput().actionPressed).orElse(false) && !resources.timers.isActiveAndValid(resources.interactCooldown)) {
+            System.out.println("WHAT THE ABSOLUTE FUCK");
             resources.setInteractCooldown();
             resources.getDialogueText().remove(0);
+            BreakableBlocker.state = false; // HACK: this is spaghetti and I dont want to untangle it
         }
     }
 

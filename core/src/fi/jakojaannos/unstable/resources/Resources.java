@@ -100,6 +100,10 @@ public class Resources {
         );
     }
 
+    public boolean isInteractOnCooldown() {
+        return timers.isActiveAndValid(interactCooldown);
+    }
+
     public static class Inventory {
         public boolean photo;
         public boolean hammer;

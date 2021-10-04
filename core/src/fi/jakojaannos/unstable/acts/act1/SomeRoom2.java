@@ -10,9 +10,6 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
-import fi.jakojaannos.unstable.renderer.TextRenderer;
-
-import java.util.List;
 
 public class SomeRoom2 {
     private static final int WIDTH = 16;
@@ -49,7 +46,9 @@ public class SomeRoom2 {
 
                 world.spawn(Poster.createDoor(new Vector2(WIDTH - 12, 1.0f),
                                               Act2.MIRROR_ROOM,
-                                              new Act2()));
+                                              new Act2(),
+                                              null,
+                                              (s, r) -> r.playerInventory.photo));
                 world.spawn(Poster.createDoor(new Vector2(WIDTH - 6, 1.0f), Act1.SMALL_BEDROOM, null));
             }
         };

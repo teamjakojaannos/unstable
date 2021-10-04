@@ -1,6 +1,5 @@
 package fi.jakojaannos.unstable.resources;
 
-import fi.jakojaannos.unstable.components.PosterState;
 import fi.jakojaannos.unstable.ecs.Component;
 import fi.jakojaannos.unstable.ecs.Entity;
 

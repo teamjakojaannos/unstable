@@ -30,6 +30,8 @@ public class BreakableBlocker implements Component<BreakableBlocker> {
         return new BreakableBlocker(this.type, this.broken);
     }
 
+    public static boolean state = false;
+
     public static Entity.Builder create(Vector2 position, Type type, Function<Resources.Inventory, Boolean> condition) {
         return Entity.builder()
                      .component(new BreakableBlocker(type))
@@ -37,14 +39,18 @@ public class BreakableBlocker implements Component<BreakableBlocker> {
                      .component(new Interactable(new Interactable.Action() {
                          @Override
                          public boolean condition(Entity self, Resources resources) {
-                             final var x = condition.apply(resources.playerInventory);
-                             if (!x) {
+                             return condition.apply(resources.playerInventory);
+                         }
+
+                         @Override
+                         public void onExecuteFailed(Entity self, Resources resources) {
+                             if (!resources.isInteractOnCooldown() && !state) {
                                  resources.setDialogueText(List.of(
                                          List.of(new TextRenderer.TextOnScreen("I need to get past this somehow"))
                                  ));
+                                 state = true;
                                  resources.setInteractCooldown();
                              }
-                             return x;
                          }
 
                          @Override
