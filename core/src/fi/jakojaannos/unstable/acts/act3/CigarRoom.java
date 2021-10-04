@@ -45,15 +45,7 @@ public class CigarRoom {
                         null
                 ));
 
-                world.spawn(Poster.create(
-                        new Vector2(3.0f, 1.0f),
-                        Poster.Type.Sofa,
-                        null,
-                        (s, r) -> {
-                            // TODO
-                            throw new IllegalStateException("Sitting on sofa not implemented :c");
-                        }
-                ));
+                world.spawn(Poster.createSofa(new Vector2(3.0f, 1.0f)));
             }
         };
     }

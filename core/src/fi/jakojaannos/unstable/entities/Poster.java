@@ -86,8 +86,8 @@ public class Poster {
 
     private static BoundingBox variantSize(Type type) {
         return switch (type) {
-            case Sofa -> new BoundingBox(new Vector3(0.5f, 0, 0),
-                                         new Vector3(3.5f, 1, 0));
+            case Sofa -> new BoundingBox(new Vector3(1.0f, 0, 0),
+                                         new Vector3(2.5f, 1, 0));
             default -> new BoundingBox(new Vector3(0, 0, 0),
                                        new Vector3(1, 1, 0));
         };
@@ -136,6 +136,28 @@ public class Poster {
                                      return true;
                                  }
                              });
+    }
+
+    public static Entity.Builder createSofa(
+            Vector2 position
+    ) {
+        return Poster.create(
+                position.cpy(),
+                Poster.Type.Sofa,
+                null,
+                (s, r) -> {
+                    if (r.player.hasComponent(Shitting.class)) {
+                        r.player.removeComponent(Shitting.class);
+                        r.player.removeComponent(Tags.FreezeInput.class);
+                    } else {
+                        final var handle = r.timers.set(1.0f, false, () -> {});
+                        r.player.addComponent(new Shitting(handle));
+                        r.player.addComponent(new Tags.FreezeInput());
+                    }
+
+                    return true;
+                }
+        );
     }
 
     // DO NOT REORDER: rendering relies on ordinals

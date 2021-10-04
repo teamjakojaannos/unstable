@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.ScreenUtils;
 import fi.jakojaannos.unstable.acts.Act;
+import fi.jakojaannos.unstable.acts.act1.Act1;
 import fi.jakojaannos.unstable.acts.act2.Act2;
 import fi.jakojaannos.unstable.ecs.SystemDispatcher;
 import fi.jakojaannos.unstable.resources.Resources;
@@ -47,9 +48,9 @@ public class UnstableGame extends ApplicationAdapter {
         this.batch = new SpriteBatch();
 
         // Initialize act
-        //resources.nextAct = new Act1();
-        resources.nextAct = new Act2();
-        resources.nextRoom = Act2.MIRROR_ROOM;
+        resources.nextAct = new Act1();
+        //resources.nextAct = new Act2();
+        //resources.nextRoom = Act2.MIRROR_ROOM;
     }
 
     @Override

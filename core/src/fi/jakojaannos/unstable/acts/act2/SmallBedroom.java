@@ -44,15 +44,7 @@ public class SmallBedroom {
 
             @Override
             public void spawnInitialEntities(EcsWorld world, Entity player) {
-                world.spawn(Poster.create(
-                        new Vector2(5.0f, 1.0f),
-                        Poster.Type.Sofa,
-                        null,
-                        (s, r) -> {
-                            // TODO
-                            throw new IllegalStateException("Sitting on sofa not implemented :c");
-                        }
-                ));
+                world.spawn(Poster.createSofa(new Vector2(5.0f, 1.0f)));
 
                 world.spawn(Poster.createDoor(
                         new Vector2(2.0f, 1.0f),

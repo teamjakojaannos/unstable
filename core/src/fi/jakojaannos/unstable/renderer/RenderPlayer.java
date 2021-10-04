@@ -9,6 +9,7 @@ import fi.jakojaannos.unstable.UnstableGame;
 import fi.jakojaannos.unstable.components.Hiding;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.components.PlayerHudComponent;
+import fi.jakojaannos.unstable.components.Shitting;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
@@ -20,9 +21,11 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
     private final SpriteBatch spriteBatch;
     private final Texture texture;
     private final Texture textureIdle;
+    private final Texture textureShit;
     private final TextureRegion[] frames;
     private final TextureRegion[] idleFrames;
     private final TextureRegion[] hidingFrames;
+    private final TextureRegion[] shittingFrames;
     private final TextureRegion[] closetIconFrames;
     private final Texture closetIndicator;
 
@@ -34,6 +37,7 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
         this.spriteBatch = spriteBatch;
         this.texture = new Texture("Journalist.png");
         this.textureIdle = new Texture("Journalist_idle.png");
+        this.textureShit = new Texture("journalboy_sit.png");
         this.frames = new TextureRegion[8];
         this.hidingFrames = new TextureRegion[8];
 
@@ -46,6 +50,13 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
 
         this.idleFrames = new TextureRegion[]{
                 new TextureRegion(this.textureIdle)
+        };
+
+        this.shittingFrames = new TextureRegion[]{
+                new TextureRegion(this.textureShit, 0, 0, 32, 48),
+                new TextureRegion(this.textureShit, 32, 0, 32, 48),
+                new TextureRegion(this.textureShit, 64, 0, 32, 48),
+                new TextureRegion(this.textureShit, 96, 0, 32, 48),
         };
 
         this.closetIndicator = new Texture("hide_icons.png");
@@ -87,12 +98,22 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                          ? this.frames
                          : entity.hidingTag.isPresent()
                          ? this.hidingFrames
+                         : entity.shittingTag.isPresent()
+                         ? this.shittingFrames
                          : this.idleFrames;
 
                  final var loopDuration = 1.25;
 
-                 final var scaledTick = ((float) tick / (float) UnstableGame.Constants.GameLoop.TICKS_PER_SECOND) / (loopDuration / framesToUse.length);
-                 final var region = framesToUse[((int) scaledTick) % framesToUse.length];
+                 final var scaledTick = entity.shittingTag
+                         .map(a -> resources.timers.isActiveAndValid(a.transition)
+                                 ? resources.timers.getTimeElapsed(a.transition) / a.transition.duration()
+                                 : 1.0f)
+                         .orElse((float) tick / (float) UnstableGame.Constants.GameLoop.TICKS_PER_SECOND) / (loopDuration / framesToUse.length);
+
+                 final var region = framesToUse[entity.shittingTag.isPresent()
+                         ? Math.min((int) (scaledTick * framesToUse.length), framesToUse.length - 1)
+                         : ((int) scaledTick) % framesToUse.length
+                         ];
                  region.flip(region.isFlipX() == physics.facingRight, false);
 
                  this.spriteBatch.draw(region, x - width / 2f, y, originX, originY, width, height, 1.0f, 1.0f, 0.0f);
@@ -131,6 +152,7 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
     public void close() {
         this.texture.dispose();
         this.textureIdle.dispose();
+        this.textureShit.dispose();
         this.closetIndicator.dispose();
 
         for (final var sound : this.sounds) {
@@ -141,6 +163,7 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
     public record Input(
             PhysicsBody body,
             PlayerHudComponent hud,
-            Optional<Hiding> hidingTag
+            Optional<Hiding> hidingTag,
+            Optional<Shitting> shittingTag
     ) {}
 }
