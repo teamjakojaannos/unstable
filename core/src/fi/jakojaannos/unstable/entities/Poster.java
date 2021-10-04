@@ -205,6 +205,13 @@ public class Poster {
         PuzzlePaintingB,
         PuzzlePaintingC,
         DOCTOR,
-        StatueTable, MedicalReport,
+        StatueTable,
+        MedicalReport,
+        TABLE,
+        NpcMIES,
+        NpcMIES2,
+        Lambu,
+        NpcNAINE,
+        NpcNAINE2,
     }
 }

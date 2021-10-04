@@ -36,6 +36,10 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
     private final Texture tohtori;
     private final Texture statuetable;
     private final Texture medrep;
+    private final Texture npcMies;
+    private final Texture npcMies2;
+    private final Texture npcNaine;
+    private final Texture npcNaine2;
 
     public RenderPosters(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
@@ -55,6 +59,10 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
         this.tohtoriDed = new Texture("doctor_ded.png");
         this.statuetable = new Texture("rintakuvaPöytäSpooky.png");
         this.medrep = new Texture("medicareport_SMALLL.png");
+        this.npcMies = new Texture("npcmies1.png");
+        this.npcMies2 = new Texture("npcmies2.png");
+        this.npcNaine = new Texture("npcnaine1.png");
+        this.npcNaine2 = new Texture("npcnaine2.png");
 
         this.variants = new TextureRegion[][]{
                 {
@@ -66,8 +74,8 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                         new TextureRegion(this.tilesCafe, 196, 48, 64, 48),
                 },
                 {
-                        new TextureRegion(this.tilesCafe, 64, 48, 64, 105),
-                        new TextureRegion(this.tilesCafe, 64, 48, 64, 105),
+                        new TextureRegion(this.tilesCafe, 0, 80, 64, 73),
+                        new TextureRegion(this.tilesCafe, 0, 80, 64, 73),
                 },
                 {
                         new TextureRegion(this.tilesCafe, 0, 0, 128, 48),
@@ -140,6 +148,30 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                         new TextureRegion(this.medrep),
                         new TextureRegion(this.medrep),
                 },
+                {
+                        new TextureRegion(this.tilesCafe, 128, 0, 32, 24),
+                        new TextureRegion(this.tilesCafe, 128, 0, 32, 24),
+                },
+                {
+                        new TextureRegion(this.npcMies, 0, 0, 32, 48),
+                        new TextureRegion(this.npcMies, 32, 0, 32, 48),
+                },
+                {
+                        new TextureRegion(this.npcMies2, 32, 0, -32, 48),
+                        new TextureRegion(this.npcMies2, 64, 0, -32, 48),
+                },
+                {
+                        new TextureRegion(this.tilesCafe, 128, 24, 32, 72),
+                        new TextureRegion(this.tilesCafe, 128, 24, 32, 72),
+                },
+                {
+                        new TextureRegion(this.npcNaine, 0, 0, 32, 48),
+                        new TextureRegion(this.npcNaine, 32, 0, 32, 48),
+                },
+                {
+                        new TextureRegion(this.npcNaine2, 32, 0, -32, 48),
+                        new TextureRegion(this.npcNaine2, 64, 0, -32, 48),
+                },
         };
 
         this.interact = Gdx.audio.newSound(Gdx.files.internal("PaperTurnPage.ogg"));
@@ -170,7 +202,7 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                  }
 
                  final var isAnimated = switch (poster.type) {
-                     case Furnace -> true;
+                     case Furnace, NpcMIES, NpcMIES2, NpcNAINE, NpcNAINE2 -> true;
                      default -> false;
                  };
 
@@ -186,6 +218,8 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
 
                      final var loopDuration = switch (poster.type) {
                          case Furnace -> 2.5f;
+                         case NpcMIES, NpcNAINE -> 0.5f;
+                         case NpcMIES2, NpcNAINE2 -> 2.25f;
                          default -> 1.0f;
                      };
 

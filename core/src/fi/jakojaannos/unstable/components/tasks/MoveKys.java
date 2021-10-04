@@ -1,12 +1,13 @@
 package fi.jakojaannos.unstable.components.tasks;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.components.MovementInput;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.resources.Resources;
 
-public class MoveKys<T> implements Task<T>{
+public class MoveKys<T> implements Task<T> {
     private final Vector2 target;
     private final float targetDistance2;
 
@@ -33,7 +34,14 @@ public class MoveKys<T> implements Task<T>{
     public void doAction(Entity entity, Resources resources) {
         final var playerPos = resources.player.getComponent(PhysicsBody.class).orElseThrow().getPosition();
         final var distToPlayer = playerPos.dst2(entity.getComponent(PhysicsBody.class).orElseThrow().getPosition());
-        if(distToPlayer <= this.targetDistance2){
+        if (distToPlayer <= this.targetDistance2) {
+
+            var tick = resources.timeManager.currentTick();
+            final var body = entity.getComponent(PhysicsBody.class).orElseThrow();
+            final var pos = body.getPosition().cpy();
+            pos.add(body.getWidth() / 2.0f, body.getHeight() / 2.0f);
+            resources.particles.burst(pos, new Color(0.8f, 0.8f, 0.8f, 1.0f), 250, tick);
+
             entity.destroy();
             return;
         }

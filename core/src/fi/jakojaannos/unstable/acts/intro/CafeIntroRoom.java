@@ -85,10 +85,35 @@ public class CafeIntroRoom {
 
                 for (int i = 0; i < 3; i++) {
                     world.spawn(Poster.create(
-                            new Vector2(2.0f + i * 7.0f, 2.0f),
+                            new Vector2(3.0f + i * 7.0f, 12.0f),
+                            Poster.Type.Lambu,
+                            null));
+
+                    world.spawn(Poster.create(
+                            new Vector2(2.0f + i * 7.0f, 3.0f),
                             Poster.Type.WINDOW,
                             null));
+
+                    world.spawn(Poster.create(
+                            new Vector2(3.0f + i * 7.0f, 1.0f),
+                            Poster.Type.TABLE,
+                            null));
+
+                    world.spawn(Poster.create(
+                            new Vector2(1f + i * 7.0f, 1.0f),
+                            i % 2 == 0 ? Poster.Type.NpcNAINE : Poster.Type.NpcMIES,
+                            null));
+
+                    world.spawn(Poster.create(
+                            new Vector2(5.0f + i * 7.0f, 1.0f),
+                            i % 2 == 0 ? Poster.Type.NpcMIES2 : Poster.Type.NpcNAINE2,
+                            null));
                 }
+
+                world.spawn(Poster.create(
+                        new Vector2(23.0f, 4.75f),
+                        Poster.Type.PAINTING,
+                        null));
 
                 world.spawn(Nurse.create(new Vector2(10.0f, 1.0f)));
             }

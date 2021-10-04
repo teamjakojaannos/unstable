@@ -1,5 +1,6 @@
 package fi.jakojaannos.unstable.entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.ecs.Component;
@@ -57,6 +58,12 @@ public class BreakableBlocker implements Component<BreakableBlocker> {
 
                          @Override
                          public boolean execute(Entity s, Resources r) {
+                             final var tick = r.timeManager.currentTick();
+                             final var body = s.getComponent(PhysicsBody.class).orElseThrow();
+                             final var pos = body.getPosition().cpy();
+                             pos.add(body.getWidth() / 2.0f, body.getHeight() / 2.0f);
+                             r.particles.burst(pos, new Color(0x347084FF), 50, tick);
+
                              s.getComponent(BreakableBlocker.class).ifPresent(bb -> bb.broken = true);
                              s.removeComponent(Interactable.class);
                              return true;

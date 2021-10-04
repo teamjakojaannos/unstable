@@ -10,16 +10,16 @@ import java.util.List;
 public class Particles {
     public final List<Particle> list = new ArrayList<>();
 
-    public void burst(Vector2 origin, Color color, int currentTick) {
-        for (int i = 0; i < 15; i++) {
+    public void burst(Vector2 origin, Color color,int count, int currentTick) {
+        for (int i = 0; i < count; i++) {
             this.list.add(new Particle(
                     color,
-                    new Vector2(origin).add(MathUtils.random(-0.5f, 0.5f), MathUtils.random(-0.1f, 0.1f)),
+                    new Vector2(origin).add(MathUtils.random(-0.2f, 0.2f), MathUtils.random(-1.2f, 1.8f)),
                     new Vector2(MathUtils.random(-2.0f, 2.0f), MathUtils.random(-2.0f, 2.0f)),
                     currentTick,
                     MathUtils.random(50, 4 * 50),
-                    0.1f, 0.05f,
-                    0.1f, 0.05f
+                    MathUtils.random(0.05f, 0.2f), MathUtils.random(0.05f, 0.15f),
+                    MathUtils.random(0.05f, 0.2f), MathUtils.random(0.05f, 0.15f)
             ));
         }
     }
