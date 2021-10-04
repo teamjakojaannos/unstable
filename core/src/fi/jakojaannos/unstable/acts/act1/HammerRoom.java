@@ -8,6 +8,7 @@ import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
 import fi.jakojaannos.unstable.renderer.TextRenderer;
+import fi.jakojaannos.unstable.resources.PopUp;
 import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.List;
@@ -56,6 +57,17 @@ public class HammerRoom {
                         new Vector2(19.0f, 1.0f),
                         null
                 ));
+
+                world.spawn(Poster.create(
+                        new Vector2(8.0f, 1.5f),
+                        Poster.Type.POSTER,
+                        new PopUp(List.of(), PopUp.Background.Article2),
+                        (s, r) -> true,
+                        List.of(
+                                List.of(new TextRenderer.TextOnScreen("Huh, another page from that article."),
+                                        new TextRenderer.TextOnScreen("...they are not talking about my friends?")),
+                                List.of(new TextRenderer.TextOnScreen("...right?"))
+                        )));
 
                 world.spawn(Poster.create(
                         new Vector2(10.0f, 1.0f),

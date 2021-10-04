@@ -58,29 +58,12 @@ public class CafeIntroRoom {
                     Entity player
             ) {
                 world.spawn(Poster.create(new Vector2(14.0f, 2.5f), Poster.Type.POSTER,
-                                          new PopUp(List.of(new TextRenderer.TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari",
-                                                                                          0.55f,
-                                                                                          0.60f,
-                                                                                          0.5f),
-                                                            new TextRenderer.TextOnScreen("""
-                                                                                                  Viime yona skotlantilainen juoppo sticky jumppasi pankin holviin ja rajaytti noin 400kg kultaa ja seitseman sentrya.
-                                                                                                                          
-                                                                                                  Han pakeni paikalta traktorilla ja soitti sakkipillia aamunkoittoon asti.""",
-                                                                                          0.05f,
-                                                                                          0.6f,
-                                                                                          0.45f)),
-                                                    PopUp.Background.Newspaper)));
+                                          new PopUp(List.of(), PopUp.Background.Newspaper)));
 
                 world.spawn(Poster.create(
                         new Vector2(WIDTH - 8, 1.0f),
                         Poster.Type.CAFE_COUNTER,
-                        new PopUp(List.of(new TextRenderer.TextOnScreen("""
-                                                                                Group of youngsters disappeared near {{ family name }} manor.
-                                                                                """,
-                                                                        0.05f,
-                                                                        0.6f,
-                                                                        0.45f)),
-                                  PopUp.Background.Newspaper),
+                        new PopUp(List.of(), PopUp.Background.Article1),
                         (s, r) -> {
                             // TODO: open another popup, a close-up of the image before changing the act
                             //  - should have a dimmer to hide the background transition
@@ -88,13 +71,11 @@ public class CafeIntroRoom {
                             return true;
                         },
                         List.of(
-                                List.of(new TextRenderer.TextOnScreen("Hey… wait a minute, there is an article"),
-                                        new TextRenderer.TextOnScreen("about my missing buddies here?")),
-                                List.of(new TextRenderer.TextOnScreen("They disappeared right after they went to"),
-                                        new TextRenderer.TextOnScreen("visit that old castle…")),
-                                List.of(new TextRenderer.TextOnScreen("Guess that’s where I'm headed next.")),
-                                List.of(new TextRenderer.TextOnScreen("There is something oddly familiar about that"),
-                                        new TextRenderer.TextOnScreen("picture ...why do I feel like I’ve seen it before?"))
+                                List.of(new TextRenderer.TextOnScreen("There is an article about weird"),
+                                        new TextRenderer.TextOnScreen("disappearances nearby.")),
+                                List.of(new TextRenderer.TextOnScreen("Wonder if this is related to my investigation."),
+                                        new TextRenderer.TextOnScreen("I should pay a visit to that old castle…")),
+                                List.of(new TextRenderer.TextOnScreen("Guess that’s where I'm headed next."))
                         )));
 
                 world.spawn(Poster.create(

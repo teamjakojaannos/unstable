@@ -14,6 +14,8 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+import fi.jakojaannos.unstable.renderer.TextRenderer;
+import fi.jakojaannos.unstable.resources.PopUp;
 import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.List;
@@ -72,6 +74,19 @@ public class MirrorRoom {
 
 
                 if (!spoopy) {
+                    world.spawn(Poster.create(
+                            new Vector2(8.0f, 1.5f),
+                            Poster.Type.POSTER,
+                            new PopUp(List.of(), PopUp.Background.Note5),
+                            (s, r) -> true,
+                            List.of(
+                                    List.of(new TextRenderer.TextOnScreen("Oh these are ramblings of a madman"),
+                                            new TextRenderer.TextOnScreen("it seems.")),
+                                    List.of(new TextRenderer.TextOnScreen("...wait! The names match my missing"),
+                                            new TextRenderer.TextOnScreen("friends!")),
+                                    List.of(new TextRenderer.TextOnScreen("I should leave and call the police"))
+                            )));
+
                     world.spawn(Entity.builder()
                                       .component(new PhysicsBody(12.0f, 1.0f, 2.0f, 1.0f))
                                       .component(new Trigger(0.0f, false, resources -> {

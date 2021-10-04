@@ -205,6 +205,6 @@ public class Poster {
         PuzzlePaintingB,
         PuzzlePaintingC,
         DOCTOR,
-        StatueTable,
+        StatueTable, MedicalReport,
     }
 }

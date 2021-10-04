@@ -10,7 +10,11 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+import fi.jakojaannos.unstable.renderer.TextRenderer;
+import fi.jakojaannos.unstable.resources.PopUp;
 import fi.jakojaannos.unstable.resources.Resources;
+
+import java.util.List;
 
 public class SomeRoom2 {
     private static final int WIDTH = 16;
@@ -55,6 +59,17 @@ public class SomeRoom2 {
                                               null,
                                               (s, r) -> r.playerInventory.photo));
                 world.spawn(Poster.createDoor(new Vector2(WIDTH - 6, 1.0f), Act1.SMALL_BEDROOM, null));
+
+                world.spawn(Poster.create(
+                        new Vector2(WIDTH - 8, 1.0f),
+                        Poster.Type.POSTER,
+                        new PopUp(List.of(), PopUp.Background.Note3),
+                        (s, r) -> true,
+                        List.of(
+                                List.of(new TextRenderer.TextOnScreen("This one rings a bell...")),
+                                List.of(new TextRenderer.TextOnScreen("I remember one of my friends pulling off"),
+                                        new TextRenderer.TextOnScreen("a similar prank on me some time."))
+                        )));
             }
         };
     }

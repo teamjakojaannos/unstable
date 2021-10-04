@@ -60,6 +60,15 @@ public class SmallBedroom {
                 ));
 
                 world.spawn(Poster.create(
+                        new Vector2(13.0f, 1.5f),
+                        Poster.Type.POSTER,
+                        new PopUp(List.of(), PopUp.Background.Note4),
+                        (s, r) -> true,
+                        List.of(
+                                List.of(new TextRenderer.TextOnScreen("Oh wow, this is getting grim"))
+                        )));
+
+                world.spawn(Poster.create(
                         new Vector2(10.0f, 1.0f),
                         Poster.Type.PhotoRipped,
                         new PopUp(List.of(), PopUp.Background.Photo),

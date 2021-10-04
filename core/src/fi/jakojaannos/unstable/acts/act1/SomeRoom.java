@@ -9,6 +9,7 @@ import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
 import fi.jakojaannos.unstable.renderer.TextRenderer;
 import fi.jakojaannos.unstable.resources.Interactable;
+import fi.jakojaannos.unstable.resources.PopUp;
 import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.List;
@@ -48,6 +49,16 @@ public class SomeRoom {
                     Resources res,
                     Entity player
             ) {
+                world.spawn(Poster.create(
+                        new Vector2(10.0f, 2.0f),
+                        Poster.Type.POSTER,
+                        new PopUp(List.of(), PopUp.Background.Note1),
+                        (s, r) -> true,
+                        List.of(
+                                List.of(new TextRenderer.TextOnScreen("Huh. A note."),
+                                        new TextRenderer.TextOnScreen("Looks a bit like my own handwriting"))
+                        )));
+
                 world.spawn(Poster.createDoor(
                         new Vector2(12.0f, 1.0f),
                         Act1.NURSE_HALLWAY,
@@ -63,8 +74,8 @@ public class SomeRoom {
                         (s, r) -> {
                             r.setDialogueText(List.of(
                                     List.of(new TextRenderer.TextOnScreen("A medieval armor?")),
-                                    List.of(new TextRenderer.TextOnScreen("...how? Did I somehow wound up in that"),
-                                            new TextRenderer.TextOnScreen("castle my friends disappeared in?")),
+                                    List.of(new TextRenderer.TextOnScreen("Uh, just seeing it makes me feel chilly."),
+                                            new TextRenderer.TextOnScreen("Why does it look oddly familiar, too?")),
                                     List.of(new TextRenderer.TextOnScreen("...")),
                                     List.of(new TextRenderer.TextOnScreen("I must be going crazy"))
                             ));

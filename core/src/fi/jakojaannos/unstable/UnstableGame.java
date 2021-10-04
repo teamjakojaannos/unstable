@@ -112,8 +112,8 @@ public class UnstableGame extends ApplicationAdapter {
             this.resources.stormy = this.currentAct.isLightningEnabled();
             if (this.resources.nextRoom == TheEnd.THE_OFFICE) {
                 resources.setDialogueText(List.of(
-                        List.of(new TextRenderer.TextOnScreen("There he sat. The man I held responsible"),
-                                new TextRenderer.TextOnScreen("for all of this.")),
+                        List.of(new TextRenderer.TextOnScreen("There he sat. The madman. He had to be the one"),
+                                new TextRenderer.TextOnScreen("responsible for all of this!")),
                         List.of(new TextRenderer.TextOnScreen("All of sudden, I could not contain my feelings."),
                                 new TextRenderer.TextOnScreen("The anger grew inside me.")),
                         List.of(new TextRenderer.TextOnScreen("The emotions ravaged through my body."),

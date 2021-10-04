@@ -35,6 +35,7 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
     private final Texture tohtoriDed;
     private final Texture tohtori;
     private final Texture statuetable;
+    private final Texture medrep;
 
     public RenderPosters(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
@@ -53,6 +54,7 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
         this.tohtori = new Texture("doctor_sit.png");
         this.tohtoriDed = new Texture("doctor_ded.png");
         this.statuetable = new Texture("rintakuvaPöytäSpooky.png");
+        this.medrep = new Texture("medicareport_SMALLL.png");
 
         this.variants = new TextureRegion[][]{
                 {
@@ -133,6 +135,10 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                 {
                         new TextureRegion(this.statuetable),
                         new TextureRegion(this.statuetable),
+                },
+                {
+                        new TextureRegion(this.medrep),
+                        new TextureRegion(this.medrep),
                 },
         };
 

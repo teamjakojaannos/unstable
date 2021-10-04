@@ -13,6 +13,8 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+import fi.jakojaannos.unstable.renderer.TextRenderer;
+import fi.jakojaannos.unstable.resources.PopUp;
 import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.List;
@@ -66,6 +68,15 @@ public class ManorNurseHallwayRoom {
                         null
                 ));
 
+                world.spawn(Poster.create(
+                        new Vector2(WIDTH - 8, 1.0f),
+                        Poster.Type.POSTER,
+                        new PopUp(List.of(), PopUp.Background.Note2),
+                        (s, r) -> true,
+                        List.of(
+                                List.of(new TextRenderer.TextOnScreen("Hmm, another note."),
+                                        new TextRenderer.TextOnScreen("I get a strange feeling reading these..."))
+                        )));
 
                 world.spawn(Entity.builder()
                                   .component(new PhysicsBody(new Vector2(13.0f, 1.0f), 1.0f, 1.0f))
