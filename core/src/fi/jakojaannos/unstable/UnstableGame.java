@@ -64,7 +64,7 @@ public class UnstableGame extends ApplicationAdapter {
         // Initialize act
         resources.nextAct = new Intro();
         //resources.nextAct = new TheEnd();
-        resources.nextRoom = Act1.MANOR_ENTRY;
+        //resources.nextRoom = Act1.MANOR_ENTRY;
     }
 
     @Override
