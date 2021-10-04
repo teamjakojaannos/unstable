@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Null;
 import fi.jakojaannos.unstable.ecs.Component;
 import fi.jakojaannos.unstable.resources.TimerHandle;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class MorkoAi implements Component<MorkoAi> {
@@ -14,6 +15,7 @@ public class MorkoAi implements Component<MorkoAi> {
     public final float loseAggroTime;
     public final float idleTime;
     public final float attackDuration = 0.66f;
+    public final TaskList taskList;
     public State state;
 
     @Null
@@ -26,11 +28,16 @@ public class MorkoAi implements Component<MorkoAi> {
     @Null
     private Vector2 targetPos = null;
 
-    public MorkoAi(float sightRadius, float loseAggroTime, float idleTime, State state) {
+    public MorkoAi(float sightRadius, float loseAggroTime, float idleTime, State state, TaskList taskList) {
         this.sightRadius = sightRadius;
         this.loseAggroTime = loseAggroTime;
         this.idleTime = idleTime;
         this.state = state;
+        this.taskList = taskList;
+    }
+
+    public MorkoAi(float sightRadius, float loseAggroTime, float idleTime, State state) {
+        this(sightRadius, loseAggroTime, idleTime, state, new TaskList(new ArrayList<>(), false));
     }
 
     public MorkoAi(float sightRadius, float loseAggroTime, float idleTime) {
@@ -55,10 +62,10 @@ public class MorkoAi implements Component<MorkoAi> {
 
     @Override
     public MorkoAi cloneComponent() {
-        return new MorkoAi(this.sightRadius, this.loseAggroTime, this.idleTime, this.state);
+        return new MorkoAi(this.sightRadius, this.loseAggroTime, this.idleTime, this.state, this.taskList);
     }
 
     public enum State {
-        IDLING, CHASING, WANDERING, SEARCHING, ATTACKING
+        IDLING, CHASING, WANDERING, SEARCHING, ATTACKING, TASK
     }
 }

@@ -6,6 +6,8 @@ import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.components.SoundTags;
 import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.components.Trigger;
+import fi.jakojaannos.unstable.components.tasks.TaskMove;
+import fi.jakojaannos.unstable.components.tasks.TaskWait;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Closet;
@@ -14,6 +16,8 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+
+import java.util.List;
 
 public class ManorEntranceRoom {
     public static final int WIDTH = 24;
@@ -60,7 +64,13 @@ public class ManorEntranceRoom {
                         .component(new PhysicsBody(16.0f, 1.0f, 1.0f, 1.0f))
                         .component(new Trigger(1.0f, false,
                                 res -> res.entities.spawn(
-                                        Morko.create(new Vector2(28.0f, 1.0f))
+                                        Morko.create(new Vector2(28.0f, 1.0f),
+                                                List.of(
+                                                        new TaskMove(new Vector2(5.0f, 1.0f), 1.0f),
+                                                        new TaskWait(2.5f),
+                                                        new TaskMove(new Vector2(35.0f, 1.0f), 1.0f)
+                                                )
+                                        )
                                 )))
                 );
             }

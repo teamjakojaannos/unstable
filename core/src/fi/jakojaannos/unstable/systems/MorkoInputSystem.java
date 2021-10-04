@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.components.*;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
+import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
 
@@ -12,13 +13,13 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
     public void tick(SystemInput<Input> input, Resources resources) {
         input.entities().forEach(entity -> {
             updateState(entity, resources);
-            doMovement(entity);
+            doMovement(entity, resources);
         });
     }
 
 // ========== MOVEMENT ==========
 
-    private void doMovement(Input entity) {
+    private void doMovement(Input entity, Resources resources) {
         final var targetDistance2 = 0.5f;
 
         final var ai = entity.ai;
@@ -32,6 +33,17 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
                     entity.input.direction.setZero();
                 }
             });
+            case TASK -> ai.taskList.currentTask()
+                    .ifPresentOrElse(
+                            _task -> {
+                                entity.input.direction.setZero();
+                                ai.taskList.update(entity.entity, resources);
+                            },
+                            () -> {
+                                // task finished, set state back to normal
+                                wanderOrIdle(entity, resources);
+                            }
+                    );
         }
     }
 
@@ -109,6 +121,10 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
     }
 
     private void idle(Input entity, Resources resources) {
+        if (hasTask(entity)) {
+            scriptedAction(entity);
+            return;
+        }
         entity.ai.state = MorkoAi.State.IDLING;
 
         if (!resources.timers.isActiveAndValid(entity.ai.idleHandle)) {
@@ -118,6 +134,10 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
     }
 
     private void wander(Input entity, Resources resources) {
+        if (hasTask(entity)) {
+            scriptedAction(entity);
+            return;
+        }
         entity.ai.state = MorkoAi.State.WANDERING;
 
         final var borders = resources.worldBounds;
@@ -162,6 +182,9 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
         }
     }
 
+    private void scriptedAction(Input entity) {
+        entity.ai.state = MorkoAi.State.TASK;
+    }
 
     // ========== CHECKING ==========
 
@@ -224,7 +247,12 @@ public class MorkoInputSystem implements EcsSystem<MorkoInputSystem.Input> {
         return resources.timers.isActiveAndValid(entity.ai.attackHandle);
     }
 
+    private boolean hasTask(Input entity) {
+        return entity.ai.taskList.currentTask().isPresent();
+    }
+
     public record Input(
+            Entity entity,
             MorkoAi ai,
             MovementInput input,
             PhysicsBody body,

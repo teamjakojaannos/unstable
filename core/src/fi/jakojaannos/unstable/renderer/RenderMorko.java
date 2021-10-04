@@ -83,7 +83,7 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
                         case IDLING -> this.idleFrames;
                         case WANDERING, CHASING -> this.walkFrames;
                         case SEARCHING -> this.searchFrames;
-                        case ATTACKING -> this.attackFrames;
+                        case ATTACKING, TASK -> this.attackFrames;
                     };
 
                     final var loopDuration = switch (ai.state) {
