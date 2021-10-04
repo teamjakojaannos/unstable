@@ -1,5 +1,6 @@
 package fi.jakojaannos.unstable.acts.act2;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.acts.act3.Act3;
 import fi.jakojaannos.unstable.components.Mirror;
@@ -72,6 +73,9 @@ public class MirrorRoom {
                                   .component(new PhysicsBody(mirrorX, mirrorY, 2.0f, 8.0f))
                                   .component(new Mirror(spoopy)));
 
+                if (spoopy) {
+                    Gdx.audio.newSound(Gdx.files.internal("ComingOut.ogg")).play(0.5f, 1.0f, 0.0f);
+                }
 
                 if (!spoopy) {
                     world.spawn(Poster.create(
