@@ -37,7 +37,8 @@ public interface Act {
                 new CollectInteractablesSystem(),
                 new TriggerObserverSystem(),
                 new PlayerActionSystem(),
-                new AttackHandlerSystem()
+                new AttackHandlerSystem(),
+                new ParticleUpdateSystem()
         );
     }
 
@@ -104,6 +105,7 @@ public interface Act {
                 new RenderPlayer(batch),
                 new RenderMorko(batch),
                 new RenderNurse(batch),
+                new RenderParticles(batch),
                 new SetShader(batch, null, null),
                 //new DebugRenderer(),
                 new TextRenderer(batch),

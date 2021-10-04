@@ -39,6 +39,7 @@ public class Resources {
     public Vector2 spawnPos;
     public Entity player;
     public Attacks attacks = new Attacks();
+    public Particles particles = new Particles();
 
     public Inventory playerInventory = new Inventory();
     public TimerHandle interactCooldown;
