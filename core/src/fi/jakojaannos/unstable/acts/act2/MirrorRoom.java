@@ -1,13 +1,12 @@
 package fi.jakojaannos.unstable.acts.act2;
 
 import com.badlogic.gdx.math.Vector2;
+import fi.jakojaannos.unstable.acts.act3.Act3;
 import fi.jakojaannos.unstable.components.Mirror;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.components.Trigger;
 import fi.jakojaannos.unstable.components.tasks.MoveKys;
 import fi.jakojaannos.unstable.components.tasks.TaskDestroySelf;
-import fi.jakojaannos.unstable.components.tasks.TaskDestroySelfOnContactWithPlayer;
-import fi.jakojaannos.unstable.components.tasks.TaskMove;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.Nurse;
@@ -15,6 +14,7 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class MirrorRoom {
             // @formatter:on
     };
 
-    public static Room create() {
+    public static Room create(boolean spoopy) {
         return new Room() {
             @Override
             public TileMap createMap() {
@@ -48,27 +48,42 @@ public class MirrorRoom {
             }
 
             @Override
-            public void spawnInitialEntities(EcsWorld world, Entity player) {
-                world.spawn(Poster.createDoor(new Vector2(WIDTH - 6, 1.0f), Act2.PUZZLE_ROOM, null));
+            public void spawnInitialEntities(
+                    EcsWorld world,
+                    Resources res,
+                    Entity player
+            ) {
+                world.spawn(Poster.createDoor(new Vector2(WIDTH - 6, 1.0f),
+                                              Act2.PUZZLE_ROOM,
+                                              null,
+                                              null,
+                                              (s, r) -> !r.combinationSolved));
+                world.spawn(Poster.createDoor(new Vector2(2, 1.0f),
+                                              Act3.LONG_HALLWAY,
+                                              null,
+                                              null,
+                                              (s, r) -> r.combinationSolved));
 
                 final var mirrorX = 12.0f;
                 final var mirrorY = 1.0f;
                 world.spawn(Entity.builder()
                                   .component(new PhysicsBody(mirrorX, mirrorY, 2.0f, 8.0f))
-                                  .component(new Mirror()));
+                                  .component(new Mirror(spoopy)));
 
 
-                world.spawn(Entity.builder()
-                                  .component(new PhysicsBody(12.0f, 1.0f, 2.0f, 1.0f))
-                                  .component(new Trigger(0.0f, false, resources -> {
-                                      // lightning strike
-                                      // TODO:
-                                      // spawn nurse
-                                      resources.entities.spawn(Nurse.createWithTasks(new Vector2(1.0f, 1.0f), true, List.of(
-                                              new MoveKys<>(new Vector2(24.0f, 1.0f), 1.0f, false),
-                                              new TaskDestroySelf<>(false)
-                                      )));
-                                  })));
+                if (!spoopy) {
+                    world.spawn(Entity.builder()
+                                      .component(new PhysicsBody(12.0f, 1.0f, 2.0f, 1.0f))
+                                      .component(new Trigger(0.0f, false, resources -> {
+                                          // lightning strike
+                                          resources.stormy = true;
+                                          // spawn nurse
+                                          resources.entities.spawn(Nurse.createWithTasks(new Vector2(1.0f, 1.0f), true, List.of(
+                                                  new MoveKys<>(new Vector2(24.0f, 1.0f), 1.0f, false),
+                                                  new TaskDestroySelf<>(false)
+                                          )));
+                                      })));
+                }
             }
         };
     }

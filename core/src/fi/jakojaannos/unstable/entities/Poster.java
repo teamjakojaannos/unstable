@@ -37,13 +37,21 @@ public class Poster {
             Interactable.Action extraAction,
             List<Collection<TextRenderer.TextOnScreen>> preCloseDialogue
     ) {
+        final var hack = popUp != null && popUp.lines().size() == 1 && popUp.lines().get(0).content() == null;
+
         final var builder = Entity
                 .builder()
-                .component(new PhysicsBody(position.cpy(), variantSize(type)))
+                .component(new PhysicsBody(position.cpy(), hack
+                        ? new BoundingBox(new Vector3(0, 0, 0), new Vector3(2, 1, 0))
+                        : variantSize(type)))
                 .component(new PosterState(type));
 
         if (popUp != null) {
             builder.component(new Interactable((self, resources) -> {
+                       if (hack && resources.combinationSolved) {
+                           return false;
+                       }
+
                        final var isOpen = self.getComponent(PosterState.class).map(s -> s.active).orElse(false);
 
                        if (resources.popup == null && !isOpen) {
@@ -196,5 +204,7 @@ public class Poster {
         PuzzlePaintingA,
         PuzzlePaintingB,
         PuzzlePaintingC,
+        DOCTOR,
+        StatueTable,
     }
 }

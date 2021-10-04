@@ -22,8 +22,10 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
     private final Texture texture;
     private final Texture textureIdle;
     private final Texture textureShit;
+    private final Texture texturePatient;
     private final TextureRegion[] frames;
     private final TextureRegion[] idleFrames;
+    private final TextureRegion[] idleFrames2;
     private final TextureRegion[] hidingFrames;
     private final TextureRegion[] shittingFrames;
     private final TextureRegion[] closetIconFrames;
@@ -38,6 +40,7 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
         this.texture = new Texture("Journalist.png");
         this.textureIdle = new Texture("Journalist_idle.png");
         this.textureShit = new Texture("journalboy_sit.png");
+        this.texturePatient = new Texture("Journalboy_hosbital2.png");
         this.frames = new TextureRegion[8];
         this.hidingFrames = new TextureRegion[8];
 
@@ -50,6 +53,10 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
 
         this.idleFrames = new TextureRegion[]{
                 new TextureRegion(this.textureIdle)
+        };
+
+        this.idleFrames2 = new TextureRegion[]{
+                new TextureRegion(this.texturePatient)
         };
 
         this.shittingFrames = new TextureRegion[]{
@@ -100,6 +107,8 @@ public class RenderPlayer implements EcsSystem<RenderPlayer.Input>, AutoCloseabl
                          ? this.hidingFrames
                          : entity.shittingTag.isPresent()
                          ? this.shittingFrames
+                         : resources.endFadeToBlackStarted2
+                         ? this.idleFrames2
                          : this.idleFrames;
 
                  final var loopDuration = 1.25;

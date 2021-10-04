@@ -62,6 +62,7 @@ public class Shaders {
                 uniform sampler2D u_bg_texture3;
                                 
                 uniform vec4 u_overlay_color;
+                uniform vec4 u_fade_color;
 
                 void main() {
                     vec4 tex_sample = texture2D(u_texture, v_texCoords);
@@ -109,7 +110,14 @@ public class Shaders {
                         tex_sample = mix(tex_sample, tex_sample3, tex_sample3.a);
                     }
 
-                    gl_FragColor = v_color * tex_sample;
+                    if (u_fade_color.a == 0.0) {
+                        gl_FragColor = v_color * tex_sample;
+                    } else if (u_fade_color.a == 2.0) {
+                        gl_FragColor = vec4(v_color.rgb - u_fade_color.rgb, v_color.a) * tex_sample;
+                    } else if (u_fade_color.a == 1.0) {
+                        vec3 inv = vec3(1.0, 1.0, 1.0) - u_fade_color.rgb;
+                        gl_FragColor = vec4(v_color.rgb - inv, v_color.a) * tex_sample;
+                    }
                 }
                 """;
 }

@@ -32,6 +32,9 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
     private final Sound interact2;
     private final Texture kaappi;
     private final Texture kaappiNurin;
+    private final Texture tohtoriDed;
+    private final Texture tohtori;
+    private final Texture statuetable;
 
     public RenderPosters(SpriteBatch spriteBatch) {
         this.spriteBatch = spriteBatch;
@@ -47,6 +50,9 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
         this.maaliA = new Texture("Painting_Zero_Small.png");
         this.maaliB = new Texture("taulu_pieni.png");
         this.maaliC = new Texture("taulu2_pieni.png");
+        this.tohtori = new Texture("doctor_sit.png");
+        this.tohtoriDed = new Texture("doctor_ded.png");
+        this.statuetable = new Texture("rintakuvaPöytäSpooky.png");
 
         this.variants = new TextureRegion[][]{
                 {
@@ -119,6 +125,14 @@ public class RenderPosters implements EcsSystem<RenderPosters.Input>, AutoClosea
                 {
                         new TextureRegion(this.maaliC),
                         new TextureRegion(this.maaliC),
+                },
+                {
+                        new TextureRegion(this.tohtoriDed),
+                        new TextureRegion(this.tohtori),
+                },
+                {
+                        new TextureRegion(this.statuetable),
+                        new TextureRegion(this.statuetable),
                 },
         };
 

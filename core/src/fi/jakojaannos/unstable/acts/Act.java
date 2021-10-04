@@ -87,7 +87,7 @@ public interface Act {
             gameState.world().spawn_player_hack(resources.player);
         }
 
-        room.spawnInitialEntities(gameState.world(), resources.player);
+        room.spawnInitialEntities(gameState.world(), resources, resources.player);
 
         states.put(room, gameState);
         return gameState;

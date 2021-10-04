@@ -99,11 +99,15 @@ public class RenderMirror implements EcsSystem<RenderMirror.Input>, AutoCloseabl
         }
         final var entity = maybeEntity.get();
 
-        if (!resources.timers.isActiveAndValid(resources.interactCooldown)) {
-            if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
-                resources.interactCooldown = resources.timers.set(1.0f, false, () -> {});
-                entity.mirror.nextState(resources, entity.body.getPosition());
-            }
+        //if (!resources.timers.isActiveAndValid(resources.interactCooldown)) {
+        //    if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
+        //        resources.interactCooldown = resources.timers.set(1.0f, false, () -> {});
+        //        entity.mirror.nextState(resources, entity.body.getPosition());
+        //    }
+        //}
+        if (entity.mirror.spoopy && entity.mirror.state == Mirror.State.Idle) {
+            entity.mirror.nextState(resources, entity.body.getPosition());
+            entity.mirror.spoopy = false;
         }
 
         final var physics = entity.body;

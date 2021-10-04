@@ -10,6 +10,7 @@ import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
 import fi.jakojaannos.unstable.renderer.TextRenderer;
 import fi.jakojaannos.unstable.resources.PopUp;
+import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.List;
 
@@ -43,7 +44,11 @@ public class PaintingRoom {
             }
 
             @Override
-            public void spawnInitialEntities(EcsWorld world, Entity player) {
+            public void spawnInitialEntities(
+                    EcsWorld world,
+                    Resources res,
+                    Entity player
+            ) {
                 // Dummy door
                 world.spawn(Poster.createDoor(new Vector2(WIDTH - 7.0f, 1.0f),
                                               null,
@@ -54,26 +59,34 @@ public class PaintingRoom {
                 world.spawn(Poster.create(
                         new Vector2(19.0f, 2.25f),
                         Poster.Type.PuzzlePaintingA,
-                        new PopUp(List.of(new TextRenderer.TextOnScreen("yee")),
-                                  PopUp.Background.PuzzlePaintingA)
+                        new PopUp(List.of(), PopUp.Background.PuzzlePaintingA)
                 ));
 
                 world.spawn(Poster.create(
                         new Vector2(12.0f, 1.5f),
                         Poster.Type.PuzzlePaintingB,
-                        new PopUp(List.of(new TextRenderer.TextOnScreen("yee")),
-                                  PopUp.Background.PuzzlePaintingB)
+                        new PopUp(List.of(), PopUp.Background.PuzzlePaintingB)
                 ));
 
                 world.spawn(Poster.create(
                         new Vector2(7.0f, 1.75f),
                         Poster.Type.PuzzlePaintingC,
-                        new PopUp(List.of(new TextRenderer.TextOnScreen("yee")),
-                                  PopUp.Background.PuzzlePaintingC)
+                        new PopUp(List.of(), PopUp.Background.PuzzlePaintingC)
                 ));
 
-                // TODO: number lock
-                world.spawn(Poster.createDoor(new Vector2(3, 1.0f), Act3.CIGAR_ROOM, new Act3()));
+                world.spawn(Poster.create(
+                        new Vector2(3.0f, 1.0f),
+                        Poster.Type.POSTER,
+                        new PopUp(List.of(new TextRenderer.TextOnScreen(null)), PopUp.Background.PuzzleNote)
+                ));
+
+                world.spawn(Poster.createDoor(
+                        new Vector2(3, 1.0f),
+                        Act3.CIGAR_ROOM,
+                        new Act3(),
+                        null,
+                        (self, resources) -> resources.combinationSolved
+                ));
             }
         };
     }

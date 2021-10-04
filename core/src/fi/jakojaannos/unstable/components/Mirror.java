@@ -8,7 +8,12 @@ import fi.jakojaannos.unstable.resources.TimerHandle;
 
 public class Mirror implements Component<Mirror> {
     public State state = State.Idle;
+    public boolean spoopy;
     public TimerHandle stateProgress;
+
+    public Mirror(boolean spoopy) {
+        this.spoopy = spoopy;
+    }
 
     public void nextState(Resources resources, Vector2 position) {
         if (this.state == State.Idle) {

@@ -8,10 +8,14 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.ScreenUtils;
 import fi.jakojaannos.unstable.acts.Act;
-import fi.jakojaannos.unstable.acts.act2.Act2;
+import fi.jakojaannos.unstable.acts.end.TheEnd;
 import fi.jakojaannos.unstable.acts.intro.Intro;
+import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.SystemDispatcher;
+import fi.jakojaannos.unstable.renderer.TextRenderer;
 import fi.jakojaannos.unstable.resources.Resources;
+
+import java.util.List;
 
 public class UnstableGame extends ApplicationAdapter {
     private final TimeState timeState;
@@ -48,8 +52,9 @@ public class UnstableGame extends ApplicationAdapter {
         this.batch = new SpriteBatch();
 
         // Initialize act
-        //resources.nextAct = new Intro();
-        resources.nextAct = new Act2();
+        resources.nextAct = new Intro();
+        //resources.nextAct = new Act3();
+        //resources.nextRoom = Act3.WAITING_ROOM;
     }
 
     @Override
@@ -105,7 +110,41 @@ public class UnstableGame extends ApplicationAdapter {
 
             this.resources.reset(this.gameState.world());
             this.resources.stormy = this.currentAct.isLightningEnabled();
+            if (this.resources.nextRoom == TheEnd.THE_OFFICE) {
+                resources.setDialogueText(List.of(
+                        List.of(new TextRenderer.TextOnScreen("There he sat. The man I held responsible"),
+                                new TextRenderer.TextOnScreen("for all of this.")),
+                        List.of(new TextRenderer.TextOnScreen("All of sudden, I could not contain my feelings."),
+                                new TextRenderer.TextOnScreen("The anger grew inside me.")),
+                        List.of(new TextRenderer.TextOnScreen("The emotions ravaged through my body."),
+                                new TextRenderer.TextOnScreen("They felt oddly familiar.")),
+                        List.of(new TextRenderer.TextOnScreen("A sliver of concern slashed through my mind,"),
+                                new TextRenderer.TextOnScreen("but the rage was already too strong.")),
+                        List.of(new TextRenderer.TextOnScreen("I embraced the rage."))
+                ));
+                resources.inOffice = true;
+                resources.spoopy = true;
+
+                resources.player.addComponent(new Tags.FreezeInput());
+            }
+
+            if (this.resources.nextRoom == TheEnd.THE_OFFICE_UNSPOOPED) {
+                resources.player.addComponent(new Tags.FreezeInput());
+            }
             this.resources.nextRoom = null;
+
+        }
+
+        if (resources.inOffice && (resources.getDialogueText() == null || resources.getDialogueText().isEmpty()) && !this.resources.endFadeToBlackStarted) {
+            resources.endFadeToBlackStarted = true;
+
+            this.resources.fadeToBlack = resources.timers.set(3.0f, false, () -> {
+                resources.endFadeToBlackStarted2 = true;
+                this.resources.nextRoom = TheEnd.THE_OFFICE_UNSPOOPED;
+                this.resources.spoopy = false;
+                this.resources.fadeToBlack = resources.timers.set(2.0f, false, () -> {
+                });
+            });
         }
 
         final var currentTick = this.timeState.currentTick();

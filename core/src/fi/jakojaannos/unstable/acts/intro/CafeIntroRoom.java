@@ -11,6 +11,7 @@ import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
 import fi.jakojaannos.unstable.renderer.TextRenderer;
 import fi.jakojaannos.unstable.resources.PopUp;
+import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.List;
 
@@ -51,7 +52,11 @@ public class CafeIntroRoom {
             }
 
             @Override
-            public void spawnInitialEntities(EcsWorld world, Entity player) {
+            public void spawnInitialEntities(
+                    EcsWorld world,
+                    Resources res,
+                    Entity player
+            ) {
                 world.spawn(Poster.create(new Vector2(14.0f, 2.5f), Poster.Type.POSTER,
                                           new PopUp(List.of(new TextRenderer.TextOnScreen("Myydaan potkukelkkoja!\nJa paskoja vihanneksia.\nTerveisin Teslak Aarisaari",
                                                                                           0.55f,

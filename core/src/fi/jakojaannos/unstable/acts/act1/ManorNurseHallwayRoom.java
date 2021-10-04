@@ -13,6 +13,7 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.List;
 
@@ -46,7 +47,11 @@ public class ManorNurseHallwayRoom {
             }
 
             @Override
-            public void spawnInitialEntities(EcsWorld world, Entity player) {
+            public void spawnInitialEntities(
+                    EcsWorld world,
+                    Resources res,
+                    Entity player
+            ) {
                 final var nurse = world.spawn(Nurse.create2(new Vector2(28.0f, 1.0f)));
                 world.spawn(Poster.createDoor(new Vector2(19.0f, 1.0f), Act1.HAMMER_ROOM, null, null, null, (s, r) -> {
                     nurse.destroy();

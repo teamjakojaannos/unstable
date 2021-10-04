@@ -8,6 +8,7 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+import fi.jakojaannos.unstable.resources.Resources;
 
 public class WaitingRoom {
     private static final int WIDTH = 16;
@@ -39,7 +40,11 @@ public class WaitingRoom {
             }
 
             @Override
-            public void spawnInitialEntities(EcsWorld world, Entity player) {
+            public void spawnInitialEntities(
+                    EcsWorld world,
+                    Resources res,
+                    Entity player
+            ) {
                 world.spawn(Poster.createDoor(
                         new Vector2(WIDTH - 2.0f, 1.0f),
                         TheEnd.THE_OFFICE,

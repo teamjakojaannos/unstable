@@ -24,7 +24,7 @@ public class Resources {
     public final Camera camera;
     public final BoundingBox worldBounds;
     public final TimeManager timeManager;
-
+    public TimerHandle lightningTimer;
     public Timers timers;
     public Entities entities;
     public Players players = new Players();
@@ -44,6 +44,14 @@ public class Resources {
     public Inventory playerInventory = new Inventory();
     public TimerHandle interactCooldown;
     public float blockerBound = Float.MAX_VALUE;
+    public boolean combinationSolved;
+    public int[] numbers = new int[3];
+    public int enteringNumber = -1;
+    public boolean inOffice;
+    public TimerHandle fadeToBlack;
+    public boolean endFadeToBlackStarted;
+    public boolean endFadeToBlackStarted2;
+
     private List<Collection<TextRenderer.TextOnScreen>> dialogueText;
 
     public Resources(

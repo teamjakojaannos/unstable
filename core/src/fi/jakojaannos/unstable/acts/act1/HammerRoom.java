@@ -8,6 +8,7 @@ import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
 import fi.jakojaannos.unstable.renderer.TextRenderer;
+import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.List;
 
@@ -41,7 +42,11 @@ public class HammerRoom {
             }
 
             @Override
-            public void spawnInitialEntities(EcsWorld world, Entity player) {
+            public void spawnInitialEntities(
+                    EcsWorld world,
+                    Resources res,
+                    Entity player
+            ) {
                 world.spawn(Poster.createSofa(new Vector2(5.0f, 1.0f)));
 
                 world.spawn(Poster.createDoor(

@@ -9,6 +9,7 @@ import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
 import fi.jakojaannos.unstable.renderer.TextRenderer;
 import fi.jakojaannos.unstable.resources.Interactable;
+import fi.jakojaannos.unstable.resources.Resources;
 
 import java.util.List;
 
@@ -42,7 +43,11 @@ public class SomeRoom {
             }
 
             @Override
-            public void spawnInitialEntities(EcsWorld world, Entity player) {
+            public void spawnInitialEntities(
+                    EcsWorld world,
+                    Resources res,
+                    Entity player
+            ) {
                 world.spawn(Poster.createDoor(
                         new Vector2(12.0f, 1.0f),
                         Act1.NURSE_HALLWAY,

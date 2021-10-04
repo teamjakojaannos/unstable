@@ -28,7 +28,8 @@ public class Entity implements Component<Entity> {
 
     public <C extends Component<C>> void addComponent(final C component) {
         if (this.archetype.hasComponent(component.getClass())) {
-            throw new IllegalStateException(String.format("The entity already has the component %s", component.getClass().getSimpleName()));
+            //throw new IllegalStateException(String.format("The entity already has the component %s", component.getClass().getSimpleName()));
+            return;
         }
 
         this.newComponents.add(component);

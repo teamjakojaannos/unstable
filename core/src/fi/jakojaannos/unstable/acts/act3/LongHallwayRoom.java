@@ -1,15 +1,21 @@
 package fi.jakojaannos.unstable.acts.act3;
 
 import com.badlogic.gdx.math.Vector2;
+import fi.jakojaannos.unstable.components.MorkoAi;
 import fi.jakojaannos.unstable.components.PhysicsBody;
 import fi.jakojaannos.unstable.components.PlayerHudComponent;
+import fi.jakojaannos.unstable.components.tasks.TaskMove;
 import fi.jakojaannos.unstable.ecs.EcsWorld;
 import fi.jakojaannos.unstable.ecs.Entity;
 import fi.jakojaannos.unstable.entities.BreakableBlocker;
+import fi.jakojaannos.unstable.entities.Morko;
 import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+import fi.jakojaannos.unstable.resources.Resources;
+
+import java.util.List;
 
 public class LongHallwayRoom {
     private static final int WIDTH = 64;
@@ -41,7 +47,11 @@ public class LongHallwayRoom {
             }
 
             @Override
-            public void spawnInitialEntities(EcsWorld world, Entity player) {
+            public void spawnInitialEntities(
+                    EcsWorld world,
+                    Resources res,
+                    Entity player
+            ) {
                 // Dummy door
                 world.spawn(Poster.createDoor(new Vector2(WIDTH - 7.0f, 1.0f),
                                               null,
@@ -54,6 +64,17 @@ public class LongHallwayRoom {
                         Act3.WAITING_ROOM,
                         null
                 ));
+
+                world.spawn(Morko.create(
+                        new Vector2(WIDTH - 1.7f, 1.0f),
+                        List.of(new TaskMove<>(new Vector2(0.0f, 1.0f), 1.0f, MorkoAi.State.CHASING)))
+                );world.spawn(Morko.create(
+                        new Vector2(WIDTH - 1.2f, 1.0f),
+                        List.of(new TaskMove<>(new Vector2(0.0f, 1.0f), 1.0f, MorkoAi.State.CHASING)))
+                );world.spawn(Morko.create(
+                        new Vector2(WIDTH - 1.3f, 1.0f),
+                        List.of(new TaskMove<>(new Vector2(0.0f, 1.0f), 1.0f, MorkoAi.State.CHASING)))
+                );
 
                 world.spawn(Poster.create(
                         new Vector2(8.0f, 1.0f),

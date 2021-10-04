@@ -10,6 +10,7 @@ import fi.jakojaannos.unstable.entities.Poster;
 import fi.jakojaannos.unstable.level.Room;
 import fi.jakojaannos.unstable.level.TileMap;
 import fi.jakojaannos.unstable.level.TileSet;
+import fi.jakojaannos.unstable.resources.Resources;
 
 public class SomeRoom2 {
     private static final int WIDTH = 16;
@@ -41,7 +42,11 @@ public class SomeRoom2 {
             }
 
             @Override
-            public void spawnInitialEntities(EcsWorld world, Entity player) {
+            public void spawnInitialEntities(
+                    EcsWorld world,
+                    Resources res,
+                    Entity player
+            ) {
                 world.spawn(Closet.create(new Vector2(1.0f, 1.0f), player, HidingSpot.Type.MansionClosetLarge));
 
                 world.spawn(Poster.createDoor(new Vector2(WIDTH - 12, 1.0f),

@@ -41,7 +41,20 @@ public class InputManager {
     }
 
     public enum KeyInput {
-        LEFT(A), RIGHT(D), ACTION(F);
+        LEFT(A),
+        RIGHT(D),
+        ACTION(F),
+        Key0(NUM_0),
+        Key1(NUM_1),
+        Key2(NUM_2),
+        Key3(NUM_3),
+        Key4(NUM_4),
+        Key5(NUM_5),
+        Key6(NUM_6),
+        Key7(NUM_7),
+        Key8(NUM_8),
+        Key9(NUM_9),
+        ;
 
         private final int keyCode;
 

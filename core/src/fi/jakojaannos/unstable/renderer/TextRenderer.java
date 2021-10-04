@@ -8,10 +8,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Align;
+import fi.jakojaannos.unstable.InputManager;
 import fi.jakojaannos.unstable.components.PlayerInput;
+import fi.jakojaannos.unstable.components.Tags;
 import fi.jakojaannos.unstable.ecs.EcsSystem;
 import fi.jakojaannos.unstable.ecs.SystemInput;
 import fi.jakojaannos.unstable.resources.Resources;
+
+import java.util.List;
 
 public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseable {
     private final SpriteBatch batch;
@@ -47,6 +51,11 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
         }
 
         final var lines = resources.popup.lines();
+        if (lines.size() == 1 && lines.get(0).content == null) {
+            tickNumberLock(resources);
+            return;
+        }
+
         final var bgType = resources.popup.photo();
         final var bg = this.backgrounds[bgType.ordinal()];
 
@@ -104,6 +113,91 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
         this.batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         this.batch.end();
 
+    }
+
+    private void tickNumberLock(Resources resources) {
+        if (resources.combinationSolved) {
+            return;
+        }
+
+        final var key0 = resources.playerInput.getState(InputManager.KeyInput.Key0);
+        final var key1 = resources.playerInput.getState(InputManager.KeyInput.Key1);
+        final var key2 = resources.playerInput.getState(InputManager.KeyInput.Key2);
+        final var key3 = resources.playerInput.getState(InputManager.KeyInput.Key3);
+        final var key4 = resources.playerInput.getState(InputManager.KeyInput.Key4);
+        final var key5 = resources.playerInput.getState(InputManager.KeyInput.Key5);
+        final var key6 = resources.playerInput.getState(InputManager.KeyInput.Key6);
+        final var key7 = resources.playerInput.getState(InputManager.KeyInput.Key7);
+        final var key8 = resources.playerInput.getState(InputManager.KeyInput.Key8);
+        final var key9 = resources.playerInput.getState(InputManager.KeyInput.Key9);
+
+        final var justPressed0 = key0 == InputManager.State.PRESSED;
+        final var justPressed1 = key1 == InputManager.State.PRESSED;
+        final var justPressed2 = key2 == InputManager.State.PRESSED;
+        final var justPressed3 = key3 == InputManager.State.PRESSED;
+        final var justPressed4 = key4 == InputManager.State.PRESSED;
+        final var justPressed5 = key5 == InputManager.State.PRESSED;
+        final var justPressed6 = key6 == InputManager.State.PRESSED;
+        final var justPressed7 = key7 == InputManager.State.PRESSED;
+        final var justPressed8 = key8 == InputManager.State.PRESSED;
+        final var justPressed9 = key9 == InputManager.State.PRESSED;
+
+        final var anyPressed = justPressed0 ||
+                justPressed1 ||
+                justPressed2 ||
+                justPressed3 ||
+                justPressed4 ||
+                justPressed5 ||
+                justPressed6 ||
+                justPressed7 ||
+                justPressed8 ||
+                justPressed9;
+
+        if (resources.enteringNumber == -1) {
+            resources.setDialogueText(List.of(List.of(new TextOnScreen("I need a three digit combination..."),
+                                                      new TextOnScreen("(use number keys 0-9)"))));
+        }
+
+        if (anyPressed) {
+            resources.setDialogueText(List.of(List.of(new TextOnScreen("Alright, next one is..."),
+                                                      new TextOnScreen("(use number keys 0-9)"))));
+
+            resources.enteringNumber++;
+            resources.numbers[resources.enteringNumber] = justPressed0
+                    ? 0
+                    : justPressed1
+                    ? 1
+                    : justPressed2
+                    ? 2
+                    : justPressed3
+                    ? 3
+                    : justPressed4
+                    ? 4
+                    : justPressed5
+                    ? 5
+                    : justPressed6
+                    ? 6
+                    : justPressed7
+                    ? 7
+                    : justPressed8
+                    ? 8
+                    : 9;
+
+            if (resources.enteringNumber == 2) {
+                if (resources.numbers[0] == 6 && resources.numbers[1] == 4 && resources.numbers[2] == 0) {
+                    resources.combinationSolved = true;
+                } else {
+                    resources.stormy = true;
+                }
+
+                resources.enteringNumber = -1;
+                resources.popup = null;
+                resources.setDialogueText(null);
+                if (resources.player.hasComponent(Tags.FreezeInput.class)) {
+                    resources.player.removeComponent(Tags.FreezeInput.class);
+                }
+            }
+        }
     }
 
     @Override

@@ -13,7 +13,13 @@ public record PopUp(
         Photo,
         PuzzlePaintingA,
         PuzzlePaintingB,
-        PuzzlePaintingC;
+        PuzzlePaintingC,
+        PuzzleNote,
+        Note1,
+        Note2,
+        Note3,
+        Note4,
+        Note5;
 
         public float height() {
             return switch (this) {
