@@ -1,4 +1,4 @@
-package fi.jakojaannos.unstable.acts.act5;
+package fi.jakojaannos.unstable.acts.act3;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import fi.jakojaannos.unstable.acts.Act;
@@ -9,7 +9,7 @@ import fi.jakojaannos.unstable.renderer.*;
 import java.util.Collection;
 import java.util.List;
 
-public class Act5 implements Act {
+public class Act3 implements Act {
     public static final Room CIGAR_ROOM = CigarRoom.create();
 
     @Override

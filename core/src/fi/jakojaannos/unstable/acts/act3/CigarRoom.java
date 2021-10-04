@@ -1,4 +1,4 @@
-package fi.jakojaannos.unstable.acts.act5;
+package fi.jakojaannos.unstable.acts.act3;
 
 import com.badlogic.gdx.math.Vector2;
 import fi.jakojaannos.unstable.ecs.EcsWorld;

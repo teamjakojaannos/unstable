@@ -96,6 +96,7 @@ public interface Act {
                 new RenderTiles(batch),
                 new RenderHidingSpot(batch),
                 new RenderPosters(batch),
+                new RenderMirror(batch),
                 new RenderPlayer(batch),
                 new RenderMorko(batch),
                 new RenderNurse(batch),

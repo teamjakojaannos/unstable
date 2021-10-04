@@ -144,6 +144,7 @@ public class RenderMorko implements EcsSystem<RenderMorko.Input>, AutoCloseable 
             }
         } else {
             this.scream.stop();
+            this.scream2.stop();
             this.screamId = -1;
         }
     }
