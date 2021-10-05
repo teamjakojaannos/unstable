@@ -181,7 +181,9 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
                                                       new TextOnScreen("(use number keys 0-9)"))));
         }
 
-        if (anyPressed) {
+        if (anyPressed && !resources.isInteractOnCooldown()) {
+            resources.setInteractCooldown();
+
             resources.enteringNumber++;
             resources.numbers[resources.enteringNumber] = justPressed0
                     ? 0
@@ -215,6 +217,9 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
                 resources.setDialogueText(null);
                 if (resources.player.hasComponent(Tags.FreezeInput.class)) {
                     resources.player.removeComponent(Tags.FreezeInput.class);
+                }
+                if (resources.player.hasComponent(Tags.Numlock.class)) {
+                    resources.player.removeComponent(Tags.Numlock.class);
                 }
             }
         }
