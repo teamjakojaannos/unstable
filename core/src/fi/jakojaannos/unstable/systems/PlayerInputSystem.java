@@ -28,6 +28,11 @@ public class PlayerInputSystem implements EcsSystem<PlayerInputSystem.Input> {
 
                  // set to false when DOWN or RELEASED
                  entity.playerInput.actionPressed = (inputState.getState(ACTION) == InputManager.State.PRESSED);
+
+                 // cheat for opening door
+                 if (inputState.getState(KeyC) == InputManager.State.PRESSED) {
+                     resources.combinationSolved = true;
+                 }
              });
     }
 

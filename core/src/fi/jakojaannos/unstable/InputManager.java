@@ -54,6 +54,8 @@ public class InputManager {
         Key7(NUM_7),
         Key8(NUM_8),
         Key9(NUM_9),
+
+        KeyC(C),
         ;
 
         private final int keyCode;

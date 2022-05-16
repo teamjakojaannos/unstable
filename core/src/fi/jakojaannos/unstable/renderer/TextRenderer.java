@@ -206,7 +206,7 @@ public class TextRenderer implements EcsSystem<TextRenderer.Input>, AutoCloseabl
                     : 9;
 
             if (resources.enteringNumber == 2) {
-                if (resources.numbers[0] == 6 && resources.numbers[1] == 4 && resources.numbers[2] == 0) {
+                if (resources.numbers[0] == 4 && resources.numbers[1] == 6 && resources.numbers[2] == 0) {
                     resources.combinationSolved = true;
                 } else {
                     resources.stormy = true;
